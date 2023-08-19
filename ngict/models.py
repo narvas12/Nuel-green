@@ -5,7 +5,6 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth import get_user_model
 
 
 
@@ -73,7 +72,6 @@ class Course(models.Model):
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
-    
 
 class Module(models.Model):
     title = models.CharField(max_length=200)
@@ -99,8 +97,31 @@ class Assessment(models.Model):
 
 
 class Student(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     enrolled_courses = models.ManyToManyField('Course')
+
+
+# assessments section 
+class Assessment(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    course = models.ForeignKey('Course', on_delete=models.PROTECT)
+    passing_score = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.title
+    
+
+class Question(models.Model):
+    text = models.TextField()
+    assessment = models.ForeignKey('Assessment', on_delete=models.PROTECT)
+
+
+class Answer(models.Model):
+    text = models.CharField(max_length=200)
+    question = models.ForeignKey('Question', on_delete=models.PROTECT)
+    is_correct = models.BooleanField(default=False)
+
 
 class Resource(models.Model):
     title = models.CharField(max_length=200)
