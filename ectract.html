@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="code-editor container">
+        <div class="code-editor-container">
+            <div class="row left-column">
+                <div class="code-box">
+                    <label><i class='bx bxl-html5'></i> HTML</label>
+                    <textarea spellcheck="false" id="html-code" class="code-input" onkeyup="run()"></textarea>
+                </div>
+    
+                <div class="code-box">
+                    <label><i class='bx bxl-css3'></i> CSS</label>
+                    <textarea spellcheck="false" id="css-code" class="code-input" onkeyup="run()"></textarea>
+                </div>
+    
+                <div class="code-box">
+                    <label><i class='bx bxl-javascript'></i> JavaScript</label>
+                    <textarea spellcheck="false" id="js-code" class="code-input" onkeyup="run()"></textarea>
+                </div>
+            </div>
+            <div class="row right-column">
+                <label id="compile"><i class='bx bx-play'></i> Output</label>
+                <iframe id="output"></iframe>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    // Initialize CodeMirror for each textarea
+    const htmlCodeMirror = CodeMirror.fromTextArea(
+        document.getElementById("html-code"),
+        {
+        mode: "htmlmixed",
+        lineNumbers: true,
+        theme: "default",
+        }
+    );
+    
+    const cssCodeMirror = CodeMirror.fromTextArea(
+    document.getElementById("css-code"),
+    {
+      mode: "css",
+      lineNumbers: true,
+      theme: "default",
+    }
+    );
+    
+    const javascriptCodeMirror = CodeMirror.fromTextArea(
+    document.getElementById("javascript-code"),
+    {
+      mode: "javascript",
+      lineNumbers: true,
+      theme: "default",
+    }
+    );
+    
+    // Implement the run() function to display output
+    function run(){
+      let htmlCode = document.querySelector('#html-code').value
+      let cssCode = document.querySelector('#css-code').value
+      let jsCode = document.querySelector('#js-code').value
+      let output = document.querySelector('#output')
+    
+      output.contentDocument.body.innerHTML = htmlCode + "<style>" + cssCode + "</style>" + "<script>" + jsCode + "</script>"
+    }
+
+
+
+
+
+
+
+
+    var runButton = document.getElementById('runButton');
+            var output = document.getElementById('output');
+
+            runButton.addEventListener('click', function () {
+                var userCode = editor.getValue();
+                try {
+                    var result = eval(userCode);
+                    output.textContent = 'Output:\n' + result;
+                } catch (error) {
+                    output.textContent = 'Error:\n' + error;
+                }
+            });
+    </script>
+</body>
+</html>

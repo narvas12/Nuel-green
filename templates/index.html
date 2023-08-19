@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Nuel-Green ICT</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 30px;
+      }
+
+      li {
+        margin-bottom: 10px;
+      }
+
+      a {
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+        transition: color 0.3s;
+      }
+
+      a:hover {
+        color: #0056b3;
+      }
+
+      section {
+        margin-bottom: 40px;
+      }
+
+      h2 {
+        margin-bottom: 10px;
+      }
+
+      p {
+        line-height: 1.8;
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+  </head>
+
+  <body>
+
+
+    {% if messages %}
+     {% for message in messages %} 
+     {% if message.tags == 'success' %}
+    <div
+      class="alert alert-{{ message.tags }} alert-dismissible fade show"
+      role="alert"
+    >
+      <button
+        type="button"
+        class="close"
+        data-dismiss="alert"
+        arial-label="close"
+      ></button>
+      {{ message }} <span aria-hidden="true">&times;</span>
+    </div>
+    {% endif %} 
+    {% endfor %}
+    {% endif %}
+    <h1><a href="{% url 'academy:html_css' %}"> Welcome to Our Website!</a></h1>
+    <a href="{% url 'academy:course_list' %}">Course List</a>
+    <p>Explore our services:</p>
+
+    <div class="user-buttons">
+      {% if user.is_authenticated %}
+      <a class="btn btn-primary" href="{% url 'academy:signout' %}">logout</a>
+      {% else %}
+      <a class="btn btn-primary" href="{% url 'academy:signin' %}">Signin</a>
+      <a class="btn btn-primary" href="{% url 'academy:signup' %}">signup</a>
+      {% endif %}
+    </div>
+<pre>
+  <code class="language-javascript">
+
+    require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.23.0/min/vs' } });
+
+    require(['vs/editor/editor.main'], function () {
+        monaco.editor.defineTheme('vs-dark', {
+            base: 'vs-dark',
+            inherit: true,
+            rules: [],
+            colors: {}
+        });
+
+        monaco.editor.setTheme('vs-dark');
+
+        var editor = monaco.editor.create(document.getElementById('js_editorContainer'), {
+            value: [
+                'console.log("Hello, world!");'
+            ].join('\n'),
+            language: 'javascript',
+            theme: 'vs-dark'
+        });
+
+        
+        var runButton = document.getElementById('runButton');
+        var output = document.getElementById('output');
+
+        runButton.addEventListener('click', function () {
+            var userCode = editor.getValue();
+            try {
+                var result = eval(userCode);
+                output.textContent = 'Output:\n' + result;
+            } catch (error) {
+                output.textContent = 'Error:\n' + error;
+            }
+        });
+    });
+  </code>
+</pre>
+    <ul>
+      <li><a href="#frontend">Frontend Development</a></li>
+      <li><a href="#backend">Backend Development and API</a></li>
+      <li><a href="#software">Software Development</a></li>
+      <li><a href="#database">Database Management</a></li>
+    </ul>
+
+    <!-- Frontend Development Section -->
+    <section id="frontend">
+      <h2>Frontend Development</h2>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at aliquam
+        mauris.
+      </p>
+    </section>
+
+    <!-- Backend Development and API Section -->
+    <section id="backend">
+      <h2>Backend Development and API</h2>
+      <p>Quisque eget orci metus. Morbi eleifend enim ac convallis aliquam.</p>
+    </section>
+
+    <!-- Software Development Section -->
+    <section id="software">
+      <h2>Software Development</h2>
+      <p>Nulla nec convallis nulla, in convallis nunc.</p>
+    </section>
+
+    <!-- Database Management Section -->
+    <section id="database">
+      <h2>Database Management</h2>
+      <p>
+        Proin a mauris eu tortor facilisis consectetur. Fusce venenatis eget
+        elit id ullamcorper.
+      </p>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+
+    <script>hljs.highlightAll();</script>
+    
+  </body>
+</html>

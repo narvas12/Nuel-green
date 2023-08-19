@@ -1,0 +1,74 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web IDE</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.23.0/min/vs/editor/editor.main.css">
+    <style>
+        body {
+            padding: 2rem 1rem;
+        }
+        .editor_input, .editor_output {
+            width: 520px;
+            height: 400px;
+            border: 2px solid black;
+        }
+        .editor_output{
+            width: 1550px;
+        }
+        .code_editor_segments{
+            display: flex;
+        }
+        .code_editor_wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .code{
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+   
+    <section class="code_editor container">
+        <div class="code_editor_container">
+            <div class="code_editor_wrapper">
+                <div class="code_editor_segments">
+
+                    <div class="code">
+                        <h4>HTML</h4>
+                        <div class="editorContainer editor_input" id="htmlEditor"></div>
+                    </div>
+
+                    <div class="code">
+                        <h4>CSS</h4>
+                        <div class="editorContainer editor_input" id="cssEditor"></div>
+                    </div>
+
+                    <div class="code">
+                        <h4>JavaScript</h4>
+                        <div class="editorContainer editor_input" id="jsEditor"></div>
+                    </div>
+                    
+                </div>
+                <button class="run_btn" id="runButton"><i class='bx bx-play'></i>Run</button>
+                <div class="code_editor_segments">
+                    <div class="output">
+                        <h4>OutPut</h4>
+                        <pre class="editor_output" id="output"></pre>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs/loader.js"></script>
+    <script src="{% static 'js/ide.js' %}"></script>
+</body>
+</html>

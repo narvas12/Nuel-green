@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Welcome, {{ user.username }}!!</h1>
+  {% if user.is_authenticated %}
+    <h2>Enrolled Courses</h2>
+    {% if enrolled_courses %}
+      <ul>
+        {% for course in enrolled_courses %}
+          <li><a href="{% url 'academy:course_detail' course.slug %}">{{ course.title }}</a></li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>You haven't enrolled in any courses yet.</p>
+    {% endif %}
+  {% else %}
+    <p>{{ message }}</p>
+    <p><a href="{% url 'academy:signin' %}">Log in</a></p>
+  {% endif %}
+{% endblock %}

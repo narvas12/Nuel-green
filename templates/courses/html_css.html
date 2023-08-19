@@ -1,0 +1,440 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block html_css %}
+
+    <section class="html-css">
+        <div class="container-fluid">
+            <div class="header">
+                <h1>Introduction to Web Development</h1>
+            </div>
+
+            <div class="mdules">
+                <!-- web development overview  module-->
+                <div class="module">
+                    <div class="modules-title">
+                        <h4>Overview of web development</h4>
+                        <i class='bx bxs-chevron-down arrow'></i>
+                    </div>
+                    <div class="module-title">
+                        <div class="module-subcontent">
+                            <p>Web development refers to the process of creating and maintaining websites and web
+                                applications for the internet.
+                                It involves a combination of programming, design, and server administration to deliver a
+                                functional and
+                                visually appealing online presence. Web development can range from simple static
+                                websites to
+                                complex web
+                                applications that offer dynamic content and interactivity.</p>
+                            <small>You can Choose to skip the readings and watch the video</small>
+                        </div>
+
+                        <h4>Key Aspects of Web Development</h4>
+
+                        <div class="module-subcontent">
+                            <h5>Front-end Development:</h5>
+                            <p>Front-end development focuses on creating the user interface and user experience of a
+                                website or web
+                                application. Developers use web technologies like HTML (Hypertext Markup Language), CSS
+                                (Cascading Style
+                                Sheets), and JavaScript to build the visual elements and interactivity. Modern front-end
+                                development often
+                                involves using frameworks/libraries like React, Angular, or Vue.js, which simplify and
+                                enhance the development
+                                process.</p>
+
+                        </div>
+
+                        <div class="module-subcontent">
+                            <h5>Back-end Development:</h5>
+                            <p>Back-end development involves building the server-side of a web application. It deals
+                                with handling data,
+                                business logic, and server operations. Popular programming languages for back-end
+                                development include Python,
+                                Ruby, PHP, Java, and Node.js (JavaScript on the server-side). Back-end developers also
+                                work with databases like
+                                MySQL, PostgreSQL, or MongoDB to store and retrieve data.</p>
+                        </div>
+
+                        <div class="module-subcontent">
+                            <p>A full-stack developer knows how to do both front-end technologies and back-end
+                                technologies. They can build the user interface (what people
+                                see and interact with) using front-end technologies, and they can also set up the server
+                                and write the code that
+                                handles the data and logics in the back-end. This means they can take care of everything
+                                needed to
+                                create a complete web application, from making it look good to making it work properly.
+                            </p>
+
+                            <h5>Some specific tasks that a full-stack developer can handle include:</h5>
+                            <ul>
+                                <li>Creating the visual design and layout of web pages using HTML and CSS.</li>
+                                <li>Adding interactivity to the website using JavaScript to make buttons work and forms
+                                    submit, for example.</li>
+                                <li>Setting up a server to host the website and handle requests from users.</li>
+                                <li>Writing code to connect the front-end and back-end, so data can be sent between
+                                    them.</li>
+                                <li>Managing databases, where information like user accounts or product details are
+                                    stored.</li>
+                                <li>Making sure the website works well on different devices and screen sizes (responsive
+                                    design).</li>
+                            </ul>
+
+                            <p>In summary, It's like having one person who can do many different
+                                jobs to build a complete and functional website.</p>
+                        </div>
+
+                        <div class="module-subcontent">
+                            <h5>Responsive Design:</h5>
+                            <p>Web developers strive to create websites that are responsive, meaning they adapt and
+                                display
+                                well on various
+                                devices and screen sizes, including desktops, tablets, and smartphones.</p>
+
+                            <h5>Content Management Systems (CMS):</h5>
+                            <p>CMS platforms like WordPress, Drupal, and Joomla allow users to create, modify, and
+                                manage
+                                website content
+                                without extensive coding knowledge. Web developers may customize and extend these
+                                systems to
+                                meet specific
+                                requirements.</p>
+                        </div>
+
+                        <div class="module-subcontent">
+                            <h5>Web Hosting and Deployment:</h5>
+                            <p>After development, a website needs to be hosted on a server to make it accessible to
+                                users.
+                                Web developers work
+                                with web hosting providers to deploy and maintain websites securely.</p>
+                        </div>
+
+                        <div class="module-subcontent">
+                            <h5>Web Development Security Best Practices</h5>
+                            <p>As a web developer, you need to be aware of security best practices to keep websites
+                                safe and protect them from
+                                various types of attacks.</p>
+
+                            <h5>Hacking Attempts:</h5>
+                            <p><strong>Example:</strong> Imagine you have a website that allows users to create
+                                accounts and log in. A hacker
+                                might try to guess users' passwords or use automated tools to find
+                                vulnerabilities in your website's login
+                                system. If you don't implement proper security measures, the hacker could gain
+                                unauthorized access to user
+                                accounts and steal sensitive information.</p>
+                            <p><strong>Solution:</strong> To protect against hacking attempts, you can use
+                                strong encryption to store passwords,
+                                implement account lockouts after multiple failed login attempts, and use CAPTCHA
+                                to prevent automated
+                                attacks.</p>
+
+                            <h5>Data Breaches:</h5>
+                            <p><strong>Example:</strong> Let's say your website collects personal information
+                                from users, such as names, email
+                                addresses, and credit card details. If a hacker manages to breach your website's
+                                security, they could access and
+                                steal this sensitive data.</p>
+                            <p><strong>Solution:</strong> To prevent data breaches, you should use secure
+                                communication protocols (HTTPS) to
+                                encrypt data transmission between users and your website. Additionally, you can
+                                store sensitive data in encrypted
+                                databases and regularly update software to patch any security vulnerabilities.
+                            </p>
+
+                            <h5>Malware:</h5>
+                            <p><strong>Example:</strong> Malware refers to malicious software designed to harm
+                                computers or steal information.
+                                Hackers might inject malware into your website's code, which can infect
+                                visitors' computers or gather sensitive
+                                data.</p>
+                            <p><strong>Solution:</strong> Regularly scan your website's files for malware and
+                                keep your server software up to date
+                                to minimize the risk of malware infections. Also, be cautious about using
+                                third-party scripts or plugins, as they
+                                can sometimes contain hidden malware.</p>
+
+                            <h5>General Security Best Practices:</h5>
+                            <ul>
+                                <li>Keep all software and frameworks up to date to patch security
+                                    vulnerabilities.</li>
+                                <li>Use strong and unique passwords for all accounts and services related to
+                                    your website.</li>
+                                <li>Implement user authentication and authorization to control access to
+                                    sensitive parts of your website.</li>
+                                <li>Sanitize and validate user input to prevent malicious code (e.g., SQL
+                                    injection or cross-site scripting) from
+                                    being executed on your website.</li>
+                                <li>Use HTTPS to encrypt data transmission between users and your website.</li>
+                                <li>Regularly backup your website's data to recover from potential attacks.</li>
+                            </ul>
+
+                            <p>Remember, security is an ongoing process, and it's essential to stay updated on
+                                the latest security threats and
+                                practices to protect your website and your users.</p>
+                        </div>
+
+                        <div class="module-subcontent">
+                            <h4>Client-side and Server-side in Web Development</h4>
+
+                            <h5>Client-side:</h5>
+                            <p>
+                                Client-side refers to the processes and computations that occur on the user's device
+                                (typically in a web browser) while interacting with a web application.
+                                The client-side is responsible for handling the user interface, user interactions, and
+                                presentation of data. The primary technologies used for client-side development are
+                                HTML, CSS, and JavaScript.
+                            </p>
+                            <h5>Key characteristics of client-side development:</h5>
+                            <ul>
+                                <li>User interaction: Client-side scripts are responsible for handling user
+                                    interactions, such as form submissions, button clicks, and animations.</li>
+                                <li>Rendering: The client-side is responsible for rendering the user interface and
+                                    displaying content on the user's screen.</li>
+                                <li>Browser dependency: Client-side code execution is dependent on the user's web
+                                    browser capabilities and may vary across different browsers.</li>
+                                <li>Faster response: Since the code executes on the user's device, client-side
+                                    operations can lead to faster response times, especially for small tasks that don't
+                                    require communication with the server.</li>
+                            </ul>
+                            <p>Common client-side frameworks and libraries include React, Angular, Vue.js, and jQuery.
+                            </p>
+
+                            <h5>Server-side:</h5>
+                            <p>
+                                Server-side refers to the processes and computations that take place on the web server.
+                                The server-side is responsible for handling business logic, data processing, and
+                                database interactions.
+                                It generates dynamic content that is then sent to the client-side for presentation.
+                                Server-side scripts are typically written in languages like PHP, Python, Ruby, Java, or
+                                Node.js.
+                            </p>
+                            <h5>Key characteristics of server-side development:</h5>
+                            <ul>
+                                <li>Business logic: Server-side code is responsible for implementing the core
+                                    functionality and business rules of the application.</li>
+                                <li>Database interactions: It handles interactions with databases, such as reading and
+                                    writing data.</li>
+                                <li>Security: Server-side code is used to validate user input, authenticate users, and
+                                    secure sensitive operations.</li>
+                                <li>Scalability: Server-side systems can be scaled more efficiently to handle high
+                                    volumes of traffic and complex computations.</li>
+                            </ul>
+                            <p>Server-side frameworks and technologies include Django (Python), Ruby on Rails (Ruby),
+                                Express.js (Node.js), and Laravel (PHP).</p>
+
+                            <h5>In summary,</h5>
+                            <p>
+                                client-side and server-side are two essential components of web development. Client-side
+                                handles user interface and interactions on the user's device, while server-side manages
+                                business logic, data processing, and communication with databases on the web server.
+                                Both sides work together to deliver a complete and functional web application.
+                            </p>
+                        </div>
+
+                        <div class="module-subcontent">
+                            <h5>Web Standards and Accessibility:</h5>
+                            <p>Following web standards and ensuring accessibility for all users, including those with
+                                disabilities, is an
+                                essential aspect of web development.</p>
+                                <h5>Web Standards</h5>
+                                <p>
+                                    Web standards are a set of guidelines and recommendations established by organizations like the World Wide Web Consortium (W3C) to ensure consistency, interoperability, and predictability in web development. Adhering to web standards brings several benefits:
+                                </p>
+                                <ul>
+                                    <li>Cross-Browser Compatibility: Following web standards helps create websites that work consistently across different web browsers, ensuring that users have a consistent experience regardless of the browser they use.</li>
+                                    <li>Future-Proofing: Web standards evolve over time, and by adopting them, developers can future-proof their websites, making it easier to adapt to changes and new technologies.</li>
+                                    <li>Improved Search Engine Optimization (SEO): Search engines prefer websites that follow web standards, as they are more likely to have well-organized content and better structured data, leading to improved SEO rankings.</li>
+                                    <li>Faster Development: Standards provide common practices and tools, allowing developers to streamline their development processes and reduce maintenance efforts.</li>
+                                    <li>Mobile-Friendly Design: Web standards encourage responsive design and accessibility, which are essential for creating mobile-friendly websites.</li>
+                                </ul>
+                            
+                                <h5>Accessibility</h5>
+                                <p>
+                                    Web accessibility is the practice of designing and developing websites that are usable and accessible to all users, including those with disabilities. Ensuring accessibility is vital for the following reasons:
+                                </p>
+                                <ul>
+                                    <li>Inclusivity: An accessible website ensures that users with various disabilities can access and interact with its content. This includes users with visual, auditory, motor, and cognitive impairments.</li>
+                                    <li>Legal and Ethical Obligations: In many countries, web accessibility is a legal requirement, and not complying with accessibility standards can lead to legal issues. Creating an accessible website is not just a legal obligation; it is also an ethical responsibility.</li>
+                                    <li>Expanded Audience: An accessible website opens up your content to a broader audience, potentially increasing user engagement and conversions.</li>
+                                    <li>Improved User Experience: Accessibility features, such as alternative text for images and keyboard navigation, can benefit all users, making the website more user-friendly for everyone.</li>
+                                    <li>SEO Benefits: Search engines also consider accessibility when ranking websites. Websites that are accessible tend to have better SEO performance.</li>
+                                </ul>
+                            
+                        </div>
+
+                        <div class="module-subcontent">
+                            <h5>Version Control:</h5>
+                            <p>Developers use version control systems like Git to manage code changes collaboratively
+                                and
+                                track the history of
+                                their projects.</p>
+                                <ul>
+                                    <li><strong>Git:</strong> Git is one of the most widely used version control systems. It is known for its speed, distributed nature, and support for branching and merging. Git has become the standard tool in the software development industry.</li>
+                                    <li><strong>Subversion (SVN):</strong> Subversion is a centralized version control system that provides versioning and collaborative features. While not as popular as Git, SVN is still used in various projects and organizations.</li>
+                                    <li><strong>Mercurial:</strong> Mercurial is another distributed version control system that shares similarities with Git. It offers an easy-to-use interface and is well-suited for projects of different sizes.</li>
+                                    <li><strong>Perforce (Helix Core):</strong> Perforce, also known as Helix Core, is widely used in enterprise environments. It is known for its scalability and performance, making it suitable for large-scale projects with numerous contributors.</li>
+                                    <li><strong>Bazaar:</strong> Bazaar is a decentralized version control system that emphasizes ease of use and simplicity. It is written in Python and designed to be user-friendly.</li>
+                                </ul>
+
+                                <h5>Benefits of Version Control:</h5>
+                                <ul>
+                                    <li><strong>Collaboration:</strong> Version control enables seamless collaboration among developers. Multiple team members can work on the same project simultaneously without conflicts, and they can merge their changes efficiently.</li>
+                                    <li><strong>History Tracking:</strong> With version control, every change made to the codebase is recorded along with relevant metadata, such as the author's name, timestamp, and description of the change. This allows developers to view the history of the project, rollback to previous states, and understand how the code has evolved over time.</li>
+                                    <li><strong>Branching and Merging:</strong> Version control systems support branching, which allows developers to create separate branches of the codebase for different features or bug fixes. This feature enables experimentation without affecting the main codebase. After testing and reviewing, developers can merge the branches back into the main codebase.</li>
+                                    <li><strong>Code Review:</strong> Version control facilitates code review processes. Team members can review changes made by others before merging them into the main codebase. This ensures code quality and promotes best practices.</li>
+                                    <li><strong>Rollback and Recovery:</strong> If issues arise in the codebase, version control allows developers to revert to a previous known working state, effectively rolling back changes. This provides a safety net for code recovery in case of accidental mistakes or bugs.</li>
+                                    <li><strong>Continuous Integration and Deployment:</strong> Version control systems can be integrated with continuous integration and continuous deployment (CI/CD) pipelines, enabling automated testing and deployment processes. This streamlines the development and release cycles.</li>
+                                    <li><strong>Backup and Redundancy:</strong> Storing code in a version control system provides redundancy and acts as a backup. Even if a local development environment fails, the code is safely stored in the repository.</li>
+                                </ul>
+                                <p>
+                                    Git, one of the most popular version control systems, has become a standard tool in the software development industry due to its speed, distributed nature, and robustness. Developers use Git to collaborate effectively, manage code changes, and maintain a well-documented history of their projects, which ultimately leads to better code quality and more efficient development workflows.
+                                </p>
+                        </div>
+
+
+                        <p>Web development is a constantly evolving field, with new tools, libraries, and best practices
+                            emerging regularly.
+                            As technologies advance, web developers must stay up-to-date and continuously enhance their
+                            skills to deliver
+                            efficient and innovative web solutions.</p>
+                        <div class="html-css-content">
+                            <iframe width="1220" height="700" src="https://www.youtube.com/embed/5YDVJaItmaY"
+                                frameborder="0" allowfullscreen></iframe>
+                            <p>The video desctibes </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- END! of web development overview  module-->
+
+
+
+                <!-- setting up developement environment  module-->
+                <div class="module">
+                    <div class="modules-title">
+                        <h4>Setting up a development environment</h4>
+                        <i class='bx bxs-chevron-down arrow'></i>
+                    </div>
+                    <div class="module-title">
+
+                        <div class="html-css-content">
+                            <iframe width="1220" height="700" src="https://www.youtube.com/embed/fWzp5lZ5CEA"
+                                frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+                <!-- END! setting up developement environment  -->
+
+
+                <div class="module">
+                    <div class="modules-title">
+                        <h4>HTML/CSS</h4>
+                        <i class='bx bxs-chevron-down arrow'></i>
+                    </div>
+                    <div class="module-title">
+
+                        <div class="module-subcontent">
+                            <div class="subcontent-description">
+                        
+                                <div class="module-subdetail">
+                                    <h4>Introduction to HTML</h4>
+                                        <pre>
+                                            <code class="language-html">
+<!DOCTYPE html>
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;My Basic HTML Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;h1&gt;Welcome to My Basic HTML Page&lt;/h1&gt;
+    &lt;/header&gt;
+    
+    &lt;nav&gt;
+        &lt;ul&gt;
+            &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;#&quot;&gt;About&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Services&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Contact&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/nav&gt;
+    
+    &lt;main&gt;
+        &lt;section&gt;
+            &lt;h2&gt;About Us&lt;/h2&gt;
+            &lt;p&gt;This is a simple HTML page to get you started on your web development journey.&lt;/p&gt;
+        &lt;/section&gt;
+        
+        &lt;section&gt;
+            &lt;h2&gt;Our Services&lt;/h2&gt;
+            &lt;ul&gt;
+                &lt;li&gt;Web Design&lt;/li&gt;
+                &lt;li&gt;Graphic Design&lt;/li&gt;
+                &lt;li&gt;SEO Optimization&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/section&gt;
+    &lt;/main&gt;
+    
+    &lt;footer&gt;
+        &lt;p&gt;&amp;copy; 2023 Your Name. All rights reserved.&lt;/p&gt;
+    &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                                                
+
+                                            </code>
+                                        </pre>
+                                </div>
+
+                        <div class="html-css-content">
+                            <iframe width="1100" height="650" src="https://www.youtube.com/embed/fWzp5lZ5CEA"
+                                frameborder="0" allowfullscreen></iframe>
+                        </div>
+
+                        <div class="code_editor">
+                            <div class="code_editor_container">
+                                <div class="code_editor_wrapper">
+                                    <div class="code_editor_segments" style="display: flex; overflow-X: scroll;">
+                    
+                                        <div class="code" style="margin: 5px;">
+                                            <h4>HTML</h4>
+                                            <div class="editorContainer editor_input" id="htmlEditor" style="height: 400px; width: 500px;"></div>
+                                        </div>
+                    
+                                        <div class="code" style="margin: 5px;">
+                                            <h4>CSS</h4>
+                                            <div class="editorContainer editor_input" id="cssEditor" style="height: 400px; width: 500px;"></div>
+                                        </div>
+                    
+                                        <div class="code" style="margin: 5px;">
+                                            <h4>JavaScript</h4>
+                                            <div class="editorContainer editor_input" id="jsEditor" style="height: 400px; width: 500px;"></div>
+                                        </div>
+                                        
+                                    </div>
+                                    <button class="run_btn" id="runButton"><i class='bx bx-play'></i>Run</button>
+                                    <div class="code_editor_segments">
+                                        <div class="output">
+                                            <h4>OutPut</h4>
+                                            <pre class="editor_output" id="output" style="width: 1100px; height: 700px;"></pre>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+    
+
+    
+{% endblock html_css %}

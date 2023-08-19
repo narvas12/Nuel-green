@@ -1,0 +1,548 @@
+{% extends '../base.html' %} {% load static %} {% block style %}
+<style>
+  h1 {
+    text-align: center;
+    
+    background: #181823;
+    max-width: 800px;
+    margin:0 auto;
+    margin-top: -20px;
+    color: #fff;
+    padding-bottom: 10px;
+  }
+
+  form {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .break {
+  }
+
+  label {
+    display: block;
+    margin-bottom: -8px;
+    color: #444;
+    opacity: 7;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 6px;
+    margin-bottom: 15px;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    border-radius: 0;
+    background: transparent;
+    transition: all 300ms ease;
+    font-size: 15px;
+  }
+
+  input:focus,
+  select:focus {
+    outline: none;
+    border-bottom-color: black;
+    margin-top: -2px;
+  }
+
+  input[type="radio"],
+  input[type="checkbox"] {
+    margin-right: 5px;
+    width: 20px;
+    height: 20px;
+    padding: 0.2rem;
+    background-color: #11101d;
+    cursor: pointer;
+  }
+
+
+  
+  input:checked {
+    
+    background-color: #11101d;
+  }
+
+
+
+  input[type="submit"] {
+    background-color: #181823;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 3px;
+    transition: all 300ms ease;
+    
+  }
+
+  input[type="submit"]:hover {
+    background-color: #11101d;
+  }
+
+  p {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  a {
+    color: #4caf50;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+  .t-c {
+    display: flex;
+  }
+
+  /* Style for the checkbox container */
+.custom-checkbox {
+    position: relative;
+    padding-left: 35px; /* Increase this value to make the checkbox larger */
+    cursor: pointer;
+  }
+  
+  /* Hide the default checkbox */
+  .custom-checkbox input {
+    opacity: 0;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  /* Style for the custom checkbox */
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px; /* Increase this value to make the checkbox larger */
+    width: 25px; /* Increase this value to make the checkbox larger */
+    background-color: #fff;
+    border: 1px solid #181823; /* Change this value to set the background color */
+  }
+  
+  /* Show a checkmark icon when the checkbox is checked */
+  .custom-checkbox input:checked ~ .checkmark {
+    background-color: #4CAF50; /* Change this value for the checked background color */
+  }
+  
+  /* Style for the checkmark icon */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the checkmark icon when the checkbox is checked */
+  .custom-checkbox input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  /* Style the checkmark icon */
+  .custom-checkbox .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+  }
+
+  .last{
+    margin: 0 auto;
+  }
+  
+</style>
+{% endblock %} 
+{% block user_profile %}
+<div class="signup">
+  <h1>Signup</h1>
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="break">
+
+      <label for="username">Choose a username</label>
+      <input type="text" name="username" required />
+
+      <label for="first_name">First Name:</label>
+      <input type="text" name="first_name" required />
+
+      <label for="middle_name">Middle Name:</label>
+      <input type="text" name="middle_name" />
+
+      <label for="last_name">Last Name:</label>
+      <input type="text" name="last_name" required />
+
+      <label for="gender">Gender:</label>
+      <select name="gender" id="gender">
+        <option value="">Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label for="date_of_birth">Date of Birth:</label>
+      <input type="date" name="date_of_birth" required />
+
+      <label for="educational_qualification">Educational Qualification:</label>
+      <input type="text" name="educational_qualification" required />
+
+      <label for="email_address">Email Address:</label>
+      <input type="email" name="email_address" required />
+
+      <label for="country">Country:</label>
+      <select id="countrySelect" name="country">
+        <!-- Options will be dynamically generated here -->
+      </select>
+    </div>
+    <div class="break">
+      <label for="state">State:</label>
+      <input type="text" name="state" required />
+
+      <label for="street_address">Street Address:</label>
+      <input type="text" name="street_address" required />
+
+      <label for="employment_status">Employment Status:</label>
+      <select name="employment_status" required>
+        <option value=""></option>
+        <option value="employed">Employed</option>
+        <option value="unemployed">Unemployed</option>
+        <option value="student">Student</option>
+        <option value="self_employed">Self-Employed</option>
+        <option value="retired">Retired</option>
+        <option value="other">Other</option>
+      </select>
+
+      <label for="phone_number">Phone Number:</label>
+      <input type="tel" name="phone_number" required />
+
+      <label for="how_did_you_hear">How did you hear about us?</label>
+      <input type="text" name="how_did_you_hear" required />
+
+
+      <label for="employment_status">Career Path</label>
+      <select name="career_path" id="career_path">
+        <option value="">-- Select a Career Path --</option>
+        <option value="Software Development">Software Development</option>
+        <option value="Data Science">Data Science</option>
+        <option value="Cybersecurity">Cybersecurity</option>
+        <option value="Web Development">Web Development</option>
+        <option value="DevOps">DevOps</option>
+        <option value="Cloud Computing">Cloud Computing</option>
+        <option value="Artificial Intelligence/Machine Learning">Artificial Intelligence/Machine Learning</option>
+        <option value="Network Engineering">Network Engineering</option>
+        <option value="UX/UI Design">UX/UI Design</option>
+        <option value="Database Administration">Database Administration</option>
+    </select>
+
+      {% comment %} <label for="profile_picture">Profile Picture:</label>
+      <input type="file" name="profile_picture" /> {% endcomment %}
+
+      <label for="password">Password:</label>
+      <input type="password" name="password" required />
+
+      <label for="confirm_password">Confirm Password:</label>
+      <input type="password" name="confirm_password" required />
+
+      <label class="custom-checkbox">
+        <input type="checkbox" />
+        <span class="checkmark"></span>
+        I accept the terms and conditions.
+      </label>
+    </div>
+    <div class="last">
+      <input type="submit" value="Sign Up" />
+      <p>If you already have an account, <a href="/signin">sign in here.</a></p>
+    </div>
+  </form>
+  {% if messages %}
+  {% for message in messages %}
+    {% if message.tags == 'success' %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" arial-label="close"></button>
+        {{ message }} <span aria-hidden="true">&times;</span>
+      </div>
+    {% endif %}
+  {% endfor %}
+{% endif %}
+</div>
+
+<script>
+  const countries = [
+    { code: "AF", name: "Afghanistan" },
+    { code: "AX", name: "Åland Islands" },
+    { code: "AL", name: "Albania" },
+    { code: "DZ", name: "Algeria" },
+    { code: "AS", name: "American Samoa" },
+    { code: "AD", name: "Andorra" },
+    { code: "AO", name: "Angola" },
+    { code: "AI", name: "Anguilla" },
+    { code: "AQ", name: "Antarctica" },
+    { code: "AG", name: "Antigua and Barbuda" },
+    { code: "AR", name: "Argentina" },
+    { code: "AM", name: "Armenia" },
+    { code: "AW", name: "Aruba" },
+    { code: "AU", name: "Australia" },
+    { code: "AT", name: "Austria" },
+    { code: "AZ", name: "Azerbaijan" },
+    { code: "BS", name: "Bahamas" },
+    { code: "BH", name: "Bahrain" },
+    { code: "BD", name: "Bangladesh" },
+    { code: "BB", name: "Barbados" },
+    { code: "BY", name: "Belarus" },
+    { code: "BE", name: "Belgium" },
+    { code: "BZ", name: "Belize" },
+    { code: "BJ", name: "Benin" },
+    { code: "BM", name: "Bermuda" },
+    { code: "BT", name: "Bhutan" },
+    { code: "BO", name: "Bolivia (Plurinational State of)" },
+    { code: "BQ", name: "Bonaire, Sint Eustatius and Saba" },
+    { code: "BA", name: "Bosnia and Herzegovina" },
+    { code: "BW", name: "Botswana" },
+    { code: "BV", name: "Bouvet Island" },
+    { code: "BR", name: "Brazil" },
+    { code: "IO", name: "British Indian Ocean Territory" },
+    { code: "BN", name: "Brunei Darussalam" },
+    { code: "BG", name: "Bulgaria" },
+    { code: "BF", name: "Burkina Faso" },
+    { code: "BI", name: "Burundi" },
+    { code: "CV", name: "Cabo Verde" },
+    { code: "KH", name: "Cambodia" },
+    { code: "CM", name: "Cameroon" },
+    { code: "CA", name: "Canada" },
+    { code: "KY", name: "Cayman Islands" },
+    { code: "CF", name: "Central African Republic" },
+    { code: "TD", name: "Chad" },
+    { code: "CL", name: "Chile" },
+    { code: "CN", name: "China" },
+    { code: "CX", name: "Christmas Island" },
+    { code: "CC", name: "Cocos (Keeling) Islands" },
+    { code: "CO", name: "Colombia" },
+    { code: "KM", name: "Comoros" },
+    { code: "CG", name: "Congo" },
+    { code: "CD", name: "Congo (Democratic Republic of the)" },
+    { code: "CK", name: "Cook Islands" },
+    { code: "CR", name: "Costa Rica" },
+    { code: "CI", name: "Côte d'Ivoire" },
+    { code: "HR", name: "Croatia" },
+    { code: "CU", name: "Cuba" },
+    { code: "CW", name: "Curaçao" },
+    { code: "CY", name: "Cyprus" },
+    { code: "CZ", name: "Czech Republic" },
+    { code: "DK", name: "Denmark" },
+    { code: "DJ", name: "Djibouti" },
+    { code: "DM", name: "Dominica" },
+    { code: "DO", name: "Dominican Republic" },
+    { code: "EC", name: "Ecuador" },
+    { code: "EG", name: "Egypt" },
+    { code: "SV", name: "El Salvador" },
+    { code: "GQ", name: "Equatorial Guinea" },
+    { code: "ER", name: "Eritrea" },
+    { code: "EE", name: "Estonia" },
+    { code: "ET", name: "Ethiopia" },
+    { code: "FK", name: "Falkland Islands (Malvinas)" },
+    { code: "FO", name: "Faroe Islands" },
+    { code: "FJ", name: "Fiji" },
+    { code: "FI", name: "Finland" },
+    { code: "FR", name: "France" },
+    { code: "GF", name: "French Guiana" },
+    { code: "PF", name: "French Polynesia" },
+    { code: "TF", name: "French Southern Territories" },
+    { code: "GA", name: "Gabon" },
+    { code: "GM", name: "Gambia" },
+    { code: "GE", name: "Georgia" },
+    { code: "DE", name: "Germany" },
+    { code: "GH", name: "Ghana" },
+    { code: "GI", name: "Gibraltar" },
+    { code: "GR", name: "Greece" },
+    { code: "GL", name: "Greenland" },
+    { code: "GD", name: "Grenada" },
+    { code: "GP", name: "Guadeloupe" },
+    { code: "GU", name: "Guam" },
+    { code: "GT", name: "Guatemala" },
+    { code: "GG", name: "Guernsey" },
+    { code: "GN", name: "Guinea" },
+    { code: "GW", name: "Guinea-Bissau" },
+    { code: "GY", name: "Guyana" },
+    { code: "HT", name: "Haiti" },
+    { code: "HM", name: "Heard Island and McDonald Islands" },
+    { code: "VA", name: "Holy See" },
+    { code: "HN", name: "Honduras" },
+    { code: "HK", name: "Hong Kong" },
+    { code: "HU", name: "Hungary" },
+    { code: "IS", name: "Iceland" },
+    { code: "IN", name: "India" },
+    { code: "ID", name: "Indonesia" },
+    { code: "IR", name: "Iran (Islamic Republic of)" },
+    { code: "IQ", name: "Iraq" },
+    { code: "IE", name: "Ireland" },
+    { code: "IM", name: "Isle of Man" },
+    { code: "IL", name: "Israel" },
+    { code: "IT", name: "Italy" },
+    { code: "JM", name: "Jamaica" },
+    { code: "JP", name: "Japan" },
+    { code: "JE", name: "Jersey" },
+    { code: "JO", name: "Jordan" },
+    { code: "KZ", name: "Kazakhstan" },
+    { code: "KE", name: "Kenya" },
+    { code: "KI", name: "Kiribati" },
+    { code: "KP", name: "Korea (Democratic People's Republic of)" },
+    { code: "KR", name: "Korea (Republic of)" },
+    { code: "KW", name: "Kuwait" },
+    { code: "KG", name: "Kyrgyzstan" },
+    { code: "LA", name: "Lao People's Democratic Republic" },
+    { code: "LV", name: "Latvia" },
+    { code: "LB", name: "Lebanon" },
+    { code: "LS", name: "Lesotho" },
+    { code: "LR", name: "Liberia" },
+    { code: "LY", name: "Libya" },
+    { code: "LI", name: "Liechtenstein" },
+    { code: "LT", name: "Lithuania" },
+    { code: "LU", name: "Luxembourg" },
+    { code: "MO", name: "Macao" },
+    { code: "MK", name: "North Macedonia" },
+    { code: "MG", name: "Madagascar" },
+    { code: "MW", name: "Malawi" },
+    { code: "MY", name: "Malaysia" },
+    { code: "MV", name: "Maldives" },
+    { code: "ML", name: "Mali" },
+    { code: "MT", name: "Malta" },
+    { code: "MH", name: "Marshall Islands" },
+    { code: "MQ", name: "Martinique" },
+    { code: "MR", name: "Mauritania" },
+    { code: "MU", name: "Mauritius" },
+    { code: "YT", name: "Mayotte" },
+    { code: "MX", name: "Mexico" },
+    { code: "FM", name: "Micronesia (Federated States of)" },
+    { code: "MD", name: "Moldova (Republic of)" },
+    { code: "MC", name: "Monaco" },
+    { code: "MN", name: "Mongolia" },
+    { code: "ME", name: "Montenegro" },
+    { code: "MS", name: "Montserrat" },
+    { code: "MA", name: "Morocco" },
+    { code: "MZ", name: "Mozambique" },
+    { code: "MM", name: "Myanmar" },
+    { code: "NA", name: "Namibia" },
+    { code: "NR", name: "Nauru" },
+    { code: "NP", name: "Nepal" },
+    { code: "NL", name: "Netherlands" },
+    { code: "NC", name: "New Caledonia" },
+    { code: "NZ", name: "New Zealand" },
+    { code: "NI", name: "Nicaragua" },
+    { code: "NE", name: "Niger" },
+    { code: "NG", name: "Nigeria" },
+    { code: "NU", name: "Niue" },
+    { code: "NF", name: "Norfolk Island" },
+    { code: "MP", name: "Northern Mariana Islands" },
+    { code: "NO", name: "Norway" },
+    { code: "OM", name: "Oman" },
+    { code: "PK", name: "Pakistan" },
+    { code: "PW", name: "Palau" },
+    { code: "PS", name: "Palestine, State of" },
+    { code: "PA", name: "Panama" },
+    { code: "PG", name: "Papua New Guinea" },
+    { code: "PY", name: "Paraguay" },
+    { code: "PE", name: "Peru" },
+    { code: "PH", name: "Philippines" },
+    { code: "PN", name: "Pitcairn" },
+    { code: "PL", name: "Poland" },
+    { code: "PT", name: "Portugal" },
+    { code: "PR", name: "Puerto Rico" },
+    { code: "QA", name: "Qatar" },
+    { code: "RE", name: "Réunion" },
+    { code: "RO", name: "Romania" },
+    { code: "RU", name: "Russian Federation" },
+    { code: "RW", name: "Rwanda" },
+    { code: "BL", name: "Saint Barthélemy" },
+    { code: "SH", name: "Saint Helena, Ascension and Tristan da Cunha" },
+    { code: "KN", name: "Saint Kitts and Nevis" },
+    { code: "LC", name: "Saint Lucia" },
+    { code: "MF", name: "Saint Martin (French part)" },
+    { code: "PM", name: "Saint Pierre and Miquelon" },
+    { code: "VC", name: "Saint Vincent and the Grenadines" },
+    { code: "WS", name: "Samoa" },
+    { code: "SM", name: "San Marino" },
+    { code: "ST", name: "Sao Tome and Principe" },
+    { code: "SA", name: "Saudi Arabia" },
+    { code: "SN", name: "Senegal" },
+    { code: "RS", name: "Serbia" },
+    { code: "SC", name: "Seychelles" },
+    { code: "SL", name: "Sierra Leone" },
+    { code: "SG", name: "Singapore" },
+    { code: "SX", name: "Sint Maarten (Dutch part)" },
+    { code: "SK", name: "Slovakia" },
+    { code: "SI", name: "Slovenia" },
+    { code: "SB", name: "Solomon Islands" },
+    { code: "SO", name: "Somalia" },
+    { code: "ZA", name: "South Africa" },
+    { code: "GS", name: "South Georgia and the South Sandwich Islands" },
+    { code: "SS", name: "South Sudan" },
+    { code: "ES", name: "Spain" },
+    { code: "LK", name: "Sri Lanka" },
+    { code: "SD", name: "Sudan" },
+    { code: "SR", name: "Suriname" },
+    { code: "SJ", name: "Svalbard and Jan Mayen" },
+    { code: "SZ", name: "Eswatini" },
+    { code: "SE", name: "Sweden" },
+    { code: "CH", name: "Switzerland" },
+    { code: "SY", name: "Syrian Arab Republic" },
+    { code: "TW", name: "Taiwan, Province of China" },
+    { code: "TJ", name: "Tajikistan" },
+    { code: "TZ", name: "Tanzania, United Republic of" },
+    { code: "TH", name: "Thailand" },
+    { code: "TL", name: "Timor-Leste" },
+    { code: "TG", name: "Togo" },
+    { code: "TK", name: "Tokelau" },
+    { code: "TO", name: "Tonga" },
+    { code: "TT", name: "Trinidad and Tobago" },
+    { code: "TN", name: "Tunisia" },
+    { code: "TR", name: "Turkey" },
+    { code: "TM", name: "Turkmenistan" },
+    { code: "TC", name: "Turks and Caicos Islands" },
+    { code: "TV", name: "Tuvalu" },
+    { code: "UG", name: "Uganda" },
+    { code: "UA", name: "Ukraine" },
+    { code: "AE", name: "United Arab Emirates" },
+    {
+      code: "GB",
+      name: "United Kingdom of Great Britain and Northern Ireland",
+    },
+    { code: "UM", name: "United States Minor Outlying Islands" },
+    { code: "US", name: "United States of America" },
+    { code: "UY", name: "Uruguay" },
+    { code: "UZ", name: "Uzbekistan" },
+    { code: "VU", name: "Vanuatu" },
+    { code: "VE", name: "Venezuela (Bolivarian Republic of)" },
+    { code: "VN", name: "Viet Nam" },
+    { code: "VG", name: "Virgin Islands (British)" },
+    { code: "VI", name: "Virgin Islands (U.S.)" },
+    { code: "WF", name: "Wallis and Futuna" },
+    { code: "EH", name: "Western Sahara" },
+    { code: "YE", name: "Yemen" },
+    { code: "ZM", name: "Zambia" },
+    { code: "ZW", name: "Zimbabwe" },
+  ];
+
+  const countrySelect = document.getElementById("countrySelect");
+
+  countries.forEach((country) => {
+    const option = document.createElement("option");
+    option.value = country.code; // Use country code as the value
+    option.textContent = country.name; // Use country name as the display text
+    countrySelect.appendChild(option);
+  });
+</script>
+{% endblock user_profile %}

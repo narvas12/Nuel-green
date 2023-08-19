@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+<h2>Available Courses</h2>
+
+
+{% block content %}
+    <h1>Available Courses</h1>
+    <ul>
+    {% for course in courses %}
+        <li><a href="{% url 'academy:course_detail' course.slug %}">{{ course.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}
+
