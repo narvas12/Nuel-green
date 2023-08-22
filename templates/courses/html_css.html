@@ -395,43 +395,57 @@
                             <iframe width="1100" height="650" src="https://www.youtube.com/embed/fWzp5lZ5CEA"
                                 frameborder="0" allowfullscreen></iframe>
                         </div>
+                        <h2>Assessments for {{ course.title }}:</h2>
+<ul>
+  {% for assessment in assessments %}
+    <li>
+      <a href="{% url 'academy:view_assessment' assessment.id %}">View Assessment</a> |
+      <a href="{% url 'academy:take_assessment' assessment.id %}">Take Assessment</a>
+      <div>
+          <ul>
+              <li>{{ assessment.title }}</li>
+          </ul>
+      </div>
+    </li>
+  {% endfor %}
+</ul>
 
-                        <div class="code_editor">
-                            <div class="code_editor_container">
-                                <div class="code_editor_wrapper">
-                                    <div class="code_editor_segments" style="display: flex; overflow-X: scroll;">
-                    
-                                        <div class="code" style="margin: 5px;">
-                                            <h4>HTML</h4>
-                                            <div class="editorContainer editor_input" id="htmlEditor" style="height: 400px; width: 500px;"></div>
-                                        </div>
-                    
-                                        <div class="code" style="margin: 5px;">
-                                            <h4>CSS</h4>
-                                            <div class="editorContainer editor_input" id="cssEditor" style="height: 400px; width: 500px;"></div>
-                                        </div>
-                    
-                                        <div class="code" style="margin: 5px;">
-                                            <h4>JavaScript</h4>
-                                            <div class="editorContainer editor_input" id="jsEditor" style="height: 400px; width: 500px;"></div>
-                                        </div>
-                                        
-                                    </div>
-                                    <button class="run_btn" id="runButton"><i class='bx bx-play'></i>Run</button>
-                                    <div class="code_editor_segments">
-                                        <div class="output">
-                                            <h4>OutPut</h4>
-                                            <pre class="editor_output" id="output" style="width: 1100px; height: 700px;"></pre>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        </div>
+        <div class="code_editor">
+            <div class="code_editor_container">
+                <div class="code_editor_wrapper">
+                    <div class="code_editor_segments" style="display: flex; overflow-X: scroll;">
+    
+                        <div class="code" style="margin: 5px;">
+                            <h4>HTML</h4>
+                            <div class="editorContainer editor_input" id="htmlEditor" style="height: 400px; width: 500px;"></div>
+                        </div>
+    
+                        <div class="code" style="margin: 5px;">
+                            <h4>CSS</h4>
+                            <div class="editorContainer editor_input" id="cssEditor" style="height: 400px; width: 500px;"></div>
+                        </div>
+    
+                        <div class="code" style="margin: 5px;">
+                            <h4>JavaScript</h4>
+                            <div class="editorContainer editor_input" id="jsEditor" style="height: 400px; width: 500px;"></div>
+                        </div>
+                        
+                    </div>
+                    <button class="run_btn" id="runButton"><i class='bx bx-play'></i>Run</button>
+                    <div class="code_editor_segments">
+                        <div class="output">
+                            <h4>OutPut</h4>
+                            <pre class="editor_output" id="output" style="width: 1100px; height: 700px;"></pre>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
     

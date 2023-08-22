@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load custom_template_filters %}
+
+{% block content %}
+  <h1>Take Assessment: {{ assessment.title }}</h1>
+  <form method="post">
+    {% csrf_token %}
+    <ul>
+      {% for question in questions %}
+        <li>
+          {{ question.text }}
+          <ul>
+            {% for answer in question.answer_set.all %}
+              <li>
+                <input type="radio" name="question_{{ question.id }}" value="{{ answer.id }}" {% if user_answer_id == answer.id and not answer.is_correct %}checked{% endif %}>
+                {{ answer.text }}
+                {% if request.POST|get_question_answer_id:question.id == answer.id and not answer.is_correct %}
+                  <span style="color: red;">Incorrect Answer</span>
+                {% endif %}
+
+              </li>
+            {% endfor %}
+          </ul>
+        </li>
+      {% endfor %}
+      
+    </ul>
+
+    
+    <button type="submit">Submit</button>
+
+  </form>
+  <span>Score: {{ score }}</span>
+  {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color: red;">{{ message }}</li>
+            {% endfor %}
+
+        </ul>
+
+      {% endif %}
+
+{% endblock %}

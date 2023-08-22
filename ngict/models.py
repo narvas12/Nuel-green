@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-from django.contrib.auth.models import AbstractUser
+
 
 
 
@@ -88,21 +88,10 @@ class Lesson(models.Model):
     order = models.PositiveIntegerField()
 
 
-class Assessment(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    course = models.ForeignKey('Course', on_delete=models.PROTECT)
-    questions = models.TextField()  # You might want to design a separate model for questions and answers
-    passing_score = models.PositiveIntegerField()
-
-
-class Student(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    enrolled_courses = models.ManyToManyField('Course')
-
 
 # assessments section 
 class Assessment(models.Model):
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=200)
     description = models.TextField()
     course = models.ForeignKey('Course', on_delete=models.PROTECT)
@@ -123,11 +112,27 @@ class Answer(models.Model):
     is_correct = models.BooleanField(default=False)
 
 
+class AssessmentScore(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE)
+    score = models.DecimalField(max_digits=5, decimal_places=2)  # Store the score as a decimal
+
+    def __str__(self):
+        return f"{self.user.username} - {self.assessment.title}"
+
+
 class Resource(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     file = models.FileField(upload_to='resources/')  # Store files like videos, slides, etc.
     lesson = models.ForeignKey('Lesson', on_delete=models.PROTECT)
+
+
+class Student(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    enrolled_courses = models.ManyToManyField('Course')
+
+    assessment_scores = models.ManyToManyField(AssessmentScore, related_name='students', blank=True)
 
 
 

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Assessments for {{ course.title }}</h1>
+  <ul>
+    {% for assessment in assessments %}
+      <li>
+        <a href="{% url 'academy:view_assessment' assessment.id %}">{{ assessment.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

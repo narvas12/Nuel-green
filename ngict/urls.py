@@ -22,5 +22,10 @@ urlpatterns = [
 
 
     path('save_user_codes/', save_user_codes, name='save_user_codes'),
-    path('get_user_codes/', get_user_codes, name='get_user_codes')
+    path('get_user_codes/', get_user_codes, name='get_user_codes'),
+
+    # path('course/<slug:course_slug>/assessments/', view_course_assessments, name='view_course_assessments'),
+    path('course/<slug:course_slug>/', view_course_assessments, name='view_course_assessments'),
+    path('assessment/<int:assessment_id>/', view_assessment, name='view_assessment'),
+    path('assessment/<int:assessment_id>/take/', take_assessment, name='take_assessment'),
 ]

@@ -5,15 +5,86 @@ from django.contrib import messages
 from django.core.mail import EmailMessage, send_mail
 from django.contrib.auth.decorators import login_required
 from core import settings
-from .models import User_Profile, Course
 from django.contrib.auth import authenticate, login, logout
-from .models import Course, Module, Lesson, Assessment, Resource, Student, UserCode
+from .models import User_Profile, Course, Module, Lesson, Assessment, Resource, Student, UserCode, Assessment, Question, Answer, AssessmentScore
 from django.views.generic import ListView, DetailView
 from django.urls import reverse
 from .forms import UserCreationForm
 from django.http import JsonResponse
 import json
 
+
+
+
+
+def view_course_assessments(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
+    assessments = Assessment.objects.filter(course=course)
+    return render(request, 'courses/assessments/course_assessments.html', {'assessments': assessments, 'course': course})
+
+
+@login_required
+def view_assessment(request, assessment_id):
+    assessment = get_object_or_404(Assessment, id=assessment_id)
+    questions = Question.objects.filter(assessment=assessment)
+    
+    user = request.user
+    assessment_score = AssessmentScore.objects.filter(user=user, assessment=assessment).first()
+    
+    return render(request, 'courses/assessments/view_assessment.html', {'assessment': assessment, 'questions': questions, 'score': assessment_score})
+
+
+from .custom_template_filters import get_question_answer_id
+
+@login_required
+def take_assessment(request, assessment_id):
+    assessment = get_object_or_404(Assessment, id=assessment_id)
+    questions = Question.objects.filter(assessment=assessment)
+
+    score = None
+    user = request.user
+    assessment_score = AssessmentScore.objects.filter(user=user, assessment=assessment).last()
+    if assessment_score:
+        score = assessment_score.score
+
+    if request.method == 'POST':
+        total_questions = questions.count()
+        correct_answers = 0
+        error_answers = 0
+        
+        for question in questions:
+            user_answer_id = request.POST.get(f'question_{question.id}', None)
+            if user_answer_id:
+                user_answer = get_object_or_404(Answer, id=user_answer_id)
+                if user_answer.is_correct:
+                    correct_answers += 1
+                else:
+                    error_answers += 1
+        
+        score = (correct_answers / total_questions) * 100
+        if score < 100:
+            messages.error(request, 'Some of your answers are incorrect. Please review your answers.')
+        else:
+            messages.success(request, 'You passes the test')
+        user = request.user
+        
+        # Save user's assessment score
+        assessment_score = AssessmentScore.objects.create(user=user, assessment=assessment, score=score)
+        assessment_score.save()
+        
+        if error_answers > 0:
+            error_message = "Some of your answers are incorrect. Please review your answers."
+            return render(request, 'courses/assessments/take_assessment.html', {'assessment': assessment, 'questions': questions, 'error_message': error_message})
+        
+        return redirect('academy:view_assessment', assessment_id=assessment.id)
+
+    return render(request, 'courses/assessments/take_assessment.html', {'assessment': assessment, 'questions': questions, 'score':assessment_score})
+
+
+
+
+
+@login_required
 def save_user_codes(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -32,6 +103,7 @@ def save_user_codes(request):
 
     return JsonResponse({"message": "Invalid request."}, status=400)
 
+@login_required
 def get_user_codes(request):
     user = request.user
     try:
@@ -61,7 +133,6 @@ class CourseListView(ListView):
     model = Course
     template_name = 'courses/course_list.html'
     context_object_name = 'courses'
-
 
 
 @login_required
@@ -96,20 +167,46 @@ def enroll_course(request, slug):  # Use slug parameter
         return redirect('academy:signin')  # Redirect to your login view
 
 
-def user_dashboard(request):
+@login_required
+def user_dashboard(request, assessment_id):
+   
     if request.user.is_authenticated:
         try:
             student = Student.objects.get(user=request.user)
             enrolled_courses = student.enrolled_courses.all()
-            return render(request, 'user/user_dashboard.html', {'enrolled_courses': enrolled_courses})
+            assessment = get_object_or_404(Assessment, id=assessment_id)
+    
+    
+            user = request.user
+            assessment_score = AssessmentScore.objects.filter(user=user, assessment=assessment).last()
+            return render(request, 'user/user_dashboard.html', {'enrolled_courses': enrolled_courses,  'assessment': assessment, 'score': assessment_score})
         except Student.DoesNotExist:
             return render(request, 'user/user_dashboard.html', {'message': 'You are not enrolled in any courses yet.'})
     else:
         return render(request, 'user/user_dashboard.html', {'message': 'Please log in to access your dashboard.'})
 
 
+@login_required
 def html_css(request):
-    return render(request, 'courses/html_css.html')
+    course = Course.objects.get(slug='html_css')  # Get the html_css course
+    assessments = Assessment.objects.filter(course=course)
+    return render(request, 'courses/html_css.html', {'assessments': assessments, 'course':course})
+
+
+@login_required
+def python(request):
+    course = Course.objects.get(slug='python')  # Get the python course
+    assessments = Assessment.objects.filter(course=course)
+    return render(request, 'courses/python.html', {'assessments': assessments, 'course':course})
+
+@login_required
+def javascript(request):
+    course = Course.objects.get(slug='javascript')  # Get the javascript course
+    assessments = Assessment.objects.filter(course=course)
+    return render(request, 'courses/javascript.html', {'assessments': assessments, 'course':course})
+
+# Similarly, define similar functions for other courses...
+
 
 
 def nodejs(request):

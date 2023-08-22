@@ -1,3 +1,5 @@
+<!-- user_dashboard.html -->
+
 {% extends 'base.html' %}
 
 {% block content %}
@@ -7,7 +9,16 @@
     {% if enrolled_courses %}
       <ul>
         {% for course in enrolled_courses %}
+        <div class="user_courses">
           <li><a href="{% url 'academy:course_detail' course.slug %}">{{ course.title }}</a></li>
+          <li>
+            <ul>
+              {% for assessment_title, score in assessment_scores[course.title].items %}
+                <li>{{ assessment_title }}: {% if score %}{{ score }}%{% else %}Not taken{% endif %}</li>
+              {% endfor %}
+            </ul>
+          </li>
+        </div>
         {% endfor %}
       </ul>
     {% else %}

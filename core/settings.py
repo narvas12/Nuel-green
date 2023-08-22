@@ -30,7 +30,7 @@ DEBUG = True
 AUTH_USER_MODEL = 'auth.User'
 
 
-ALLOWED_HOSTS = ['127.0.0.1','d5a8-197-211-58-46.ngrok-free.app']
+ALLOWED_HOSTS = ['127.0.0.1','c270-197-211-58-46.ngrok-free.app']
 
 
 # Application definition
@@ -69,9 +69,13 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'custom_template_filters': 'ngict.custom_template_filters',
+            },
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
