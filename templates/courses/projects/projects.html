@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block projects %}
+<div class="projects">
+    <h3>Projects</h3>
+    <h4>Submit Project:</h4>
+    <form id="project-form" method="post">
+      {% csrf_token %}
+      <label for="project_id">Select Project:</label>
+      <select name="project_id" required>
+        <option value="" disabled selected>Select a project</option>
+        {% for project in projects %}
+          <option value="{{ project.id }}" {% if project.id in submitted_project_ids %}disabled{% endif %}>
+            {{ project.project_title }} {% if project.id in submitted_project_ids %}(Submitted){% endif %}
+          </option>
+        {% endfor %}
+      </select>
+      <br>
+      <label for="project_link">Live Project Link:</label>
+      <input type="url" name="project_link" required>
+      <button type="submit">Submit</button>
+    </form>
+    <div id="project-feedback"></div>
+  </div>
+  
+  <h3>Submitted Projects:</h3>
+  <ul>
+    {% for project_submission in project_submissions %}
+      <li>
+        <strong>{{ project_submission.project.project_title }}</strong>
+        - <a href="{{ project_submission.project_link }}" target="_blank">View Project</a>
+      </li>
+    {% endfor %}
+  </ul>
+  
+
+  {% endblock projects %}

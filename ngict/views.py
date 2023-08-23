@@ -6,7 +6,7 @@ from django.core.mail import EmailMessage, send_mail
 from django.contrib.auth.decorators import login_required
 from core import settings
 from django.contrib.auth import authenticate, login, logout
-from .models import Project, User_Profile, Course, Module, Lesson, Assessment, Resource, Student, UserCode, Assessment, Question, Answer, AssessmentScore
+from .models import Project, ProjectSubmission, User_Profile, Course, Module, Lesson, Assessment, Resource, Student, UserCode, Assessment, Question, Answer, AssessmentScore, UserProgress
 from django.views.generic import ListView, DetailView
 from django.urls import reverse
 from .forms import UserCreationForm
@@ -161,34 +161,51 @@ def enroll_course(request, slug):  # Use slug parameter
         return redirect('academy:signin')  # Redirect to your login view
 
 
+from django.http import JsonResponse
+
+@login_required
+def projects(request):
+    projects = Project.objects.all()
+    submitted_project_ids = ProjectSubmission.objects.filter(user=request.user).values_list('submitted_project_id', flat=True)
+    project_submissions = ProjectSubmission.objects.filter(user=request.user)
+
+    if request.method == 'POST':
+        submitted_project_id = request.POST.get('project_id')
+        project_link = request.POST.get('project_link')
+        submitted_project = Project.objects.get(id=submitted_project_id)
+
+        project_submission = ProjectSubmission(user=request.user, submitted_project=submitted_project, project_link=project_link)
+        project_submission.save()
+
+        return JsonResponse({'project_title': submitted_project.project_title, 'project_link': project_link})
+
+    return render(request, 'courses/projects/projects.html', {
+        'projects': projects,
+        'submitted_project_ids': submitted_project_ids,
+        'project_submissions': project_submissions
+    })
+
+
+
 @login_required
 def user_dashboard(request):
-    if request.method == 'POST':
-        live_link = request.POST.get('live_link')
-        course_slug = request.POST.get('course_slug')
-        course = get_object_or_404(Course, slug=course_slug)
-
-        project = Project(course=course, live_link=live_link)
-        project.save()
-
-        project_html = f'<p>Project submitted: <a href="{live_link}">{live_link}</a></p>'
-        return JsonResponse({'project_html': project_html})
-
     if request.user.is_authenticated:
         try:
             student = Student.objects.get(user=request.user)
             enrolled_courses = student.enrolled_courses.all()
 
-            # Retrieve assessment scores for each enrolled course
-            assessment_scores = {}
+            progress_data = []
             for course in enrolled_courses:
-                assessment_scores[course.course_title] = {}
-                assessments = course.assessment_set.all()
-                for assessment in assessments:
-                    assessment_score = AssessmentScore.objects.filter(user=request.user, assessment=assessment).last()
-                    assessment_scores[course.course_title][assessment.title] = assessment_score.score if assessment_score else None
+                user_progress = UserProgress.objects.filter(user=request.user, course=course)
+                total_weeks = course.duration_in_weeks  # Assuming the course has a duration_in_weeks field
 
-            return render(request, 'user/user_dashboard.html', {'enrolled_courses': enrolled_courses, 'assessment_scores': assessment_scores})
+                progress_data.append({
+                    'course': course,
+                    'total_weeks': total_weeks,
+                    'user_progress': user_progress,
+                })
+
+            return render(request, 'user/user_dashboard.html', {'enrolled_courses': enrolled_courses, 'progress_data': progress_data})
         except Student.DoesNotExist:
             return render(request, 'user/user_dashboard.html', {'message': 'You are not enrolled in any courses yet.'})
     else:

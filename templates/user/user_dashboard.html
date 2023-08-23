@@ -36,44 +36,26 @@
     <p><a href="{% url 'academy:signin' %}">Log in</a></p>
   {% endif %}
 
-  <div class="projects">
-    <h3>Projects</h3>
-    <h4>Submit Project:</h4>
-    <form id="project-form" method="post" action="{% url 'academy:user_dashboard' %}">
-      {% csrf_token %}
-      <label for="live_link">Live Project Link:</label>
-      <input type="url" name="live_link" required>
-      <input type="hidden" name="course_slug" value="{{ course.slug }}">
-      <button type="submit">Submit</button>
-    </form>
-    <div id="project-feedback"></div>
+
+
+  <div class="course-progress">
+    <h3>Course Progress</h3>
+    {% if progress_data %}
+      <ul>
+        {% for data in progress_data %}
+          <li>
+            <h4>{{ data.course.course_title }}</h4>
+            <p>Completed Lessons: {{ data.completed_lessons }} / {{ data.total_lessons }}</p>
+            <p>Progress: {{ data.progress_percentage }}%</p>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No progress data available.</p>
+    {% endif %}
   </div>
-  
+
   <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const projectForm = document.getElementById("project-form");
-    const projectFeedback = document.getElementById("project-feedback");
-  
-    projectForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      
-      const formData = new FormData(projectForm);
-      try {
-        const response = await fetch("{% url 'academy:user_dashboard' %}", {
-          method: "POST",
-          body: formData,
-        });
-  
-        if (response.ok) {
-          const data = await response.json();
-          projectFeedback.innerHTML = data.project_html;
-        } else {
-          projectFeedback.innerHTML = "Project submission failed.";
-        }
-      } catch (error) {
-        projectFeedback.innerHTML = "An error occurred while submitting the project.";
-      }
-    });
-  });
+    // ... existing JavaScript code ...
   </script>
 {% endblock %}

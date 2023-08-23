@@ -32,6 +32,37 @@ sidebarBtn.addEventListener("click", () => {
 
 
 
+ document.addEventListener("DOMContentLoaded", function () {
+  const projectForm = document.getElementById("project-form");
+  const projectFeedback = document.getElementById("project-feedback");
+
+  projectForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(projectForm);
+
+    try {
+      const response = await fetch("{% url 'academy:user_dashboard' %}", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        projectFeedback.innerHTML = `Project submitted: <a href="${data.project_link}" target="_blank">${data.project_title}</a>`;
+      } else {
+        console.error("Response not OK:", response);
+        projectFeedback.innerHTML = "Project submission failed.";
+      }
+    } catch (error) {
+      console.error("Error occurred:", error);
+      projectFeedback.innerHTML = "An error occurred while submitting the project.";
+    }
+  });
+
+});
+
+
 
 
 

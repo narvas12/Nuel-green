@@ -1,12 +1,17 @@
 # admin.py
 from django.contrib import admin
 
-from .models import Instructor, Course, Module, Lesson, Student, Assessment, Resource, UserCode, Question, Answer, AssessmentScore, Project
+from .models import Instructor, Course, Module, Lesson, ProjectSubmission, Student, Assessment, Resource, UserCode, Question, Answer, AssessmentScore, Project
+
+@admin.register(ProjectSubmission)
+class SubmitPojectAdmin(admin.ModelAdmin):
+    list_display = ['user', 'project_link', 'submitted_project']
+
 
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ['course', 'project_title', 'live_link']
+    list_display = ['course', 'project_title', 'project_description']
 
 
 @admin.register(AssessmentScore)
@@ -40,7 +45,7 @@ class ModuleAdmin(admin.ModelAdmin):
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('lesson_title', 'module', 'order')
+    list_display = ('lesson_title','description', 'module', 'order')
 
 
 @admin.register(Student)
@@ -48,7 +53,7 @@ class StudentAdmin(admin.ModelAdmin):
     list_display = ('user', 'display_enrolled_courses', 'display_assessment_scores')
 
     def display_enrolled_courses(self, obj):
-        return ", ".join([course.title for course in obj.enrolled_courses.all()])
+        return ", ".join([course.course_title for course in obj.enrolled_courses.all()])
     display_enrolled_courses.short_description = 'Enrolled Courses'
 
     def display_assessment_scores(self, obj):
@@ -58,7 +63,7 @@ class StudentAdmin(admin.ModelAdmin):
 
 @admin.register(Assessment)
 class AssessmentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title','description', 'course', 'passing_score')
+    list_display = ('id', 'title','description', 'course','module', 'lesson', 'passing_score')
 
 
 @admin.register(Answer)

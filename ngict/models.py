@@ -56,6 +56,11 @@ class Course(models.Model):
     video_url = models.URLField(null=True)
     description = models.TextField()
     slug = models.SlugField(unique=True, blank=True)
+    duration_in_days = models.IntegerField(default=100)
+    
+    @property
+    def duration_in_weeks(self):
+        return self.duration_in_days // 7
 
     class Meta:
         verbose_name_plural = 'Course'
@@ -80,13 +85,20 @@ class Module(models.Model):
     order = models.PositiveIntegerField()
 
 
+    def __str__(self):
+        return self.module_title
+
+
 class Lesson(models.Model):
+    course = models.ForeignKey(Course, default=None, null=True, on_delete=models.DO_NOTHING)
+    module = models.ForeignKey(Module, default=None, null=True, on_delete=models.DO_NOTHING)
     lesson_title = models.CharField(max_length=200)
     description = models.TextField()
-    content = models.TextField()  # This could hold text, video links, code snippets, etc.
-    module = models.ForeignKey('Module', on_delete=models.DO_NOTHING)
-    order = models.PositiveIntegerField()
+    content = models.TextField()
+    order = models.PositiveIntegerField() 
 
+    def __str__(self):
+        return self.lesson_title
 
 
 # assessments section 
@@ -94,7 +106,9 @@ class Assessment(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=200)
     description = models.TextField()
-    course = models.ForeignKey('Course', on_delete=models.DO_NOTHING)
+    course = models.ForeignKey(Course, default=None, null=True, on_delete=models.DO_NOTHING)
+    module = models.ForeignKey(Module, default=None, null=True, on_delete=models.DO_NOTHING)
+    lesson = models.ForeignKey(Lesson, default=None, null=True, on_delete=models.DO_NOTHING)
     passing_score = models.PositiveIntegerField()
 
     def __str__(self):
@@ -139,10 +153,14 @@ class Project(models.Model):
     
     def __str__(self):
         return self.project_title
-    
-class Submit_project(models.Model):
+
+class ProjectSubmission(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    live_link =  models.URLField()
+    project_link = models.URLField()
+    submitted_project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        unique_together = ['user', 'submitted_project'] 
 
 
 class Student(models.Model):
@@ -151,6 +169,25 @@ class Student(models.Model):
 
     assessment_scores = models.ManyToManyField(AssessmentScore, related_name='students', blank=True)
 
+
+class UserProgress(models.Model):
+    STATUS_NOT_STARTED = 'Not Started'
+    STATUS_IN_PROGRESS = 'In Progress'
+    STATUS_COMPLETED = 'Completed'
+
+    STATUS_CHOICES = (
+        (STATUS_NOT_STARTED, 'Not Started'),
+        (STATUS_IN_PROGRESS, 'In Progress'),
+        (STATUS_COMPLETED, 'Completed'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    week = models.PositiveIntegerField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_NOT_STARTED)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.course.course_title} - Week {self.week} - Status: {self.get_status_display()}"
 
 
 
