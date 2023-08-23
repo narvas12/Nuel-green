@@ -6,7 +6,7 @@ from django.core.mail import EmailMessage, send_mail
 from django.contrib.auth.decorators import login_required
 from core import settings
 from django.contrib.auth import authenticate, login, logout
-from .models import User_Profile, Course, Module, Lesson, Assessment, Resource, Student, UserCode, Assessment, Question, Answer, AssessmentScore
+from .models import Project, User_Profile, Course, Module, Lesson, Assessment, Resource, Student, UserCode, Assessment, Question, Answer, AssessmentScore
 from django.views.generic import ListView, DetailView
 from django.urls import reverse
 from .forms import UserCreationForm
@@ -33,8 +33,6 @@ def view_assessment(request, assessment_id):
     
     return render(request, 'courses/assessments/view_assessment.html', {'assessment': assessment, 'questions': questions, 'score': assessment_score})
 
-
-from .custom_template_filters import get_question_answer_id
 
 @login_required
 def take_assessment(request, assessment_id):
@@ -81,9 +79,6 @@ def take_assessment(request, assessment_id):
     return render(request, 'courses/assessments/take_assessment.html', {'assessment': assessment, 'questions': questions, 'score':assessment_score})
 
 
-
-
-
 @login_required
 def save_user_codes(request):
     if request.method == "POST":
@@ -103,6 +98,7 @@ def save_user_codes(request):
 
     return JsonResponse({"message": "Invalid request."}, status=400)
 
+
 @login_required
 def get_user_codes(request):
     user = request.user
@@ -117,8 +113,6 @@ def get_user_codes(request):
         )
     except UserCode.DoesNotExist:
         return JsonResponse({"message": "User codes not found."}, status=404)
-
-
 
 
 @login_required
@@ -168,22 +162,38 @@ def enroll_course(request, slug):  # Use slug parameter
 
 
 @login_required
-def user_dashboard(request, assessment_id):
-   
+def user_dashboard(request):
+    if request.method == 'POST':
+        live_link = request.POST.get('live_link')
+        course_slug = request.POST.get('course_slug')
+        course = get_object_or_404(Course, slug=course_slug)
+
+        project = Project(course=course, live_link=live_link)
+        project.save()
+
+        project_html = f'<p>Project submitted: <a href="{live_link}">{live_link}</a></p>'
+        return JsonResponse({'project_html': project_html})
+
     if request.user.is_authenticated:
         try:
             student = Student.objects.get(user=request.user)
             enrolled_courses = student.enrolled_courses.all()
-            assessment = get_object_or_404(Assessment, id=assessment_id)
-    
-    
-            user = request.user
-            assessment_score = AssessmentScore.objects.filter(user=user, assessment=assessment).last()
-            return render(request, 'user/user_dashboard.html', {'enrolled_courses': enrolled_courses,  'assessment': assessment, 'score': assessment_score})
+
+            # Retrieve assessment scores for each enrolled course
+            assessment_scores = {}
+            for course in enrolled_courses:
+                assessment_scores[course.course_title] = {}
+                assessments = course.assessment_set.all()
+                for assessment in assessments:
+                    assessment_score = AssessmentScore.objects.filter(user=request.user, assessment=assessment).last()
+                    assessment_scores[course.course_title][assessment.title] = assessment_score.score if assessment_score else None
+
+            return render(request, 'user/user_dashboard.html', {'enrolled_courses': enrolled_courses, 'assessment_scores': assessment_scores})
         except Student.DoesNotExist:
             return render(request, 'user/user_dashboard.html', {'message': 'You are not enrolled in any courses yet.'})
     else:
         return render(request, 'user/user_dashboard.html', {'message': 'Please log in to access your dashboard.'})
+
 
 
 @login_required

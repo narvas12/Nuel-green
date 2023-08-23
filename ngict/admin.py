@@ -1,7 +1,13 @@
 # admin.py
 from django.contrib import admin
 
-from .models import Instructor, Course, Module, Lesson, Student, Assessment, Resource, UserCode, Question, Answer, AssessmentScore
+from .models import Instructor, Course, Module, Lesson, Student, Assessment, Resource, UserCode, Question, Answer, AssessmentScore, Project
+
+
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ['course', 'project_title', 'live_link']
+
 
 @admin.register(AssessmentScore)
 class AssessmentScoreAdmin(admin.ModelAdmin):
@@ -23,18 +29,18 @@ class InstructorAdmin(admin.ModelAdmin):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description')
-    prepopulated_fields = {'slug': ('title',)}
+    list_display = ('course_title', 'description')
+    prepopulated_fields = {'slug': ('course_title',)}
 
 
 @admin.register(Module)
 class ModuleAdmin(admin.ModelAdmin):
-    list_display = ('title', 'course', 'order')
+    list_display = ('module_title', 'course', 'order')
 
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('title', 'module', 'order')
+    list_display = ('lesson_title', 'module', 'order')
 
 
 @admin.register(Student)
@@ -73,4 +79,4 @@ admin.site.register(Question, QuestionAdmin)
 
 @admin.register(Resource)
 class ResourceAdmin(admin.ModelAdmin):
-    list_display = ('title', 'lesson')
+    list_display = ('resource_title', 'lesson')

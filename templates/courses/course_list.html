@@ -8,7 +8,7 @@
     <h1>Available Courses</h1>
     <ul>
     {% for course in courses %}
-        <li><a href="{% url 'academy:course_detail' course.slug %}">{{ course.title }}</a></li>
+        <li><a href="{% url 'academy:course_detail' course.slug %}">{{ course.course_title }}</a></li>
     {% endfor %}
     </ul>
 {% endblock %}

@@ -9,7 +9,7 @@ from django.utils.text import slugify
 
 
 class UserCode(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     html_code = models.TextField()
     css_code = models.TextField()
     js_code = models.TextField()
@@ -22,7 +22,7 @@ class UserCode(models.Model):
 
 
 class User_Profile(models.Model):
-    username = models.ForeignKey(User, max_length=20, on_delete=models.PROTECT)
+    username = models.ForeignKey(User, max_length=20, on_delete=models.DO_NOTHING)
     f_name = models.CharField(max_length=100)
     m_name = models.CharField(max_length=100)
     l_name = models.CharField(max_length=100)
@@ -52,39 +52,39 @@ class Instructor(models.Model):
 
 
 class Course(models.Model):
-    title = models.CharField(max_length=100)
+    course_title = models.CharField(max_length=100)
     video_url = models.URLField(null=True)
     description = models.TextField()
     slug = models.SlugField(unique=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Course'
-        ordering = ('-title',)
+        ordering = ('-course_title',)
 
     def get_absolute_url (self):
         return reverse('academy:course', args=[self.slug])
 
     def __str__(self):
-        return self.title
+        return self.course_title
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = slugify(self.course_title)
         super().save(*args, **kwargs)
 
 
 class Module(models.Model):
-    title = models.CharField(max_length=200)
+    module_title = models.CharField(max_length=200)
     description = models.TextField()
-    course = models.ForeignKey(Course, on_delete=models.PROTECT)
+    course = models.ForeignKey(Course, on_delete=models.DO_NOTHING)
     order = models.PositiveIntegerField()
 
 
 class Lesson(models.Model):
-    title = models.CharField(max_length=200)
+    lesson_title = models.CharField(max_length=200)
     description = models.TextField()
     content = models.TextField()  # This could hold text, video links, code snippets, etc.
-    module = models.ForeignKey('Module', on_delete=models.PROTECT)
+    module = models.ForeignKey('Module', on_delete=models.DO_NOTHING)
     order = models.PositiveIntegerField()
 
 
@@ -94,7 +94,7 @@ class Assessment(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=200)
     description = models.TextField()
-    course = models.ForeignKey('Course', on_delete=models.PROTECT)
+    course = models.ForeignKey('Course', on_delete=models.DO_NOTHING)
     passing_score = models.PositiveIntegerField()
 
     def __str__(self):
@@ -103,18 +103,18 @@ class Assessment(models.Model):
 
 class Question(models.Model):
     text = models.TextField()
-    assessment = models.ForeignKey('Assessment', on_delete=models.PROTECT)
+    assessment = models.ForeignKey('Assessment', on_delete=models.DO_NOTHING)
 
 
 class Answer(models.Model):
     text = models.CharField(max_length=200)
-    question = models.ForeignKey('Question', on_delete=models.PROTECT)
+    question = models.ForeignKey('Question', on_delete=models.DO_NOTHING)
     is_correct = models.BooleanField(default=False)
 
 
 class AssessmentScore(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    assessment = models.ForeignKey(Assessment, on_delete=models.DO_NOTHING)
     score = models.DecimalField(max_digits=5, decimal_places=2)  # Store the score as a decimal
 
     def __str__(self):
@@ -122,14 +122,31 @@ class AssessmentScore(models.Model):
 
 
 class Resource(models.Model):
-    title = models.CharField(max_length=200)
+    resource_title = models.CharField(max_length=200)
     description = models.TextField()
     file = models.FileField(upload_to='resources/')  # Store files like videos, slides, etc.
-    lesson = models.ForeignKey('Lesson', on_delete=models.PROTECT)
+    lesson = models.ForeignKey('Lesson', on_delete=models.DO_NOTHING)
+
+
+class Project(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    project_title = models.CharField(max_length=200)
+    project_description = models.TextField(max_length=200)
+    # Other fields for Project
+
+    class Meta:
+        unique_together = ['course', 'project_title']  # Enforce uniqueness per course
+    
+    def __str__(self):
+        return self.project_title
+    
+class Submit_project(models.Model):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    live_link =  models.URLField()
 
 
 class Student(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     enrolled_courses = models.ManyToManyField('Course')
 
     assessment_scores = models.ManyToManyField(AssessmentScore, related_name='students', blank=True)
