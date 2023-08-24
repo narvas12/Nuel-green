@@ -199,10 +199,13 @@ def user_dashboard(request):
                 user_progress = UserProgress.objects.filter(user=request.user, course=course)
                 total_weeks = course.duration_in_weeks  # Assuming the course has a duration_in_weeks field
 
+                assessment_scores = AssessmentScore.objects.filter(user=request.user, assessment__course=course)
+
                 progress_data.append({
                     'course': course,
                     'total_weeks': total_weeks,
                     'user_progress': user_progress,
+                    'assessment_scores': assessment_scores,
                 })
 
             return render(request, 'user/user_dashboard.html', {'enrolled_courses': enrolled_courses, 'progress_data': progress_data})
@@ -212,12 +215,12 @@ def user_dashboard(request):
         return render(request, 'user/user_dashboard.html', {'message': 'Please log in to access your dashboard.'})
 
 
-
 @login_required
 def html_css(request):
     course = Course.objects.get(slug='html_css')  # Get the html_css course
     assessments = Assessment.objects.filter(course=course)
-    return render(request, 'courses/html_css.html', {'assessments': assessments, 'course':course})
+    modules = Module.objects.filter(course=course)
+    return render(request, 'courses/html_css.html', {'assessments': assessments, 'course':course,  'modules': modules})
 
 
 @login_required
@@ -233,8 +236,6 @@ def javascript(request):
     return render(request, 'courses/javascript.html', {'assessments': assessments, 'course':course})
 
 # Similarly, define similar functions for other courses...
-
-
 
 def nodejs(request):
     return render(request, 'courses/nodejs.html')

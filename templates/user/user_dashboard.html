@@ -37,6 +37,25 @@
   {% endif %}
 
 
+  {% for course_progress in progress_data %}
+  <div class="course-progress">
+    <h3>{{ course_progress.course.course_title }}</h3>
+    <p>Total Weeks: {{ course_progress.total_weeks }}</p>
+    <ul>
+      {% for progress in course_progress.user_progress %}
+      <li>Week {{ progress.week }}: {{ progress.status }}</li>
+      {% endfor %}
+    </ul>
+    <h4>Assessment Scores:</h4>
+    <ul>
+      {% for score in course_progress.assessment_scores %}
+      <li>{{ score.assessment.title }}: {{ score.score }}%</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+
+
 
   <div class="course-progress">
     <h3>Course Progress</h3>

@@ -395,26 +395,45 @@
                             <iframe width="1100" height="650" src="https://www.youtube.com/embed/fWzp5lZ5CEA"
                                 frameborder="0" allowfullscreen></iframe>
                         </div>
-                        <h2>Assessments for {{ course.course_title }}:</h2>
-<ul>
-  {% for assessment in assessments %}
-    <li>
-      <a href="{% url 'academy:view_assessment' assessment.id %}">View Assessment</a> |
-      <a href="{% url 'academy:take_assessment' assessment.id %}">Take Assessment</a>
-      <div>
-          <ul>
-              <li>{{ assessment.title }}</li>
-          </ul>
-      </div>
-    </li>
-  {% endfor %}
-</ul>
 
+                        <h1>{{ course.course_title }}</h1>
+  
+                        <h2>Modules</h2>
+                        <ul>
+                            {% for module in modules %}
+                            <li>
+                                {{ module.module_title }}
+                                <ul>
+                                {% for lesson in module.lesson_set.all %}
+                                    <li>{{ lesson.lesson_title }}</li>
+                                {% endfor %}
+                                </ul>
+                            </li>
+                            {% endfor %}
+                        </ul>
+
+
+                        <h2>Assessments for {{ course.course_title }}:</h2>
+                        <ul>
+                        {% for assessment in assessments %}
+                            <li>
+                            <a href="{% url 'academy:view_assessment' assessment.id %}">View Assessment</a> |
+                            <a href="{% url 'academy:take_assessment' assessment.id %}">Take Assessment</a>
+                            <div>
+                                <ul>
+                                    <li>{{ assessment.title }}</li>
+                                </ul>
+                            </div>
+                            </li>
+                        {% endfor %}
+                        <a href="{% url 'academy:projects' %}">Projects</a>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
         </div>
+
         <div class="code_editor">
             <div class="code_editor_container">
                 <div class="code_editor_wrapper">

@@ -121,7 +121,7 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
-    text = models.CharField(max_length=200)
+    text = models.CharField(max_length=500)
     question = models.ForeignKey('Question', on_delete=models.DO_NOTHING)
     is_correct = models.BooleanField(default=False)
 
