@@ -154,6 +154,7 @@ class Project(models.Model):
     def __str__(self):
         return self.project_title
 
+
 class ProjectSubmission(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     project_link = models.URLField()

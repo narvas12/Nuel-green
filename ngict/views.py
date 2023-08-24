@@ -161,8 +161,6 @@ def enroll_course(request, slug):  # Use slug parameter
         return redirect('academy:signin')  # Redirect to your login view
 
 
-from django.http import JsonResponse
-
 @login_required
 def projects(request):
     projects = Project.objects.all()
@@ -170,7 +168,7 @@ def projects(request):
     project_submissions = ProjectSubmission.objects.filter(user=request.user)
 
     if request.method == 'POST':
-        submitted_project_id = request.POST.get('project_id')
+        submitted_project_id = request.POST.get('project_id')  # Get the submitted project ID
         project_link = request.POST.get('project_link')
         submitted_project = Project.objects.get(id=submitted_project_id)
 
@@ -184,6 +182,7 @@ def projects(request):
         'submitted_project_ids': submitted_project_ids,
         'project_submissions': project_submissions
     })
+
 
 
 

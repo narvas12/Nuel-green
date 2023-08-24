@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
-{% block projects %}
-<div class="projects">
+{% block content %}
+  <div class="projects">
     <h3>Projects</h3>
     <h4>Submit Project:</h4>
-    <form id="project-form" method="post">
+    <form id="project-form" method="post" action="{% url 'academy:projects' %}">
       {% csrf_token %}
       <label for="project_id">Select Project:</label>
       <select name="project_id" required>
@@ -29,11 +28,9 @@
   <ul>
     {% for project_submission in project_submissions %}
       <li>
-        <strong>{{ project_submission.project.project_title }}</strong>
+        <strong>{{ project_submission.submitted_project.project_title }}</strong>
         - <a href="{{ project_submission.project_link }}" target="_blank">View Project</a>
       </li>
     {% endfor %}
   </ul>
-  
-
-  {% endblock projects %}
+{% endblock %}

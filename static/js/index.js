@@ -35,6 +35,7 @@ sidebarBtn.addEventListener("click", () => {
  document.addEventListener("DOMContentLoaded", function () {
   const projectForm = document.getElementById("project-form");
   const projectFeedback = document.getElementById("project-feedback");
+  const userDashboardUrl = "{% url 'academy:user_dashboard' %}";
 
   projectForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -42,7 +43,7 @@ sidebarBtn.addEventListener("click", () => {
     const formData = new FormData(projectForm);
 
     try {
-      const response = await fetch("{% url 'academy:user_dashboard' %}", {
+      const response = await fetch(userDashboardUrl, {
         method: "POST",
         body: formData,
       });
@@ -61,6 +62,7 @@ sidebarBtn.addEventListener("click", () => {
   });
 
 });
+
 
 
 
