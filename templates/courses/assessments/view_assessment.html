@@ -1,5 +1,52 @@
 {% extends 'base.html' %}
 
+{% block style %}
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      color: #11101d; /* Primary Color */
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      color: #1d1b31; /* Secondary Color */
+      margin-top: 20px;
+      margin-bottom: 15px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    .messages {
+      margin-top: 15px;
+    }
+
+    .messages li {
+      color: red;
+      list-style-type: disc;
+    }
+
+    .score {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+{% endblock %}
+
 {% block content %}
   <h1>{{ assessment.title }}</h1>
   <h2>Questions:</h2>
@@ -14,15 +61,13 @@
     {% endfor %}
   </ul>
   {% if score %}
-    <p>Your score: {{ score.score }}%</p>
-  {% endif %}  
+    <p class="score">Your score: {{ score.score }}%</p>
+  {% endif %}
   {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color: red;">{{ message }}</li>
-            {% endfor %}
-
-        </ul>
-
-      {% endif %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 {% endblock %}

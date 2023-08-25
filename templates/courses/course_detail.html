@@ -1,20 +1,90 @@
 {% extends 'base.html' %}
 
+{% block style %}
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #11101d; /* Primary Color */
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    a {
+      color: #1d1b31; /* Secondary Color */
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    form {
+      margin-top: 15px;
+    }
+
+    button[type="submit"] {
+      background-color: #11101d; /* Primary Color */
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #1d1b31; /* Secondary Color */
+    }
+
+    .enrolled-message {
+      font-size: 18px;
+      color: green;
+    }
+
+    .login-message {
+      font-size: 18px;
+      color: #e74c3c; /* Red Color */
+    }
+  </style>
+{% endblock %}
+
 {% block content %}
-  <h1>{{ course.course_title }}</h1>
-  <p>{{ course.description }}</p>
-  <p>Welcome, {{ user.username }}!</p>
-  
-  {% if request.user.is_authenticated %}
-    <form method="post" action="{% url 'academy:enroll_course' course.slug %}">
-      {% csrf_token %}
-      {% if is_enrolled %}
-        <p>Enrolled</p>
-      {% else %}
-        <button type="submit">Enroll in Course</button>
-      {% endif %}
-    </form>
-  {% else %}
-    <p>Please <a href="{% url 'login' %}">login</a> to enroll.</p>
-  {% endif %}
+  <div class="container">
+    <h1>{{ course.course_title }}</h1>
+    <p>{{ course.description }}</p>
+    <p>Welcome, {{ user.username }}!</p>
+    
+    {% if request.user.is_authenticated %}
+      <form method="post" action="{% url 'academy:enroll_course' course.slug %}">
+        {% csrf_token %}
+        {% if is_enrolled %}
+          <p class="enrolled-message">Enrolled</p>
+        {% else %}
+          <button type="submit">Enroll in Course</button>
+        {% endif %}
+      </form>
+    {% else %}
+      <p class="login-message">Please <a href="{% url 'login' %}">login</a> to enroll.</p>
+    {% endif %}
+  </div>
 {% endblock %}

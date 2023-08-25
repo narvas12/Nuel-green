@@ -1,6 +1,84 @@
 {% extends 'base.html' %}
 {% load custom_template_filters %}
 
+{% block style %}
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      color: #11101d; /* Primary Color */
+      margin-bottom: 20px;
+    }
+
+    form {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    li {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #1d1b31; /* Secondary Color */
+    }
+
+    input[type="radio"] {
+      margin-right: 5px;
+    }
+
+    .incorrect-answer {
+      color: red;
+    }
+
+    .messages {
+      margin-top: 15px;
+    }
+
+    .messages li {
+      color: red;
+      list-style-type: disc;
+    }
+
+    button[type="submit"] {
+      background-color: #11101d; /* Primary Color */
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #1d1b31; /* Secondary Color */
+    }
+
+    .score {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+{% endblock %}
+
 {% block content %}
   <h1>Take Assessment: {{ assessment.title }}</h1>
   <form method="post">
@@ -8,37 +86,32 @@
     <ul>
       {% for question in questions %}
         <li>
-          {{ question.text }}
+          <p>{{ question.text }}</p>
           <ul>
             {% for answer in question.answer_set.all %}
               <li>
-                <input type="radio" name="question_{{ question.id }}" value="{{ answer.id }}" {% if user_answer_id == answer.id and not answer.is_correct %}checked{% endif %}>
-                {{ answer.text }}
+                <label>
+                  <input type="radio" name="question_{{ question.id }}" value="{{ answer.id }}" {% if user_answer_id == answer.id and not answer.is_correct %}checked{% endif %}>
+                  {{ answer.text }}
+                </label>
                 {% if request.POST|get_question_answer_id:question.id == answer.id and not answer.is_correct %}
-                  <span style="color: red;">Incorrect Answer</span>
+                  <span class="incorrect-answer">Incorrect Answer</span>
                 {% endif %}
-
               </li>
             {% endfor %}
           </ul>
         </li>
       {% endfor %}
-      
     </ul>
-
     
     <button type="submit">Submit</button>
-
   </form>
-  <span>Score: {{ score }}</span>
+  <span class="score">Score: {{ score }}</span>
   {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color: red;">{{ message }}</li>
-            {% endfor %}
-
-        </ul>
-
-      {% endif %}
-
+    <ul class="messages">
+      {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 {% endblock %}

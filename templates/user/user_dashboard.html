@@ -1,80 +1,162 @@
 {% extends 'base.html' %}
 
+{% block style %}
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #11101d; /* Primary Color */
+      font-size: 28px;
+      margin-bottom: 15px;
+    }
+
+    h2, h3, h4 {
+      color: #1d1b31; /* Secondary Color */
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    a {
+      color: #1d1b31; /* Secondary Color */
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .user_courses {
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 5px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .user_courses:hover {
+      transform: translateY(-5px);
+    }
+
+    .course-progress {
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 5px;
+      background-color: #fff;
+      margin-top: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .assessment-scores li {
+      margin-bottom: 5px;
+    }
+
+    .course-progress ul {
+      padding-left: 20px;
+    }
+
+    .course-progress h4 {
+      margin-top: 15px;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.5;
+    }
+  </style>
+{% endblock %}
+
 {% block content %}
-  <h1>Welcome, {{ user.username }}!!</h1>
-  {% if user.is_authenticated %}
-    <h2>Enrolled Courses</h2>
-    {% if enrolled_courses %}
-      <ul>
-        {% for course in enrolled_courses %}
-        <div class="user_courses">
-          <li><a href="{% url 'academy:course_detail' course.slug %}">{{ course.course_title }}</a></li>
-          <li>
-            <ul>
-              {% for assessment_title, score in assessment_scores.items %}
-                {% if assessment_title == course.course_title %}
-                  <li>
-                    {{ assessment_title }}
-                    {% if score %}
-                      <p>Your score: {{ score }}%</p>
-                    {% else %}
-                      <p>No score available</p>
+  <div class="container">
+    <h1>Welcome, {{ user.username }}!</h1>
+    {% if user.is_authenticated %}
+      <h2>Enrolled Courses</h2>
+      {% if enrolled_courses %}
+        <ul>
+          {% for course in enrolled_courses %}
+            <li>
+              <div class="user_courses">
+                <a href="{% url 'academy:course_detail' course.slug %}">{{ course.course_title }}</a>
+                <ul class="assessment-scores">
+                  {% for assessment_title, score in assessment_scores.items %}
+                    {% if assessment_title == course.course_title %}
+                      <li>
+                        {{ assessment_title }}
+                        {% if score %}
+                          <p>Your score: {{ score }}%</p>
+                        {% else %}
+                          <p>No score available</p>
+                        {% endif %}
+                      </li>
                     {% endif %}
-                  </li>
-                {% endif %}
-              {% endfor %}
-            </ul>
-          </li>
-        </div>
-        {% endfor %}
-      </ul>
+                  {% endfor %}
+                </ul>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>You haven't enrolled in any courses yet.</p>
+      {% endif %}
     {% else %}
-      <p>You haven't enrolled in any courses yet.</p>
+      <p>{{ message }}</p>
+      <p><a href="{% url 'academy:signin' %}">Log in</a></p>
     {% endif %}
-  {% else %}
-    <p>{{ message }}</p>
-    <p><a href="{% url 'academy:signin' %}">Log in</a></p>
-  {% endif %}
 
+    {% for course_progress in progress_data %}
+      <div class="course-progress">
+        <h3>{{ course_progress.course.course_title }}</h3>
+        <p>Total Weeks: {{ course_progress.total_weeks }}</p>
+        <ul>
+          {% for progress in course_progress.user_progress %}
+            <li>Week {{ progress.week }}: {{ progress.status }}</li>
+          {% endfor %}
+        </ul>
+        <h4>Assessment Scores:</h4>
+        <ul>
+          {% for score in course_progress.assessment_scores %}
+            <li>{{ score.assessment.title }}: {{ score.score }}%</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
 
-  {% for course_progress in progress_data %}
-  <div class="course-progress">
-    <h3>{{ course_progress.course.course_title }}</h3>
-    <p>Total Weeks: {{ course_progress.total_weeks }}</p>
-    <ul>
-      {% for progress in course_progress.user_progress %}
-      <li>Week {{ progress.week }}: {{ progress.status }}</li>
-      {% endfor %}
-    </ul>
-    <h4>Assessment Scores:</h4>
-    <ul>
-      {% for score in course_progress.assessment_scores %}
-      <li>{{ score.assessment.title }}: {{ score.score }}%</li>
-      {% endfor %}
-    </ul>
+    <div class="course-progress">
+      <h3>Course Progress</h3>
+      {% if progress_data %}
+        <ul>
+          {% for data in progress_data %}
+            <li>
+              <h4>{{ data.course.course_title }}</h4>
+              <p>Completed Lessons: {{ data.completed_lessons }} / {{ data.total_lessons }}</p>
+              <p>Progress: {{ data.progress_percentage }}%</p>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No progress data available.</p>
+      {% endif %}
+    </div>
   </div>
-  {% endfor %}
-
-
-
-  <div class="course-progress">
-    <h3>Course Progress</h3>
-    {% if progress_data %}
-      <ul>
-        {% for data in progress_data %}
-          <li>
-            <h4>{{ data.course.course_title }}</h4>
-            <p>Completed Lessons: {{ data.completed_lessons }} / {{ data.total_lessons }}</p>
-            <p>Progress: {{ data.progress_percentage }}%</p>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p>No progress data available.</p>
-    {% endif %}
-  </div>
-
-  <script>
-    // ... existing JavaScript code ...
-  </script>
 {% endblock %}
