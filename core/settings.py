@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ngict'
+    'ngict',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -151,7 +152,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
-# STATIC_URL = os.path.join('/staticfiles/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -164,3 +166,12 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'devcaliban@gmail.com' # Replace with your Gmail address
 EMAIL_HOST_PASSWORD = 'tpatxaoryaiuzzrp' # Replace with your Gmail password or app password
 EMAIL_USE_TLS = True
+
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Full',
+        'height': 300,
+        'width': 800,
+    },
+}

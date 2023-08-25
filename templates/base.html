@@ -12,8 +12,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.23.0/min/vs/editor/editor.main.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="shortcut icon" href="https://img.icons8.com/?size=1x&id=dxoYK8bxqiJr&format=png" type="image/x-icon">
 
-    
+    <script src="https://cdn.tiny.cloud/1/aw01d898gx45vpepb2o43yxcrbpor07angszkuhjsn6kpgxn/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+    tinymce.init({
+        selector: 'textarea.tinymce',
+        plugins: 'link lists code',
+        toolbar: 'bold italic underline strikethrough | bullist numlist | code',
+        menubar: false
+    });
+    </script>
+
 
    
     <title>Nuel-Green ICT</title>
@@ -196,14 +207,50 @@
         {% block course_list %}{% endblock course_list %}
         {% block content %}{% endblock %}
         {% block projects %}{% endblock projects %}
-
         
     </section>
     
     
 
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("DOM content loaded.");
+            const projectForm = document.getElementById("project-form");
+            console.log("Project form:", projectForm);
+    
+            const projectForm = document.getElementById("project-form");
+            const projectFeedback = document.getElementById("project-feedback");
+            const userDashboardUrl = "{% url 'academy:user_dashboard' %}";
+          
+            projectForm.addEventListener("submit", async (event) => {
+              event.preventDefault();
+          
+              const formData = new FormData(projectForm);
+          
+              try {
+                const response = await fetch(userDashboardUrl, {
+                  method: "POST",
+                  body: formData,
+                });
+          
+                if (response.ok) {
+                  const data = await response.json();
+                  projectFeedback.innerHTML = `Project submitted: <a href="${data.project_link}" target="_blank">${data.project_title}</a>`;
+                } else {
+                  console.error("Response not OK:", response);
+                  projectFeedback.innerHTML = "Project submission failed.";
+                }
+              } catch (error) {
+                console.error("Error occurred:", error);
+                projectFeedback.innerHTML = "An error occurred while submitting the project.";
+              }
+            });
+          
+          });
+    </script>
+        
+    
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs/loader.js"></script>
     <script src="{% static 'js/ide.js' %}"></script>

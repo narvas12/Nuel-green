@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-
+from ckeditor.fields import CKEditorField
 
 
 
@@ -118,6 +118,9 @@ class Assessment(models.Model):
 class Question(models.Model):
     text = models.TextField()
     assessment = models.ForeignKey('Assessment', on_delete=models.DO_NOTHING)
+
+    def __str__(self):
+        return self.text
 
 
 class Answer(models.Model):
