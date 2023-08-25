@@ -30,6 +30,9 @@ urlpatterns = [
     path('assessment/<int:assessment_id>/', view_assessment, name='view_assessment'),
     path('assessment/<int:assessment_id>/take/', take_assessment, name='take_assessment'),
     path('projects/', projects, name='projects'),
+
+
+    path('notes/', notes, name='notes'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

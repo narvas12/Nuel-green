@@ -175,3 +175,5 @@ CKEDITOR_CONFIGS = {
         'width': 800,
     },
 }
+
+CKEDITOR_BASEPATH = "/staticfiles/ckeditor/ckeditor/"

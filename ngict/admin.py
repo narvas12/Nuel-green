@@ -1,12 +1,19 @@
 # admin.py
 from django.contrib import admin
 
-from .models import Instructor, Course, Module, Lesson, ProjectSubmission, Student, Assessment, Resource, UserCode, Question, Answer, AssessmentScore, Project
+from .models import Instructor, Course, Module, Lesson, Note, ProjectSubmission, Student, Assessment, Resource, UserCode, Question, Answer, AssessmentScore, Project
 
 @admin.register(ProjectSubmission)
 class SubmitPojectAdmin(admin.ModelAdmin):
     list_display = ['user', 'project_link', 'submitted_project']
 
+class NoteAdmin(admin.ModelAdmin):
+    list_display = ('user', 'created_at')
+    list_filter = ('user',)
+    search_fields = ('user__username', 'created_at')
+    readonly_fields = ('created_at',)
+
+admin.site.register(Note, NoteAdmin)
 
 
 @admin.register(Project)

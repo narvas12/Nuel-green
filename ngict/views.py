@@ -6,13 +6,31 @@ from django.core.mail import EmailMessage, send_mail
 from django.contrib.auth.decorators import login_required
 from core import settings
 from django.contrib.auth import authenticate, login, logout
-from .models import Project, ProjectSubmission, User_Profile, Course, Module, Lesson, Assessment, Resource, Student, UserCode, Assessment, Question, Answer, AssessmentScore, UserProgress
+from .models import Note, Project, ProjectSubmission, User_Profile, Course, Module, Lesson, Assessment, Resource, Student, UserCode, Assessment, Question, Answer, AssessmentScore, UserProgress
 from django.views.generic import ListView, DetailView
 from django.urls import reverse
-from .forms import UserCreationForm
+from .forms import NoteForm, UserCreationForm
 from django.http import JsonResponse
 import json
 
+
+
+
+@login_required
+def notes(request):
+    if request.method == 'POST':
+        form = NoteForm(request.POST)
+        if form.is_valid():
+            note = form.save(commit=False)
+            note.user = request.user
+            note.save()
+            return redirect('academy:notes')
+    else:
+        form = NoteForm()
+    
+    notes = Note.objects.filter(user=request.user).order_by('-created_at')
+    
+    return render(request, 'user/notes.html', {'form': form, 'notes': notes})
 
 
 
@@ -182,8 +200,6 @@ def projects(request):
         'submitted_project_ids': submitted_project_ids,
         'project_submissions': project_submissions
     })
-
-
 
 
 @login_required

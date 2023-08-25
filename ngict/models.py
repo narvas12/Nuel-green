@@ -4,8 +4,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-from ckeditor.fields import CKEditorField
-
+from ckeditor.fields import RichTextField
 
 
 class UserCode(models.Model):
@@ -192,8 +191,12 @@ class UserProgress(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.course.course_title} - Week {self.week} - Status: {self.get_status_display()}"
+    
 
+class Note(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = RichTextField( null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-
-
-
+    def __str__(self):
+        return f"Note by {self.user.username}"

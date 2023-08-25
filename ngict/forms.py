@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Assessment, Question, Answer
+from .models import Assessment, Question, Answer, Note
 # ... rest of your code ...
 
 
@@ -31,3 +31,9 @@ class AnswerForm(forms.ModelForm):
         model = Answer
         fields = ['text', 'is_correct']
 
+
+
+class NoteForm(forms.ModelForm):
+    class Meta:
+        model = Note
+        fields = ('content',)
