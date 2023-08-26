@@ -16,8 +16,8 @@ urlpatterns = [
 
     
     path('course_list', CourseListView.as_view(), name='course_list'),
-    # path('course/<int:pk>/', CourseDetailView.as_view(), name='course_detail'),
     path('course/<slug:slug>/', course_detail, name='course_detail'),
+    path('course/<slug:slug>/', course_detail, name='course'),
     path('nodejs/', nodejs, name='nodejs'),
     path('enroll/<slug:slug>/', enroll_course, name='enroll_course'),
 

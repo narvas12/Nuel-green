@@ -52,49 +52,67 @@ def view_assessment(request, assessment_id):
     return render(request, 'courses/assessments/view_assessment.html', {'assessment': assessment, 'questions': questions, 'score': assessment_score})
 
 
-@login_required
-def take_assessment(request, assessment_id):
-    assessment = get_object_or_404(Assessment, id=assessment_id)
-    questions = Question.objects.filter(assessment=assessment)
 
-    score = None
-    user = request.user
-    assessment_score = AssessmentScore.objects.filter(user=user, assessment=assessment).last()
-    if assessment_score:
-        score = assessment_score.score
+class TakeAssessmentView:
+    def __init__(self, request, assessment_id):
+        self.request = request
+        self.assessment_id = assessment_id
 
-    if request.method == 'POST':
+    def get_assessment(self):
+        return get_object_or_404(Assessment, id=self.assessment_id)
+
+    def get_user(self):
+        return self.request.user
+
+    def get_questions(self, assessment):
+        return Question.objects.filter(assessment=assessment)
+
+    def get_assessment_score(self, assessment):
+        return AssessmentScore.objects.filter(user=self.get_user(), assessment=assessment).last()
+
+    def calculate_score(self, questions, user_answers):
         total_questions = questions.count()
         correct_answers = 0
-        error_answers = 0
-        
+        for question, user_answer_id in user_answers.items():
+            user_answer = get_object_or_404(Answer, id=user_answer_id)
+            if user_answer.is_correct:
+                correct_answers += 1
+        return (correct_answers / total_questions) * 100
+
+    def handle_post_request(self, assessment, questions):
+        user_answers = {}
         for question in questions:
-            user_answer_id = request.POST.get(f'question_{question.id}', None)
+            user_answer_id = self.request.POST.get(f'question_{question.id}', None)
             if user_answer_id:
-                user_answer = get_object_or_404(Answer, id=user_answer_id)
-                if user_answer.is_correct:
-                    correct_answers += 1
-                else:
-                    error_answers += 1
-        
-        score = (correct_answers / total_questions) * 100
+                user_answers[question.id] = user_answer_id
+
+        score = self.calculate_score(questions, user_answers)
+        assessment_score = AssessmentScore.objects.create(user=self.get_user(), assessment=assessment, score=score)
+
         if score < 100:
-            messages.error(request, 'Some of your answers are incorrect. Please review your answers.')
-        else:
-            messages.success(request, 'You passes the test')
-        user = request.user
-        
-        # Save user's assessment score
-        assessment_score = AssessmentScore.objects.create(user=user, assessment=assessment, score=score)
-        assessment_score.save()
-        
-        if error_answers > 0:
+            messages.error(self.request, 'Some of your answers are incorrect. Please review your answers.')
             error_message = "Some of your answers are incorrect. Please review your answers."
-            return render(request, 'courses/assessments/take_assessment.html', {'assessment': assessment, 'questions': questions, 'error_message': error_message})
-        
+            return render(self.request, 'courses/assessments/take_assessment.html', {'assessment': assessment, 'questions': questions, 'error_message': error_message})
+
+        messages.success(self.request, 'You passed the test')
+        assessment_score.save()
         return redirect('academy:view_assessment', assessment_id=assessment.id)
 
-    return render(request, 'courses/assessments/take_assessment.html', {'assessment': assessment, 'questions': questions, 'score':assessment_score})
+    def render_page(self, assessment, questions, assessment_score=None):
+        return render(self.request, 'courses/assessments/take_assessment.html', {'assessment': assessment, 'questions': questions, 'score': assessment_score})
+
+@login_required
+def take_assessment(request, assessment_id):
+    take_assessment_view = TakeAssessmentView(request, assessment_id)
+    assessment = take_assessment_view.get_assessment()
+    questions = take_assessment_view.get_questions(assessment)
+    assessment_score = take_assessment_view.get_assessment_score(assessment)
+
+    if request.method == 'POST':
+        return take_assessment_view.handle_post_request(assessment, questions)
+    
+    return take_assessment_view.render_page(assessment, questions, assessment_score)
+
 
 
 @login_required
@@ -161,109 +179,238 @@ def course_detail(request, slug):
     return render(request, 'courses/course_detail.html', {'course': course, 'is_enrolled': is_enrolled, 'user': user})
 
 
-@login_required
-def enroll_course(request, slug):  # Use slug parameter
-    if request.user.is_authenticated:
-        course = get_object_or_404(Course, slug=slug)
-        student, created = Student.objects.get_or_create(user=request.user)
+class EnrollCourseView:
+    def __init__(self, request, slug):
+        self.request = request
+        self.slug = slug
+
+    @property
+    def user(self):
+        return self.request.user
+
+    def enroll_student(self):
+        course = get_object_or_404(Course, slug=self.slug)
+        student, created = Student.objects.get_or_create(user=self.user)
 
         if course not in student.enrolled_courses.all():
             student.enrolled_courses.add(course)
-            return redirect('academy:course_detail', slug=slug)
+            return True
         else:
-            messages.info(request, 'You are already enrolled in this course.')
-            return redirect('academy:course_detail', slug=slug)
-    else:
-        # Handle non-authenticated users (redirect to login or show a message)
-        messages.error(request, 'Sign Up to Enroll')
-        return redirect('academy:signin')  # Redirect to your login view
+            return False
 
+    def render_enroll_redirect(self, success):
+        if success:
+            return redirect('academy:course_detail', slug=self.slug)
+        else:
+            messages.info(self.request, 'You are already enrolled in this course.')
+            return redirect('academy:course_detail', slug=self.slug)
+
+    def render_unauthenticated_redirect(self):
+        messages.error(self.request, 'Sign Up to Enroll')
+        return redirect('academy:signin')
+
+@login_required
+def enroll_course(request, slug):
+    enroll_course_view = EnrollCourseView(request, slug)
+
+    if request.user.is_authenticated:
+        success = enroll_course_view.enroll_student()
+        return enroll_course_view.render_enroll_redirect(success)
+    else:
+        return enroll_course_view.render_unauthenticated_redirect()
+    
+
+
+class ProjectView:
+    def __init__(self, request):
+        self.request = request
+
+    @property
+    def user(self):
+        return self.request.user
+
+    def get_submitted_project_ids(self):
+        return ProjectSubmission.objects.filter(user=self.user).values_list('submitted_project_id', flat=True)
+
+    def get_project_submissions(self):
+        return ProjectSubmission.objects.filter(user=self.user)
+
+    def handle_post_request(self):
+        submitted_project_id = self.request.POST.get('project_id')
+        project_link = self.request.POST.get('project_link')
+        submitted_project = Project.objects.get(id=submitted_project_id)
+
+        project_submission = ProjectSubmission(user=self.user, submitted_project=submitted_project, project_link=project_link)
+        project_submission.save()
+
+        return {'project_title': submitted_project.project_title, 'project_link': project_link}
+
+    def render_page(self):
+        projects = Project.objects.all()
+        submitted_project_ids = self.get_submitted_project_ids()
+        project_submissions = self.get_project_submissions()
+
+        if self.request.method == 'POST':
+            response_data = self.handle_post_request()
+            return JsonResponse(response_data)
+
+        return render(self.request, 'courses/projects/projects.html', {
+            'projects': projects,
+            'submitted_project_ids': submitted_project_ids,
+            'project_submissions': project_submissions
+        })
 
 @login_required
 def projects(request):
-    projects = Project.objects.all()
-    submitted_project_ids = ProjectSubmission.objects.filter(user=request.user).values_list('submitted_project_id', flat=True)
-    project_submissions = ProjectSubmission.objects.filter(user=request.user)
+    project_view = ProjectView(request)
+    return project_view.render_page()
 
-    if request.method == 'POST':
-        submitted_project_id = request.POST.get('project_id')  # Get the submitted project ID
-        project_link = request.POST.get('project_link')
-        submitted_project = Project.objects.get(id=submitted_project_id)
 
-        project_submission = ProjectSubmission(user=request.user, submitted_project=submitted_project, project_link=project_link)
-        project_submission.save()
 
-        return JsonResponse({'project_title': submitted_project.project_title, 'project_link': project_link})
 
-    return render(request, 'courses/projects/projects.html', {
-        'projects': projects,
-        'submitted_project_ids': submitted_project_ids,
-        'project_submissions': project_submissions
-    })
+class UserDashboardView:
+    def __init__(self, request):
+        self.request = request
 
+    @property
+    def user(self):
+        return self.request.user
+
+    def get_enrolled_courses(self):
+        try:
+            student = Student.objects.get(user=self.user)
+            return student.enrolled_courses.all()
+        except Student.DoesNotExist:
+            return None
+
+    def get_progress_data(self, enrolled_courses):
+        progress_data = []
+        for course in enrolled_courses:
+            user_progress = UserProgress.objects.filter(user=self.user, course=course)
+            total_weeks = course.duration_in_weeks  # Assuming the course has a duration_in_weeks field
+
+            assessment_scores = AssessmentScore.objects.filter(user=self.user, assessment__course=course)
+
+            progress_data.append({
+                'course': course,
+                'total_weeks': total_weeks,
+                'user_progress': user_progress,
+                'assessment_scores': assessment_scores,
+            })
+        return progress_data
+
+    def render_dashboard(self, enrolled_courses, progress_data=None, message=None):
+        context = {'enrolled_courses': enrolled_courses}
+        if progress_data is not None:
+            context['progress_data'] = progress_data
+        if message is not None:
+            context['message'] = message
+        return render(self.request, 'user/user_dashboard.html', context)
+
+    def render_authenticated_dashboard(self):
+        enrolled_courses = self.get_enrolled_courses()
+        if enrolled_courses is not None:
+            progress_data = self.get_progress_data(enrolled_courses)
+            return self.render_dashboard(enrolled_courses, progress_data)
+        else:
+            return self.render_dashboard(enrolled_courses, message='You are not enrolled in any courses yet.')
+
+    def render_unauthenticated_dashboard(self):
+        return self.render_dashboard(enrolled_courses=None, message='Please log in to access your dashboard.')
 
 @login_required
 def user_dashboard(request):
+    user_dashboard_view = UserDashboardView(request)
+    
     if request.user.is_authenticated:
-        try:
-            student = Student.objects.get(user=request.user)
-            enrolled_courses = student.enrolled_courses.all()
-
-            progress_data = []
-            for course in enrolled_courses:
-                user_progress = UserProgress.objects.filter(user=request.user, course=course)
-                total_weeks = course.duration_in_weeks  # Assuming the course has a duration_in_weeks field
-
-                assessment_scores = AssessmentScore.objects.filter(user=request.user, assessment__course=course)
-
-                progress_data.append({
-                    'course': course,
-                    'total_weeks': total_weeks,
-                    'user_progress': user_progress,
-                    'assessment_scores': assessment_scores,
-                })
-
-            return render(request, 'user/user_dashboard.html', {'enrolled_courses': enrolled_courses, 'progress_data': progress_data})
-        except Student.DoesNotExist:
-            return render(request, 'user/user_dashboard.html', {'message': 'You are not enrolled in any courses yet.'})
+        return user_dashboard_view.render_authenticated_dashboard()
     else:
-        return render(request, 'user/user_dashboard.html', {'message': 'Please log in to access your dashboard.'})
+        return user_dashboard_view.render_unauthenticated_dashboard()
 
+
+
+class CourseView:
+    def __init__(self, request, course_slug):
+        self.request = request
+        self.course_slug = course_slug
+
+    def get_course(self):
+        return Course.objects.get(slug=self.course_slug)
+
+    def get_assessments(self, course):
+        return Assessment.objects.filter(course=course)
+
+    def render_course_page(self, course, assessments):
+        return render(self.request, f'courses/{course.slug}.html', {'assessments': assessments, 'course': course})
 
 @login_required
 def html_css(request):
-    course = Course.objects.get(slug='html_css')  # Get the html_css course
-    assessments = Assessment.objects.filter(course=course)
-    modules = Module.objects.filter(course=course)
-    return render(request, 'courses/html_css.html', {'assessments': assessments, 'course':course,  'modules': modules})
-
+    course_view = CourseView(request, 'html_css')
+    course = course_view.get_course()
+    assessments = course_view.get_assessments(course)
+    return course_view.render_course_page(course, assessments)
 
 @login_required
 def python(request):
-    course = Course.objects.get(slug='python')  # Get the python course
-    assessments = Assessment.objects.filter(course=course)
-    return render(request, 'courses/python.html', {'assessments': assessments, 'course':course})
+    course_view = CourseView(request, 'python')
+    course = course_view.get_course()
+    assessments = course_view.get_assessments(course)
+    return course_view.render_course_page(course, assessments)
 
 @login_required
 def javascript(request):
-    course = Course.objects.get(slug='javascript')  # Get the javascript course
-    assessments = Assessment.objects.filter(course=course)
-    return render(request, 'courses/javascript.html', {'assessments': assessments, 'course':course})
+    course_view = CourseView(request, 'javascript')
+    course = course_view.get_course()
+    assessments = course_view.get_assessments(course)
+    return course_view.render_course_page(course, assessments)
 
 # Similarly, define similar functions for other courses...
 
+@login_required
 def nodejs(request):
     return render(request, 'courses/nodejs.html')
 
 
-def signup(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+# @login_required
+# def html_css(request):
+#     course = Course.objects.get(slug='html_css')  # Get the html_css course
+#     assessments = Assessment.objects.filter(course=course)
+#     modules = Module.objects.filter(course=course)
+#     return render(request, 'courses/html_css.html', {'assessments': assessments, 'course':course,  'modules': modules})
+
+
+# @login_required
+# def python(request):
+#     course = Course.objects.get(slug='python')  # Get the python course
+#     assessments = Assessment.objects.filter(course=course)
+#     return render(request, 'courses/python.html', {'assessments': assessments, 'course':course})
+
+# @login_required
+# def javascript(request):
+#     course = Course.objects.get(slug='javascript')  # Get the javascript course
+#     assessments = Assessment.objects.filter(course=course)
+#     return render(request, 'courses/javascript.html', {'assessments': assessments, 'course':course})
+
+# # Similarly, define similar functions for other courses...
+
+# def nodejs(request):
+#     return render(request, 'courses/nodejs.html')
+
+
+
+class SignupView:
+    def __init__(self, request):
+        self.request = request
+
+    def render_signup_page(self, form):
+        return render(self.request, 'user/signup.html', {'form': form})
+
+    def handle_post_request(self, form):
         if form.is_valid():
             user = form.save()
             if user.is_authenticated:
-                login(request, user)
-            
+                login(self.request, user)
+
             # Send welcome email
             subject = "Welcome to Nuel-Green ICT!!"
             message = (
@@ -278,19 +425,28 @@ def signup(request):
             send_mail(subject, message, from_email, to_list, fail_silently=True)
 
             if not user.is_active:
-                logout(request)
+                logout(self.request)
                 messages.info(
-                    request,
+                    self.request,
                     "Your Account has been created successfully!! Please check your email to confirm your email address in order to activate your account.",
                 )
             else:
-                messages.success(request, "Your Account has been created successfully!!")
+                messages.success(self.request, "Your Account has been created successfully!!")
 
             return redirect("academy:home")
+
+        return self.render_signup_page(form)
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        signup_view = SignupView(request)
+        return signup_view.handle_post_request(form)
     else:
         form = UserCreationForm()
+        signup_view = SignupView(request)
+        return signup_view.render_signup_page(form)
 
-    return render(request, 'user/signup.html', {'form': form})
 
 
 def signin(request):

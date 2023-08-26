@@ -69,22 +69,23 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container">
-    <h1>{{ course.course_title }}</h1>
-    <p>{{ course.description }}</p>
-    <p>Welcome, {{ user.username }}!</p>
-    
-    {% if request.user.is_authenticated %}
-      <form method="post" action="{% url 'academy:enroll_course' course.slug %}">
-        {% csrf_token %}
-        {% if is_enrolled %}
-          <p class="enrolled-message">Enrolled</p>
-        {% else %}
-          <button type="submit">Enroll in Course</button>
-        {% endif %}
-      </form>
-    {% else %}
-      <p class="login-message">Please <a href="{% url 'login' %}">login</a> to enroll.</p>
-    {% endif %}
-  </div>
+<div class="container">
+  <h1>{{ course.course_title }}</h1>
+  <p>{{ course.description }}</p>
+  <p>Welcome, {{ user.username }}!</p>
+  
+  {% if request.user.is_authenticated %}
+    <form method="post" action="{% url 'academy:enroll_course' course.slug %}">
+      {% csrf_token %}
+      {% if is_enrolled %}
+        <p class="enrolled-message"><a href="{% url 'academy:course' course.slug %}">Enrolled</a></p>
+      {% else %}
+        <button type="submit">Enroll in Course</button>
+      {% endif %}
+    </form>
+  {% else %}
+    <p class="login-message">Please <a href="{% url 'academy:login' %}">login</a> to enroll.</p>
+  {% endif %}
+</div>
+
 {% endblock %}
