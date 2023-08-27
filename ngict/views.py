@@ -159,16 +159,10 @@ def home(request):
     return render(request, 'index.html', {'user':user})
 
 
-class CourseListView(ListView):
-    model = Course
-    template_name = 'courses/course_list.html'
-    context_object_name = 'courses'
-
-
 @login_required
 def course_detail(request, slug):
     course = Course.objects.get(slug=slug)
-    user = request.user  # Use the request.user object directly
+    user = request.user
 
     try:
         student = Student.objects.get(user=user)
@@ -176,7 +170,39 @@ def course_detail(request, slug):
     except Student.DoesNotExist:
         is_enrolled = False
 
-    return render(request, 'courses/course_detail.html', {'course': course, 'is_enrolled': is_enrolled, 'user': user})
+    # Retrieve modules, lessons, and assessments related to the course
+    modules = Module.objects.filter(course=course)
+    lessons = Lesson.objects.filter(module__in=modules)
+    assessments = Assessment.objects.filter(lesson__in=lessons)
+
+    return render(request, 'courses/course_detail.html', {
+        'course': course,
+        'is_enrolled': is_enrolled,
+        'user': user,
+        'modules': modules,
+        'lessons': lessons,
+        'assessments': assessments,
+    })
+
+
+class CourseListView(ListView):
+    model = Course
+    template_name = 'courses/course_list.html'
+    context_object_name = 'courses'
+
+
+# @login_required
+# def course_detail(request, slug):
+#     course = Course.objects.get(slug=slug)
+#     user = request.user  # Use the request.user object directly
+
+#     try:
+#         student = Student.objects.get(user=user)
+#         is_enrolled = course in student.enrolled_courses.all()
+#     except Student.DoesNotExist:
+#         is_enrolled = False
+
+#     return render(request, 'courses/course_detail.html', {'course': course, 'is_enrolled': is_enrolled, 'user': user})
 
 
 class EnrollCourseView:
@@ -209,6 +235,8 @@ class EnrollCourseView:
         messages.error(self.request, 'Sign Up to Enroll')
         return redirect('academy:signin')
 
+
+#enroll
 @login_required
 def enroll_course(request, slug):
     enroll_course_view = EnrollCourseView(request, slug)
@@ -318,6 +346,7 @@ class UserDashboardView:
     def render_unauthenticated_dashboard(self):
         return self.render_dashboard(enrolled_courses=None, message='Please log in to access your dashboard.')
 
+
 @login_required
 def user_dashboard(request):
     user_dashboard_view = UserDashboardView(request)
@@ -327,48 +356,6 @@ def user_dashboard(request):
     else:
         return user_dashboard_view.render_unauthenticated_dashboard()
 
-
-
-class CourseView:
-    def __init__(self, request, course_slug):
-        self.request = request
-        self.course_slug = course_slug
-
-    def get_course(self):
-        return Course.objects.get(slug=self.course_slug)
-
-    def get_assessments(self, course):
-        return Assessment.objects.filter(course=course)
-
-    def render_course_page(self, course, assessments):
-        return render(self.request, f'courses/{course.slug}.html', {'assessments': assessments, 'course': course})
-
-@login_required
-def html_css(request):
-    course_view = CourseView(request, 'html_css')
-    course = course_view.get_course()
-    assessments = course_view.get_assessments(course)
-    return course_view.render_course_page(course, assessments)
-
-@login_required
-def python(request):
-    course_view = CourseView(request, 'python')
-    course = course_view.get_course()
-    assessments = course_view.get_assessments(course)
-    return course_view.render_course_page(course, assessments)
-
-@login_required
-def javascript(request):
-    course_view = CourseView(request, 'javascript')
-    course = course_view.get_course()
-    assessments = course_view.get_assessments(course)
-    return course_view.render_course_page(course, assessments)
-
-# Similarly, define similar functions for other courses...
-
-@login_required
-def nodejs(request):
-    return render(request, 'courses/nodejs.html')
 
 
 
@@ -443,8 +430,6 @@ def signout(request):
     messages.success(request, "Logged Out Successfully!!")
     return redirect('academy:home')  # Redirect to the 'academy:home' URL name
 
-
-
 class UpdateProfileView:
     def __init__(self, request):
         self.request = request
@@ -466,8 +451,25 @@ class UpdateProfileView:
         career_path = self.request.POST.get('career_path')
 
         # Update user profile
-        try:
-            user_profile = User_Profile.objects.get(user=user)  # Use username to match the User_Profile
+        user_profile, created = User_Profile.objects.get_or_create(
+            user=user,
+            defaults={
+                'f_name': f_name,
+                'm_name': m_name,
+                'l_name': l_name,
+                'gender': gender,
+                'edu_qual': edu_qual,
+                'country': country,
+                'street_address': street_address,
+                'emp_status': emp_status,
+                'phone_number': phone_number,
+                'how_did_you_hear': how_did_you_hear,
+                'career_path': career_path
+            }
+        )
+        
+        if not created:
+            # If the profile already exists, update the fields
             user_profile.f_name = f_name
             user_profile.m_name = m_name
             user_profile.l_name = l_name
@@ -483,13 +485,12 @@ class UpdateProfileView:
 
             messages.success(self.request, 'User profile updated successfully')
             return redirect('academy:user_dashboard')  # Replace with the appropriate URL
-        except User_Profile.DoesNotExist:
-            messages.error(self.request, 'User profile not found')
-            return redirect('academy:user_dashboard')  # Handle the case when the profile doesn't exist
+
+        messages.success(self.request, 'User profile created successfully')
+        return redirect('academy:user_dashboard')  # Replace with the appropriate URL
 
     def render_update_profile_page(self):
         return render(self.request, 'user/user_profile.html', context={})
-
         
 
 def update_profile(request):

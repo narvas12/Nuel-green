@@ -242,3 +242,51 @@
 #         return redirect('signin')
 
 #     return render(request, 'user/signup.html', context)
+
+
+# class UpdateProfileView:
+#     def __init__(self, request):
+#         self.request = request
+
+#     def handle_post_request(self):
+#         user = self.request.user  # Get the authenticated user
+        
+#         # Extract form data from POST request
+#         f_name = self.request.POST.get('first_name')
+#         m_name = self.request.POST.get('middle_name')
+#         l_name = self.request.POST.get('last_name')
+#         gender = self.request.POST.get('gender')
+#         edu_qual = self.request.POST.get('educational_qualification')
+#         country = self.request.POST.get('country')
+#         street_address = self.request.POST.get('street_address')
+#         emp_status = self.request.POST.get('employment_status')
+#         phone_number = self.request.POST.get('phone_number')
+#         how_did_you_hear = self.request.POST.get('how_did_you_hear')
+#         career_path = self.request.POST.get('career_path')
+
+#         # Update user profile
+#         try:
+#             user_profile = User_Profile.objects.get_or_create(user=user,
+#                                                        f_name = f_name,
+#                                                         m_name = m_name,
+#                                                         l_name = l_name,
+#                                                         gender = gender,
+#                                                         edu_qual = edu_qual,
+#                                                         country = country,
+#                                                         street_address = street_address,
+#                                                         emp_status = emp_status,
+#                                                         phone_number = phone_number,
+#                                                         how_did_you_hear = how_did_you_hear,
+#                                                         career_path = career_path
+#                                                         )  # Use username to match the User_Profile
+            
+#             user_profile.save()
+
+#             messages.success(self.request, 'User profile updated successfully')
+#             return redirect('academy:user_dashboard')  # Replace with the appropriate URL
+#         except User_Profile.DoesNotExist:
+#             messages.error(self.request, 'User profile not found')
+#             return redirect('academy:user_dashboard')  # Handle the case when the profile doesn't exist
+
+#     def render_update_profile_page(self):
+#         return render(self.request, 'user/user_profile.html', context={})

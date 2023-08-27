@@ -88,7 +88,6 @@ class Module(models.Model):
 
 
 class Lesson(models.Model):
-    course = models.ForeignKey(Course, default=None, null=True, on_delete=models.DO_NOTHING)
     module = models.ForeignKey(Module, default=None, null=True, on_delete=models.DO_NOTHING)
     lesson_title = models.CharField(max_length=200)
     description = models.TextField()
@@ -97,6 +96,7 @@ class Lesson(models.Model):
 
     def __str__(self):
         return self.lesson_title
+
 
 
 # assessments section 

@@ -50,6 +50,7 @@
   </style>
 {% endblock %}
 
+
 {% block content %}
   <div class="container">
     <h1>Available Courses</h1>
@@ -57,10 +58,38 @@
       {% for course in courses %}
       <div class="course_detail">
         <li><a href="{% url 'academy:course_detail' course.slug %}">{{ course.course_title }}</a></li>
-        <p>{{ course.course_title }}</p>
+        <p>{{ course.description }}</p>
+        {% if user.is_authenticated %}
+          {% if course in user.student.enrolled_courses.all %}
+            <a href="{% url 'academy:course_detail' course.slug %}" class="btn btn-primary">Start Taking Course</a>
+          {% else %}
+            <form method="post" action="{% url 'academy:enroll_course' course.slug %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success">Enroll in Course</button>
+            </form>
+          {% endif %}
+        {% else %}
+          <a href="{% url 'academy:signin' %}" class="btn btn-primary">Sign in to Enroll</a>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
+
+
+{% comment %} {% block content %}
+  <div class="container">
+    <h1>Available Courses</h1>
+    <ul>
+      {% for course in courses %}
+      <div class="course_detail">
+        <li><a href="{% url 'academy:course_detail' course.slug %}">{{ course.course_title }}</a></li>
+        <p>{{ course.description }}</p>
+        <p>Duration: {{ course.duration_in_days}}</p>
       </div>
         
       {% endfor %}
     </ul>
   </div>
-{% endblock %}
+{% endblock %} {% endcomment %}
