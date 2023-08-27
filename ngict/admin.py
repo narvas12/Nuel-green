@@ -1,7 +1,23 @@
 # admin.py
 from django.contrib import admin
 
-from .models import Instructor, Course, Module, Lesson, Note, ProjectSubmission, Student, Assessment, Resource, UserCode, Question, Answer, AssessmentScore, Project
+from .models import Instructor, Course, Module, Lesson, Note, ProjectSubmission, Student, Assessment, Resource, User_Profile, UserCode, Question, Answer, AssessmentScore, Project
+
+
+@admin.register(User_Profile)
+class User_ProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'f_name', 'l_name', 'email', 'career_path', 'date_joined']
+    list_filter = ['career_path', 'is_active', 'is_staff']
+    search_fields = ['user__username', 'email']
+    readonly_fields = ['date_joined']
+
+    fieldsets = [
+        ('User Information', {'fields': ['user', 'f_name', 'm_name', 'l_name', 'gender']}),
+        ('Contact Information', {'fields': ['email', 'phone_number', 'country', 'street_address']}),
+        ('Employment', {'fields': ['emp_status', 'career_path', 'how_did_you_hear']}),
+        ('Permissions', {'fields': ['is_active', 'is_staff']}),
+        ('Dates', {'fields': ['date_joined'], 'classes': ['collapse']}),
+    ]
 
 @admin.register(ProjectSubmission)
 class SubmitPojectAdmin(admin.ModelAdmin):

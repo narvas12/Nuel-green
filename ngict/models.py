@@ -21,13 +21,13 @@ class UserCode(models.Model):
 
 
 class User_Profile(models.Model):
-    username = models.ForeignKey(User, max_length=20, on_delete=models.DO_NOTHING)
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     f_name = models.CharField(max_length=100)
     m_name = models.CharField(max_length=100)
     l_name = models.CharField(max_length=100)
     gender = models.CharField(max_length=10)
     edu_qual = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)  # Email should be unique
+    email = models.EmailField(unique=True)
     country = models.CharField(max_length=100)
     street_address = models.CharField(max_length=200)
     emp_status = models.CharField(max_length=100)
@@ -38,10 +38,9 @@ class User_Profile(models.Model):
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
 
-    # Add additional fields as per your requirement
-
     def __str__(self):
-        return self.email
+        return self.user.username  # Return the username instead of email
+
 
 
 class Instructor(models.Model):

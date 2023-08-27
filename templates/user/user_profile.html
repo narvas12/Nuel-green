@@ -173,10 +173,7 @@
   <form method="post">
     {% csrf_token %}
     <div class="break">
-
-      <label for="username">Choose a username</label>
-      <input type="text" name="username" required />
-
+  
       <label for="first_name">First Name:</label>
       <input type="text" name="first_name" required />
 
@@ -246,16 +243,11 @@
         <option value="Network Engineering">Network Engineering</option>
         <option value="UX/UI Design">UX/UI Design</option>
         <option value="Database Administration">Database Administration</option>
-    </select>
+      </select>
 
-      {% comment %} <label for="profile_picture">Profile Picture:</label>
-      <input type="file" name="profile_picture" /> {% endcomment %}
+      <label for="profile_picture">Profile Picture:</label>
+      <input type="file" name="profile_picture" />
 
-      <label for="password">Password:</label>
-      <input type="password" name="password" required />
-
-      <label for="confirm_password">Confirm Password:</label>
-      <input type="password" name="confirm_password" required />
 
       <label class="custom-checkbox">
         <input type="checkbox" />
@@ -263,11 +255,10 @@
         I accept the terms and conditions.
       </label>
     </div>
-    <div class="last">
-      <input type="submit" value="Sign Up" />
-      <p>If you already have an account, <a href="/signin">sign in here.</a></p>
-    </div>
+
+    <button type="submit">Update Profile</button>
   </form>
+
   {% if messages %}
   {% for message in messages %}
     {% if message.tags == 'success' %}

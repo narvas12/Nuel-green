@@ -371,32 +371,6 @@ def nodejs(request):
     return render(request, 'courses/nodejs.html')
 
 
-# @login_required
-# def html_css(request):
-#     course = Course.objects.get(slug='html_css')  # Get the html_css course
-#     assessments = Assessment.objects.filter(course=course)
-#     modules = Module.objects.filter(course=course)
-#     return render(request, 'courses/html_css.html', {'assessments': assessments, 'course':course,  'modules': modules})
-
-
-# @login_required
-# def python(request):
-#     course = Course.objects.get(slug='python')  # Get the python course
-#     assessments = Assessment.objects.filter(course=course)
-#     return render(request, 'courses/python.html', {'assessments': assessments, 'course':course})
-
-# @login_required
-# def javascript(request):
-#     course = Course.objects.get(slug='javascript')  # Get the javascript course
-#     assessments = Assessment.objects.filter(course=course)
-#     return render(request, 'courses/javascript.html', {'assessments': assessments, 'course':course})
-
-# # Similarly, define similar functions for other courses...
-
-# def nodejs(request):
-#     return render(request, 'courses/nodejs.html')
-
-
 
 class SignupView:
     def __init__(self, request):
@@ -470,60 +444,58 @@ def signout(request):
     return redirect('academy:home')  # Redirect to the 'academy:home' URL name
 
 
-def create_profile(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        f_name = request.POST.get('first_name')
-        m_name = request.POST.get('middle_name')
-        l_name = request.POST.get('last_name')
-        gender = request.POST.get('gender')
-        edu_qual = request.POST.get('educational_qualification')
-        email = request.POST.get('email_address')
-        country = request.POST.get('country')
-        street_address = request.POST.get('street_address')
-        emp_status = request.POST.get('employment_status')
-        phone_number = request.POST.get('phone_number')
-        password = request.POST.get('password')
-        comfirm_password = request.POST.get('confirm_password')
-        how_did_you_hear = request.POST.get('how_did_you_hear')
-        career_path = request.POST.get('career_path')
 
-        if User_Profile.objects.filter(username=username).exists():
-                messages.error(request, 'User with the same username already exists')
-        elif User_Profile.objects.filter(email=email).exists():
-            messages.error(request, 'User with the same email already exists')
+class UpdateProfileView:
+    def __init__(self, request):
+        self.request = request
+
+    def handle_post_request(self):
+        user = self.request.user  # Get the authenticated user
         
-        if len(username) > 15:
-            messages.error(request, 'Username must be under 15 characters')
+        # Extract form data from POST request
+        f_name = self.request.POST.get('first_name')
+        m_name = self.request.POST.get('middle_name')
+        l_name = self.request.POST.get('last_name')
+        gender = self.request.POST.get('gender')
+        edu_qual = self.request.POST.get('educational_qualification')
+        country = self.request.POST.get('country')
+        street_address = self.request.POST.get('street_address')
+        emp_status = self.request.POST.get('employment_status')
+        phone_number = self.request.POST.get('phone_number')
+        how_did_you_hear = self.request.POST.get('how_did_you_hear')
+        career_path = self.request.POST.get('career_path')
 
-        if password != comfirm_password:
-            messages.error(request, 'Password does not match')
+        # Update user profile
+        try:
+            user_profile = User_Profile.objects.get(user=user)  # Use username to match the User_Profile
+            user_profile.f_name = f_name
+            user_profile.m_name = m_name
+            user_profile.l_name = l_name
+            user_profile.gender = gender
+            user_profile.edu_qual = edu_qual
+            user_profile.country = country
+            user_profile.street_address = street_address
+            user_profile.emp_status = emp_status
+            user_profile.phone_number = phone_number
+            user_profile.how_did_you_hear = how_did_you_hear
+            user_profile.career_path = career_path
+            user_profile.save()
 
-       
-        user = User_Profile.objects.create(
-            username=username,
-            f_name=f_name,
-            m_name=m_name,
-            l_name=l_name,
-            gender=gender,
-            edu_qual=edu_qual,
-            email=email,
-            country=country,
-            street_address=street_address,
-            emp_status=emp_status,
-            phone_number=phone_number,
-            password=password,
-            how_did_you_hear=how_did_you_hear,
-            career_path=career_path
-        )
+            messages.success(self.request, 'User profile updated successfully')
+            return redirect('academy:user_dashboard')  # Replace with the appropriate URL
+        except User_Profile.DoesNotExist:
+            messages.error(self.request, 'User profile not found')
+            return redirect('academy:user_dashboard')  # Handle the case when the profile doesn't exist
 
-        context = {
-            'f_name':f_name,
-            'l_name':l_name
-        }
+    def render_update_profile_page(self):
+        return render(self.request, 'user/user_profile.html', context={})
 
-        user.save()
+        
 
-        return redirect('signin')
-
-    return render(request, 'user/signup.html', context)
+def update_profile(request):
+    update_profile_view = UpdateProfileView(request)
+    
+    if request.method == 'POST':
+        return update_profile_view.handle_post_request()
+    
+    return update_profile_view.render_update_profile_page()

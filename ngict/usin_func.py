@@ -1,4 +1,33 @@
 
+# @login_required
+# def html_css(request):
+#     course = Course.objects.get(slug='html_css')  # Get the html_css course
+#     assessments = Assessment.objects.filter(course=course)
+#     modules = Module.objects.filter(course=course)
+#     return render(request, 'courses/html_css.html', {'assessments': assessments, 'course':course,  'modules': modules})
+
+
+
+# @login_required
+# def python(request):
+#     course = Course.objects.get(slug='python')  # Get the python course
+#     assessments = Assessment.objects.filter(course=course)
+#     return render(request, 'courses/python.html', {'assessments': assessments, 'course':course})
+
+
+# @login_required
+# def javascript(request):
+#     course = Course.objects.get(slug='javascript')  # Get the javascript course
+#     assessments = Assessment.objects.filter(course=course)
+#     return render(request, 'courses/javascript.html', {'assessments': assessments, 'course':course})
+
+
+
+# # Similarly, define similar functions for other courses...
+
+# def nodejs(request):
+#     return render(request, 'courses/nodejs.html')
+
 
 
 # @login_required
@@ -154,3 +183,62 @@
 #         form = UserCreationForm()
 
 #     return render(request, 'user/signup.html', {'form': form})
+
+
+# def create_profile(request):
+#     if request.method == 'POST':
+#         username = request.POST.get('username')
+#         f_name = request.POST.get('first_name')
+#         m_name = request.POST.get('middle_name')
+#         l_name = request.POST.get('last_name')
+#         gender = request.POST.get('gender')
+#         edu_qual = request.POST.get('educational_qualification')
+#         email = request.POST.get('email_address')
+#         country = request.POST.get('country')
+#         street_address = request.POST.get('street_address')
+#         emp_status = request.POST.get('employment_status')
+#         phone_number = request.POST.get('phone_number')
+#         password = request.POST.get('password')
+#         comfirm_password = request.POST.get('confirm_password')
+#         how_did_you_hear = request.POST.get('how_did_you_hear')
+#         career_path = request.POST.get('career_path')
+
+#         if User_Profile.objects.filter(username=username).exists():
+#                 messages.error(request, 'User with the same username already exists')
+#         elif User_Profile.objects.filter(email=email).exists():
+#             messages.error(request, 'User with the same email already exists')
+        
+#         if len(username) > 15:
+#             messages.error(request, 'Username must be under 15 characters')
+
+#         if password != comfirm_password:
+#             messages.error(request, 'Password does not match')
+
+       
+#         user = User_Profile.objects.create(
+#             username=username,
+#             f_name=f_name,
+#             m_name=m_name,
+#             l_name=l_name,
+#             gender=gender,
+#             edu_qual=edu_qual,
+#             email=email,
+#             country=country,
+#             street_address=street_address,
+#             emp_status=emp_status,
+#             phone_number=phone_number,
+#             password=password,
+#             how_did_you_hear=how_did_you_hear,
+#             career_path=career_path
+#         )
+
+#         context = {
+#             'f_name':f_name,
+#             'l_name':l_name
+#         }
+
+#         user.save()
+
+#         return redirect('signin')
+
+#     return render(request, 'user/signup.html', context)
