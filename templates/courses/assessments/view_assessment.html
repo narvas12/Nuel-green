@@ -48,6 +48,7 @@
 {% endblock %}
 
 {% block content %}
+<div class="container">
   <h1>{{ assessment.title }}</h1>
   <h2>Questions:</h2>
   <ul>
@@ -70,4 +71,5 @@
       {% endfor %}
     </ul>
   {% endif %}
+</div>
 {% endblock %}

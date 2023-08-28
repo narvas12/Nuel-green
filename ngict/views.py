@@ -16,6 +16,16 @@ import json
 
 
 
+
+@login_required
+def html_css(request):
+    course = Course.objects.get(slug='html_css')  # Get the html_css course
+    assessments = Assessment.objects.filter(course=course)
+    modules = Module.objects.filter(course=course)
+    return render(request, 'courses/html_css.html', {'assessments': assessments, 'course':course,  'modules': modules})
+
+
+
 @login_required
 def notes(request):
     if request.method == 'POST':
@@ -31,8 +41,6 @@ def notes(request):
     notes = Note.objects.filter(user=request.user).order_by('-created_at')
     
     return render(request, 'user/notes.html', {'form': form, 'notes': notes})
-
-
 
 
 def view_course_assessments(request, course_slug):
@@ -191,19 +199,6 @@ class CourseListView(ListView):
     context_object_name = 'courses'
 
 
-# @login_required
-# def course_detail(request, slug):
-#     course = Course.objects.get(slug=slug)
-#     user = request.user  # Use the request.user object directly
-
-#     try:
-#         student = Student.objects.get(user=user)
-#         is_enrolled = course in student.enrolled_courses.all()
-#     except Student.DoesNotExist:
-#         is_enrolled = False
-
-#     return render(request, 'courses/course_detail.html', {'course': course, 'is_enrolled': is_enrolled, 'user': user})
-
 
 class EnrollCourseView:
     def __init__(self, request, slug):
@@ -248,7 +243,6 @@ def enroll_course(request, slug):
         return enroll_course_view.render_unauthenticated_redirect()
     
 
-
 class ProjectView:
     def __init__(self, request):
         self.request = request
@@ -292,8 +286,6 @@ class ProjectView:
 def projects(request):
     project_view = ProjectView(request)
     return project_view.render_page()
-
-
 
 
 class UserDashboardView:
@@ -357,8 +349,6 @@ def user_dashboard(request):
         return user_dashboard_view.render_unauthenticated_dashboard()
 
 
-
-
 class SignupView:
     def __init__(self, request):
         self.request = request
@@ -407,7 +397,6 @@ def signup(request):
         form = UserCreationForm()
         signup_view = SignupView(request)
         return signup_view.render_signup_page(form)
-
 
 
 def signin(request):

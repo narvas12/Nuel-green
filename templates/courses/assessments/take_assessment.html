@@ -81,7 +81,7 @@
 
 {% block content %}
   <h1>Take Assessment: {{ assessment.title }}</h1>
-  <form method="post">
+  <form method="post" class="container">
     {% csrf_token %}
     <ul>
       {% for question in questions %}

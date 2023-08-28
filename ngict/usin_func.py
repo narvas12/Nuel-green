@@ -290,3 +290,17 @@
 
 #     def render_update_profile_page(self):
 #         return render(self.request, 'user/user_profile.html', context={})
+
+
+# @login_required
+# def course_detail(request, slug):
+#     course = Course.objects.get(slug=slug)
+#     user = request.user  # Use the request.user object directly
+
+#     try:
+#         student = Student.objects.get(user=user)
+#         is_enrolled = course in student.enrolled_courses.all()
+#     except Student.DoesNotExist:
+#         is_enrolled = False
+
+#     return render(request, 'courses/course_detail.html', {'course': course, 'is_enrolled': is_enrolled, 'user': user})

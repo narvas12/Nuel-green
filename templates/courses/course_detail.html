@@ -29,7 +29,7 @@
     }
 
     a {
-      color: #1d1b31; /* Secondary Color */
+      color: blue; /* Secondary Color */
       text-decoration: none;
     }
 
@@ -65,8 +65,16 @@
       font-size: 18px;
       color: #e74c3c; /* Red Color */
     }
+
+    .notes{
+      color: red;
+      border: 1px solid black;
+      text-align: left;
+      padding: 2rem;
+    }
   </style>
 {% endblock %}
+
 
 
 
@@ -82,25 +90,47 @@
           <li>
             <h3>{{ module.module_title }}</h3>
             <ul>
-              {% for lesson in module.lessons.all %}
+              {% for lesson in module.lesson_set.all %}
                 <li>
                   <h4>{{ lesson.lesson_title }}</h4>
-                  <p>{{ lesson.lesson_content }}</p>
+                  <p>{{ lesson.content }}</p>
                   <h5>Assessments</h5>
                   <ul>
                     {% for assessment in assessments %}
                       {% if assessment.lesson == lesson %}
-                        <li>{{ assessment.assessment_title }}</li>
+                        <li>{{ assessment.title }}</li>
                       {% endif %}
                     {% endfor %}
                   </ul>
+                  <div class="notes">
+                    <h4>You can make notes whie studying</h4>
+                    <a href="{% url 'academy:notes' %}">Click me to Make Notes</a>
+                  </div>
                 </li>
               {% endfor %}
             </ul>
           </li>
         {% endfor %}
       </ul>
+      
     {% endif %}
+
+    
+
+    <ul class="assessment_ul">
+      {% for assessment in assessments %}
+          <li>
+            <a href="{% url 'academy:view_assessment' assessment.id %}">View Assessment</a> |
+            <a href="{% url 'academy:take_assessment' assessment.id %}">Take Assessment</a>
+            <div>
+                <ul>
+                    <li>{{ assessment.title }}</li>
+                </ul>
+            </div>
+          </li>
+      {% endfor %}
+      <a href="{% url 'academy:projects' %}">Projects</a>
+      </ul>
 
     {% if is_enrolled %}
       <a href="{% url 'academy:course_detail' course.slug %}" class="btn btn-primary">Start Taking Course</a>
@@ -112,6 +142,7 @@
     {% endif %}
   </div>
 {% endblock %}
+
 
 
 {% comment %} {% block content %}

@@ -15,6 +15,9 @@ urlpatterns = [
     path('create_profile/', update_profile, name='update_profile'),
     
 
+    path('html_css/', html_css, name='html_css'),
+
+
     path('course_list/', CourseListView.as_view(), name='course_list'),
     path('enroll/<slug:slug>/', enroll_course, name='enroll_course'),
     path('course/<slug:slug>/', course_detail, name='course_detail'),
