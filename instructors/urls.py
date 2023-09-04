@@ -1,0 +1,17 @@
+from django.urls import path
+from .views import *
+from ngict.views import home
+
+app_name = 'instructors'
+
+urlpatterns = [
+    path('', home, name="home"),
+    path('instructor_dashboard/', instructor_dashboard, name='instructor_dashboard'),
+    path('create_course/', create_course, name='create_course'),
+    path('course/<slug:slug>/', course_detail, name='course_detail'),
+    path('create_module/', create_modules, name='create_module'),
+    path('module/<int:module_id>/create_lesson/', lesson, name='create_lesson'),
+    path('lesson/<int:lesson_id>/create_assessment/', create_assessment, name='create_assessment'),
+    path('lesson/<int:lesson_id>/upload_resource/', upload_resource, name='upload_resource'),
+    # Add more URL patterns as needed
+]

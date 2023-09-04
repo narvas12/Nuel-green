@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>{{ instructor_profile.user.username }} Instructor Dashboard</h2>
+  <a href="{% url 'instructors:create_course' %}" class="btn btn-primary">Create Course</a>
+
+  {% if no_courses_exist %}
+    <p>No courses created yet.</p>
+  {% else %}
+    <h3>Your Courses</h3>
+    <ul>
+      {% for course in courses %}
+        <li>
+          <a href="{% url 'instructors:course_detail' slug=course.slug %}">{{ course.course_title }}</a>
+          <p>Description: {{ course.description }}</p>
+          <!-- Add more course details here -->
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <h3>Your Instructor Profile</h3>
+  <p>Username: {{ instructor_profile.user.username }}</p>
+  <p>Biography: {{ instructor_profile.biography }}</p>
+  <p>Contact Info: {{ instructor_profile.contact_info }}</p>
+
+  <!-- Add more instructor profile details here -->
+
+</div>
+{% endblock %}

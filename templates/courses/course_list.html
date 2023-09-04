@@ -57,7 +57,7 @@
     <ul>
       {% for course in courses %}
       <div class="course_detail">
-        <li><a href="{% url 'academy:course_detail' course.slug %}">{{ course.course_title }}</a></li>
+        <li><a href="{% url 'academy:course_detail' course.slug %}"><h4>{{ course.course_title }}</h4></a></li>
         <p>{{ course.description }}</p>
         {% if user.is_authenticated %}
           {% if course in user.student.enrolled_courses.all %}
@@ -77,19 +77,3 @@
   </div>
 {% endblock %}
 
-
-{% comment %} {% block content %}
-  <div class="container">
-    <h1>Available Courses</h1>
-    <ul>
-      {% for course in courses %}
-      <div class="course_detail">
-        <li><a href="{% url 'academy:course_detail' course.slug %}">{{ course.course_title }}</a></li>
-        <p>{{ course.description }}</p>
-        <p>Duration: {{ course.duration_in_days}}</p>
-      </div>
-        
-      {% endfor %}
-    </ul>
-  </div>
-{% endblock %} {% endcomment %}

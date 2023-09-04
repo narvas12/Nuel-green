@@ -1,7 +1,7 @@
 # admin.py
 from django.contrib import admin
 
-from .models import Instructor, Course, Module, Lesson, Note, ProjectSubmission, Student, Assessment, Resource, User_Profile, UserCode, Question, Answer, AssessmentScore, Project
+from .models import Note, ProjectSubmission, Student, User_Profile, UserCode, AssessmentScore, Project
 
 
 @admin.register(User_Profile)
@@ -50,25 +50,6 @@ class AssessmentScoreAdmin(admin.ModelAdmin):
 class UserCodeAdmin(admin.ModelAdmin):
     list_display = ['user', 'html_code', 'css_code', 'js_code']
 
-@admin.register(Instructor)
-class InstructorAdmin(admin.ModelAdmin):
-    list_display = ('name', 'contact_info')
-
-
-@admin.register(Course)
-class CourseAdmin(admin.ModelAdmin):
-    list_display = ('course_title', 'description')
-    prepopulated_fields = {'slug': ('course_title',)}
-
-
-@admin.register(Module)
-class ModuleAdmin(admin.ModelAdmin):
-    list_display = ('module_title', 'course', 'order')
-
-
-@admin.register(Lesson)
-class LessonAdmin(admin.ModelAdmin):
-    list_display = ('lesson_title','description', 'module', 'order')
 
 
 @admin.register(Student)
@@ -84,28 +65,3 @@ class StudentAdmin(admin.ModelAdmin):
     display_assessment_scores.short_description = 'Assessment Scores'
 
 
-@admin.register(Assessment)
-class AssessmentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title','description', 'course','module', 'lesson', 'passing_score')
-
-
-@admin.register(Answer)
-class AnswerAdmin(admin.ModelAdmin):
-    list_display = ['text', 'question', 'is_correct']
-
-
-class AnswerInline(admin.TabularInline):
-    model = Answer
-    extra = 4  # Number of answer options to show for each question
-
-
-class QuestionAdmin(admin.ModelAdmin):
-    inlines = [AnswerInline]
-    list_display = ['text', 'assessment']
-
-admin.site.register(Question, QuestionAdmin)
-
-
-@admin.register(Resource)
-class ResourceAdmin(admin.ModelAdmin):
-    list_display = ('resource_title', 'lesson')

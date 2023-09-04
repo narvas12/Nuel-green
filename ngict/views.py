@@ -6,7 +6,10 @@ from django.core.mail import EmailMessage, send_mail
 from django.contrib.auth.decorators import login_required
 from core import settings
 from django.contrib.auth import authenticate, login, logout
-from .models import Note, Project, ProjectSubmission, User_Profile, Course, Module, Lesson, Assessment, Resource, Student, UserCode, Assessment, Question, Answer, AssessmentScore, UserProgress
+
+from instructors.models import Answer, Assessment, Lesson, Module, Question
+# from instructors.models import *
+from .models import Note, Project, ProjectSubmission, User_Profile, Course, Student, UserCode, AssessmentScore, UserProgress
 from django.views.generic import ListView, DetailView
 from django.urls import reverse
 from .forms import NoteForm, UserCreationForm

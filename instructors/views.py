@@ -1,0 +1,138 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import Course, InstructorProfile, Module, Lesson, Assessment, Resource
+from .forms import CourseForm, LessonForm, AssessmentForm, ResourceForm
+
+
+from django.contrib.auth.decorators import login_required, user_passes_test
+
+# Custom user test function to check if a user is staff
+def is_staff(user):
+    return user.is_staff
+
+@login_required
+@user_passes_test(is_staff, login_url='academy:home')  # Redirect non-staff users to the 'home' page
+def instructor_dashboard(request):
+    # Fetch courses created by the instructor
+    courses = Course.objects.filter(instructor=request.user)
+    instructor_profile = get_object_or_404(InstructorProfile, user=request.user)
+    no_courses_exist = not courses.exists()
+
+    return render(request, 'instructors/dashboard.html', {'courses': courses, 'instructor_profile': instructor_profile, 'no_courses_exist': no_courses_exist})
+
+
+
+# @login_required
+# @user_passes_test(lambda u: u.is_staff, login_url='home')  # Only staff users can access this view
+
+@login_required
+def create_course(request):
+    # Check if the user has an associated InstructorProfile and is a creator
+    try:
+        instructor_profile = InstructorProfile.objects.get(user=request.user)
+    except InstructorProfile.DoesNotExist:
+        messages.error(request, "You do not have permission to create courses.")
+        return redirect('instructors:instructor_dashboard')  # Redirect to instructor dashboard
+
+    if not instructor_profile.is_creator:
+        messages.error(request, "You do not have permission to create courses.")
+        return redirect('instructors:instructor_dashboard')  # Redirect to instructor dashboard
+
+    if request.method == 'POST':
+        form = CourseForm(request.POST)
+        if form.is_valid():
+            course = form.save(commit=False)
+            course.instructor = request.user
+            course.save()
+            return redirect('instructors:create_module', course_slug=course.slug)
+    else:
+        form = CourseForm()
+
+    return render(request, 'instructors/create_course.html', {'form': form})
+
+
+
+@login_required
+def course_detail(request, slug):
+    course = get_object_or_404(Course, slug=slug)
+    modules = Module.objects.filter(course=course)
+    return render(request, 'instructors/course_detail.html', {'course': course, 'modules': modules})
+
+
+
+@login_required
+def create_modules(request):
+    if request.method == 'POST':
+        module_titles_text = request.POST.get('module_titles_textarea')
+        course_id = request.POST.get('course')  # Get the selected course ID
+
+        # Split the module titles by commas
+        module_titles = [title.strip() for title in module_titles_text.split(',')]
+
+        # Get the selected course
+        selected_course = get_object_or_404(Course, pk=course_id)
+
+        # Create and save Module instances associated with the selected course
+        for title in module_titles:
+            # Check if a module with the same title already exists for the course
+            if not Module.objects.filter(module_title=title, course=selected_course).exists():
+                module = Module(module_title=title, course=selected_course)
+                module.save()
+
+        return redirect('instructors:course_detail', slug=selected_course.slug)  # Redirect to the course detail page
+
+    # Fetch available courses for the select dropdown
+    courses = Course.objects.all()
+
+    # If it's not a POST request, render the form
+    return render(request, 'instructors/create_module.html', {'courses': courses})
+
+
+
+@login_required
+def lesson(request):
+    if request.method == 'POST':
+        form = LessonForm(request.POST)
+        if form.is_valid():
+            note = form.save(commit=False)
+            note.user = request.user
+            note.save()
+            return redirect('academy:notes')
+    else:
+        form = LessonForm()
+    
+    lessons = Lesson.objects.filter(user=request.user).order_by('-created_at')
+    
+    return render(request, 'user/notes.html', {'form': form, 'notes': lessons})
+
+
+
+@login_required
+def create_assessment(request, lesson_id):
+    lesson = get_object_or_404(Lesson, id=lesson_id)
+    if request.method == 'POST':
+        form = AssessmentForm(request.POST)
+        if form.is_valid():
+            assessment = form.save(commit=False)
+            assessment.lesson = lesson
+            assessment.course = lesson.module.course
+            assessment.save()
+            return redirect('instructors:course_detail', slug=lesson.module.course.slug)
+    else:
+        form = AssessmentForm()
+    return render(request, 'instructors/assessment_form.html', {'form': form, 'lesson': lesson})
+
+@login_required
+def upload_resource(request, lesson_id):
+    lesson = get_object_or_404(Lesson, id=lesson_id)
+    if request.method == 'POST':
+        form = ResourceForm(request.POST, request.FILES)
+        if form.is_valid():
+            resource = form.save(commit=False)
+            resource.lesson = lesson
+            resource.save()
+            return redirect('instructors:course_detail', slug=lesson.module.course.slug)
+    else:
+        form = ResourceForm()
+    return render(request, 'instructors/resource_form.html', {'form': form, 'lesson': lesson})

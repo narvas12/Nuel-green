@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Assessment, Question, Answer, Note
+
+from instructors.models import Answer, Assessment, Question
+from .models import Note
 # ... rest of your code ...
 
 
