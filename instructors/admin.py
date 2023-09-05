@@ -11,12 +11,12 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(Module)
 class ModuleAdmin(admin.ModelAdmin):
-    list_display = ('module_title', 'course', 'order')
+    list_display = ('id', 'module_title', 'course')
 
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('lesson_title','description', 'module', 'order')
+    list_display = ('module','user', 'content', 'created_at')
 
 @admin.register(Assessment)
 class AssessmentAdmin(admin.ModelAdmin):

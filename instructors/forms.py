@@ -41,10 +41,15 @@ class ModuleForm(forms.ModelForm):
 
 
 class LessonForm(forms.ModelForm):
+    course = forms.ModelChoiceField(queryset=Course.objects.all(), empty_label="Select a course")
+    module = forms.ModelChoiceField(queryset=Module.objects.all(), empty_label="Select a module")
+
     class Meta:
         model = Lesson
-        fields = ['lesson_title', 'module']
-        # ...
+        fields = ('course', 'module', 'content',)
+        widgets = {
+            'content': forms.Textarea(attrs={'class': 'ckeditor'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

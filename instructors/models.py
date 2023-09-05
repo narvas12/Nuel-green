@@ -1,3 +1,5 @@
+from datetime import timezone
+import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -46,10 +48,10 @@ class Course(models.Model):
 
 
 class Module(models.Model):
+    id = models.AutoField(primary_key=True)
     module_title = models.CharField(max_length=200)
     description = models.TextField()
     course = models.ForeignKey(Course, on_delete=models.PROTECT)
-    order = models.AutoField(primary_key=True)
 
 
     def __str__(self):
@@ -57,16 +59,19 @@ class Module(models.Model):
 
 
 class Lesson(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.PROTECT)
     module = models.ForeignKey(Module, default=None, null=True, on_delete=models.PROTECT)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = RichTextField( null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    content = RichTextField(null=True)
+    created_at = models.DateTimeField(null=True)  # Make it nullable
 
     def __str__(self):
-        return f"Note by {self.user.username}"
+        return f"Lesson Created by {self.user.username}"
 
-    def __str__(self):
-        return self.lesson_title
+    def save(self, *args, **kwargs):
+        if not self.created_at:
+            self.created_at = timezone.now()
+        super().save(*args, **kwargs)
 
 
 

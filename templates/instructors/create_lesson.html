@@ -1,13 +1,58 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-  <h2>Create a New Module for {{ course.course_title }}</h2>
+  <h2>Create a New Lesson</h2>
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Create Module</button>
+    
+    <!-- Course (Select Input) -->
+    <div class="form-group">
+      <label for="id_course">Course:</label>
+      <select id="id_course" name="course" class="form-control" required>
+        <option value="" disabled selected>Select a course</option>
+        {% for course in courses %}
+          <option value="{{ course.id }}">{{ course.course_title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Module (Select Input) -->
+    <div class="form-group">
+      <label for="id_module">Module:</label>
+      <select id="id_module" name="module" class="form-control" required>
+        <option value="" disabled selected>Select a module</option>
+      </select>
+    </div>
+
+    <!-- Lesson Content (CKEditor) -->
+    <div class="form-group">
+      <label for="id_content">Lesson Content:</label>
+      {{ form.content }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Lesson</button>
   </form>
 
-  <!-- Anchor link to create a lesson -->
-  <a href="{% url 'instructors:create_lesson' module.id %}">Create Lesson</a>
+  <script>
+    // JavaScript to update module options based on the selected course
+    document.getElementById("id_course").addEventListener("change", function () {
+      var courseId = this.value;
+      var moduleSelect = document.getElementById("id_module");
+      // Clear existing options
+      moduleSelect.innerHTML = '<option value="" selected>Select a module</option>';
+
+      // Fetch modules associated with the selected course (you can use AJAX here)
+      // For simplicity, you can pass a JSON object containing module data from your Django view
+      var modules = JSON.parse('{{ modules | safe }}');
+      modules.forEach(function (module) {
+        if (module.course_id == courseId) {
+          var option = document.createElement("option");
+          option.value = module.id;
+          option.text = module.module_title;
+          moduleSelect.appendChild(option);
+        }
+      });
+    });
+  </script>
 {% endblock %}

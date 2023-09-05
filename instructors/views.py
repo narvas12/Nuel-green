@@ -1,3 +1,5 @@
+import json
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -89,22 +91,63 @@ def create_modules(request):
     return render(request, 'instructors/create_module.html', {'courses': courses})
 
 
-
 @login_required
-def lesson(request):
+def create_lesson(request):
+    # Fetch courses and modules and pass them as context
+    courses = Course.objects.all()
+    modules = Module.objects.all()
+
     if request.method == 'POST':
         form = LessonForm(request.POST)
         if form.is_valid():
-            note = form.save(commit=False)
-            note.user = request.user
-            note.save()
-            return redirect('academy:notes')
+            lesson = form.save(commit=False)
+            lesson.user = request.user
+            lesson.save()
+            # You can redirect to a different page after creating the lesson if needed
+            return redirect('instructors:course_detail', slug=lesson.module.course.slug)
     else:
         form = LessonForm()
+
+    # Prepare a JSON object containing module data for AJAX
+    module_data = [{'id': module.id, 'module_title': module.module_title, 'course_id': module.course_id}
+                   for module in modules]
+
+    # If the request is AJAX, return the module data as JSON
+    if request.is_ajax():
+        return JsonResponse({'modules': module_data})
+
+    return render(request, 'instructors/create_lesson.html', {'form': form, 'courses': courses, 'modules': modules})
+
+
+# @login_required
+# def create_lesson(request):
+#     if request.method == 'POST':
+#         form = LessonForm(request.POST)
+#         if form.is_valid():
+#             lesson = form.save(commit=False)
+#             lesson.user = request.user
+#             lesson.save()
+#             # You can redirect to a different page after creating the lesson if needed
+#             return redirect('instructors:course_detail', slug=lesson.module.course.slug)
+#     else:
+#         form = LessonForm()
+
+#     # Fetch modules based on the selected course (if a course is selected)
+#     selected_course_id = request.POST.get('course')  # Assuming the select field has the name 'course'
+#     if selected_course_id:
+#         modules = Module.objects.filter(course__id=selected_course_id)
+#     else:
+#         modules = Module.objects.none()  # Use an empty queryset initially
+
+#     # Prepare a JSON object containing module data for AJAX
+#     module_data = [{'id': module.id, 'module_title': module.module_title, 'course_id': module.course_id}
+#                    for module in modules]
     
-    lessons = Lesson.objects.filter(user=request.user).order_by('-created_at')
+#     # If the request is AJAX, return the module data as JSON
+#     if request.is_ajax():
+#         return JsonResponse({'modules': module_data})
     
-    return render(request, 'user/notes.html', {'form': form, 'notes': lessons})
+#     return render(request, 'instructors/create_lesson.html', {'form': form, 'modules': modules})
 
 
 
