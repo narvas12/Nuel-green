@@ -119,36 +119,6 @@ def create_lesson(request):
     return render(request, 'instructors/create_lesson.html', {'form': form, 'courses': courses, 'modules': modules})
 
 
-# @login_required
-# def create_lesson(request):
-#     if request.method == 'POST':
-#         form = LessonForm(request.POST)
-#         if form.is_valid():
-#             lesson = form.save(commit=False)
-#             lesson.user = request.user
-#             lesson.save()
-#             # You can redirect to a different page after creating the lesson if needed
-#             return redirect('instructors:course_detail', slug=lesson.module.course.slug)
-#     else:
-#         form = LessonForm()
-
-#     # Fetch modules based on the selected course (if a course is selected)
-#     selected_course_id = request.POST.get('course')  # Assuming the select field has the name 'course'
-#     if selected_course_id:
-#         modules = Module.objects.filter(course__id=selected_course_id)
-#     else:
-#         modules = Module.objects.none()  # Use an empty queryset initially
-
-#     # Prepare a JSON object containing module data for AJAX
-#     module_data = [{'id': module.id, 'module_title': module.module_title, 'course_id': module.course_id}
-#                    for module in modules]
-    
-#     # If the request is AJAX, return the module data as JSON
-#     if request.is_ajax():
-#         return JsonResponse({'modules': module_data})
-    
-#     return render(request, 'instructors/create_lesson.html', {'form': form, 'modules': modules})
-
 
 
 @login_required
@@ -179,3 +149,42 @@ def upload_resource(request, lesson_id):
     else:
         form = ResourceForm()
     return render(request, 'instructors/resource_form.html', {'form': form, 'lesson': lesson})
+
+
+
+@login_required
+def edit_course(request, slug):
+    course = get_object_or_404(Course, slug=slug)
+
+    # Check if the user is the owner of the course
+    if course.instructor != request.user:
+        messages.error(request, "You do not have permission to edit this course.")
+        return redirect('instructors:course_detail', slug=course.slug)
+
+    if request.method == 'POST':
+        form = CourseForm(request.POST, instance=course)
+        if form.is_valid():
+            form.save()
+            return redirect('instructors:course_detail', slug=course.slug)
+    else:
+        form = CourseForm(instance=course)
+
+    return render(request, 'instructors/edit_course.html', {'form': form, 'course': course})
+
+
+
+@login_required
+def delete_course(request, slug):
+    course = get_object_or_404(Course, slug=slug)
+
+    # Check if the user is the owner of the course
+    if course.instructor != request.user:
+        messages.error(request, "You do not have permission to delete this course.")
+        return redirect('instructors:course_detail', slug=course.slug)
+
+    if request.method == 'POST':
+        course.delete()
+        messages.success(request, "Course deleted successfully.")
+        return redirect('instructors:instructor_dashboard')
+
+    return render(request, 'instructors/delete_course.html', {'course': course})
