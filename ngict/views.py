@@ -65,21 +65,27 @@ def view_assessment(request, assessment_id):
 
 
 class TakeAssessmentView:
+
     def __init__(self, request, assessment_id):
         self.request = request
         self.assessment_id = assessment_id
 
+
     def get_assessment(self):
         return get_object_or_404(Assessment, id=self.assessment_id)
+
 
     def get_user(self):
         return self.request.user
 
+
     def get_questions(self, assessment):
         return Question.objects.filter(assessment=assessment)
 
+
     def get_assessment_score(self, assessment):
         return AssessmentScore.objects.filter(user=self.get_user(), assessment=assessment).last()
+
 
     def calculate_score(self, questions, user_answers):
         total_questions = questions.count()
@@ -90,27 +96,35 @@ class TakeAssessmentView:
                 correct_answers += 1
         return (correct_answers / total_questions) * 100
 
+
     def handle_post_request(self, assessment, questions):
+
         user_answers = {}
         for question in questions:
             user_answer_id = self.request.POST.get(f'question_{question.id}', None)
             if user_answer_id:
                 user_answers[question.id] = user_answer_id
 
+
         score = self.calculate_score(questions, user_answers)
         assessment_score = AssessmentScore.objects.create(user=self.get_user(), assessment=assessment, score=score)
+
 
         if score < 100:
             messages.error(self.request, 'Some of your answers are incorrect. Please review your answers.')
             error_message = "Some of your answers are incorrect. Please review your answers."
             return render(self.request, 'courses/assessments/take_assessment.html', {'assessment': assessment, 'questions': questions, 'error_message': error_message})
 
+
         messages.success(self.request, 'You passed the test')
         assessment_score.save()
         return redirect('academy:view_assessment', assessment_id=assessment.id)
 
+
     def render_page(self, assessment, questions, assessment_score=None):
         return render(self.request, 'courses/assessments/take_assessment.html', {'assessment': assessment, 'questions': questions, 'score': assessment_score})
+
+
 
 @login_required
 def take_assessment(request, assessment_id):
@@ -128,6 +142,7 @@ def take_assessment(request, assessment_id):
 
 @login_required
 def save_user_codes(request):
+
     if request.method == "POST":
         data = json.loads(request.body)
         user = request.user
@@ -146,8 +161,10 @@ def save_user_codes(request):
     return JsonResponse({"message": "Invalid request."}, status=400)
 
 
+
 @login_required
 def get_user_codes(request):
+
     user = request.user
     try:
         user_code = UserCode.objects.get(user=user)
@@ -162,6 +179,7 @@ def get_user_codes(request):
         return JsonResponse({"message": "User codes not found."}, status=404)
 
 
+
 @login_required
 def home(request):
 
@@ -170,8 +188,10 @@ def home(request):
     return render(request, 'index.html', {'user':user})
 
 
+
 @login_required
 def course_detail(request, slug):
+
     course = Course.objects.get(slug=slug)
     user = request.user
 
@@ -213,6 +233,7 @@ class EnrollCourseView:
         return self.request.user
 
     def enroll_student(self):
+        
         course = get_object_or_404(Course, slug=self.slug)
         student, created = Student.objects.get_or_create(user=self.user)
 

@@ -16,7 +16,9 @@ urlpatterns = [
     path('lesson/<int:lesson_id>/upload_resource/', upload_resource, name='upload_resource'),
     # Add more URL patterns as needed
 
-
     path('edit_course/<slug:slug>/', edit_course, name='edit_course'),
     path('delete_course/<slug:slug>/', delete_course, name='delete_course'),
+
+    path('save_lesson_data/', save_lesson_data, name='save_lesson_data'),
+    path('load_lesson_data/', load_lesson_data, name='load_lesson_data'),
 ]

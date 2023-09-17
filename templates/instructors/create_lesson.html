@@ -35,24 +35,72 @@
   </form>
 
   <script>
-    // JavaScript to update module options based on the selected course
-    document.getElementById("id_course").addEventListener("change", function () {
-      var courseId = this.value;
-      var moduleSelect = document.getElementById("id_module");
-      // Clear existing options
-      moduleSelect.innerHTML = '<option value="" selected>Select a module</option>';
 
-      // Fetch modules associated with the selected course (you can use AJAX here)
-      // For simplicity, you can pass a JSON object containing module data from your Django view
-      var modules = JSON.parse('{{ modules | safe }}');
-      modules.forEach(function (module) {
-        if (module.course_id == courseId) {
-          var option = document.createElement("option");
-          option.value = module.id;
-          option.text = module.module_title;
-          moduleSelect.appendChild(option);
-        }
+
+      // JavaScript to update module options based on the selected course
+      document.getElementById("id_course").addEventListener("change", function () {
+        var courseId = this.value;
+        var moduleSelect = document.getElementById("id_module");
+        // Clear existing options
+        moduleSelect.innerHTML = '<option value="" selected>Select a module</option>';
+    
+        // Parse the module data JSON
+        var modules = JSON.parse('{{ module_data_json|escapejs }}');
+        modules.forEach(function (module) {
+          if (module.course_id == courseId) {
+            var option = document.createElement("option");
+            option.value = module.id;
+            option.text = module.module_title;
+            moduleSelect.appendChild(option);
+          }
+        });
       });
-    });
+
+
+      // Function to save form data using AJAX
+      function saveFormData() {
+        const course = document.getElementById("id_course").value;
+        const module = document.getElementById("id_module").value;
+        const content = document.getElementById("id_content").value;
+
+        // Send an AJAX request to save the data on the server
+        // You will need to define a server-side endpoint for saving the data
+        // Example: /save_lesson_data/
+        fetch('/save_lesson_data/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+          },
+          body: JSON.stringify({ course, module, content }),
+        })
+          .then(response => {
+            if (response.ok) {
+              console.log('Form data saved successfully.');
+            } else {
+              console.error('Failed to save form data.');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Load form data using AJAX when the page loads
+        fetch('/load_lesson_data/')  // Define a server-side endpoint for loading the data
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById("id_course").value = data.course;
+            document.getElementById("id_module").value = data.module;
+            document.getElementById("id_content").value = data.content;
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+
+        // Listen for changes in form fields and save data when anything is typed
+        document.querySelector("form").addEventListener("input", saveFormData);
+      });
   </script>
 {% endblock %}

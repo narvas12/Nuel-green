@@ -91,6 +91,8 @@ def create_modules(request):
     return render(request, 'instructors/create_module.html', {'courses': courses})
 
 
+
+
 @login_required
 def create_lesson(request):
     # Fetch courses and modules and pass them as context
@@ -116,8 +118,37 @@ def create_lesson(request):
     if request.is_ajax():
         return JsonResponse({'modules': module_data})
 
-    return render(request, 'instructors/create_lesson.html', {'form': form, 'courses': courses, 'modules': modules})
+    return render(request, 'instructors/create_lesson.html', {'form': form, 'courses': courses, 'module_data_json': json.dumps(module_data)})
 
+
+def save_lesson_data(request):
+    if request.method == 'POST':
+        course = request.POST.get('course')
+        module = request.POST.get('module')
+        content = request.POST.get('content')
+        
+        # Save the data to the database or perform other necessary actions
+        # Example:
+        lesson = Lesson(course=course, module=module, content=content)
+        lesson.save()
+        return JsonResponse({'message': 'Form data saved successfully'})
+
+    return JsonResponse({'message': 'Invalid request'}, status=400)
+
+def load_lesson_data(request):
+    # Fetch the saved data from the database or another storage
+    # You may need to identify the specific data to load (e.g., based on user or session)
+    # Example:
+    lesson = Lesson.objects.first()  # Fetch the first lesson (you may need more complex logic)
+    if lesson:
+        data = {
+            'course': lesson.course,
+            'module': lesson.module,
+            'content': lesson.content,
+        }
+        return JsonResponse(data)
+    else:
+        return JsonResponse({'message': 'No data found'}, status=404)
 
 
 
@@ -188,3 +219,5 @@ def delete_course(request, slug):
         return redirect('instructors:instructor_dashboard')
 
     return render(request, 'instructors/delete_course.html', {'course': course})
+
+

@@ -76,12 +76,10 @@
 {% endblock %}
 
 
-
-
 {% block content %}
   <div class="container">
     <h1>{{ course.course_title }}</h1>
-    <p>{{ course.description }}</p>
+    <p>{{ course.description|safe  }}</p>
 
     {% if is_enrolled %}
       <h2>Modules and Lessons</h2>
@@ -93,12 +91,12 @@
               {% for lesson in module.lesson_set.all %}
                 <li>
                   <h6>{{ lesson.lesson_title }}</h6>
-                  <p>{{ lesson.content }}</p>
+                  <p>{{ lesson.content|safe  }}</p>
                   <h5>Assessments</h5>
                   <ul>
                     {% for assessment in assessments %}
                       {% if assessment.lesson == lesson %}
-                        <li>{{ assessment.title }}</li>
+                        <li>{{ assessment.title|safe  }}</li>
                       {% endif %}
                     {% endfor %}
                   </ul>
@@ -124,7 +122,7 @@
             <a href="{% url 'academy:take_assessment' assessment.id %}">Take Assessment</a>
             <div>
                 <ul>
-                    <li>{{ assessment.title }}</li>
+                    <li>{{ assessment.title|safe  }}</li>
                 </ul>
             </div>
           </li>
@@ -150,27 +148,3 @@
   {% endif %}
   </div>
 {% endblock %}
-
-
-
-{% comment %} {% block content %}
-<div class="container">
-  <h1>{{ course.course_title }}</h1>
-  <p>{{ course.description }}</p>
-  <p>Welcome, {{ user.username }}!</p>
-  
-  {% if request.user.is_authenticated %}
-    <form method="post" action="{% url 'academy:enroll_course' course.slug %}">
-      {% csrf_token %}
-      {% if is_enrolled %}
-        <p class="enrolled-message"><a href="{% url 'academy:course' course.slug %}">Enrolled</a></p>
-      {% else %}
-        <button type="submit">Enroll in Course</button>
-      {% endif %}
-    </form>
-  {% else %}
-    <p class="login-message">Please <a href="{% url 'academy:login' %}">login</a> to enroll.</p>
-  {% endif %}
-</div>
-
-{% endblock %} {% endcomment %}

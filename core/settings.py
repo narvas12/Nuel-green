@@ -30,7 +30,7 @@ DEBUG = True
 AUTH_USER_MODEL = 'auth.User'
 
 
-ALLOWED_HOSTS = ['127.0.0.1','c270-197-211-58-46.ngrok-free.app']
+ALLOWED_HOSTS = ['127.0.0.1','8628-197-211-58-46.ngrok-free.app']
 
 
 # Application definition
@@ -45,7 +45,10 @@ INSTALLED_APPS = [
     'ngict',
     'ckeditor',
     'instructors',
+    
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

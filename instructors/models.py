@@ -1,11 +1,13 @@
-from datetime import timezone
-import datetime
+from datetime import *
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.text import slugify
 from ckeditor.fields import RichTextField
 # Create your models here.
+
+
 
 class InstructorProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT)
