@@ -267,6 +267,22 @@ def enroll_course(request, slug):
         return enroll_course_view.render_unauthenticated_redirect()
     
 
+
+@login_required
+def unenroll_course(request, slug):
+    course = get_object_or_404(Course, slug=slug)
+    student, created = Student.objects.get_or_create(user=request.user)
+
+    if course in student.enrolled_courses.all():
+        student.enrolled_courses.remove(course)
+        messages.success(request, 'You have been unenrolled from the course.')
+    else:
+        messages.warning(request, 'You were not enrolled in this course.')
+
+    return redirect('academy:user_dashboard')  # Redirect to the enrolled courses page
+
+
+
 class ProjectView:
     def __init__(self, request):
         self.request = request

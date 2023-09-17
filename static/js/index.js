@@ -30,6 +30,4 @@ sidebarBtn.addEventListener("click", () => {
      });
  });
 
-
-
  

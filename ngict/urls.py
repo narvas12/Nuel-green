@@ -19,11 +19,12 @@ urlpatterns = [
 
 
     path('course_list/', CourseListView.as_view(), name='course_list'),
-    path('enroll/<slug:slug>/', enroll_course, name='enroll_course'),
-    path('course/<slug:slug>/', course_detail, name='course_detail'),
-
     
     path('enroll/<slug:slug>/', enroll_course, name='enroll_course'),
+    path('unenroll/<slug:slug>/', unenroll_course, name='unenroll_course'),
+
+    path('course/<slug:slug>/', course_detail, name='course_detail'),
+
 
     path('save_user_codes/', save_user_codes, name='save_user_codes'),
     path('get_user_codes/', get_user_codes, name='get_user_codes'),
