@@ -3,8 +3,9 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Course, InstructorProfile, Module, Lesson, Assessment, Resource
-from .forms import CourseForm, LessonForm, AssessmentForm, ResourceForm
+from .models import Answer, Course, InstructorProfile, Module, Lesson, Assessment, Question, Resource
+from .forms import CourseForm, LessonForm, AssessmentForm, QuestionAnswerForm, ResourceForm
+from django.db.models import Q
 
 
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -167,6 +168,8 @@ def create_assessment(request, lesson_id):
         form = AssessmentForm()
     return render(request, 'instructors/assessment_form.html', {'form': form, 'lesson': lesson})
 
+
+
 @login_required
 def upload_resource(request, lesson_id):
     lesson = get_object_or_404(Lesson, id=lesson_id)
@@ -219,5 +222,50 @@ def delete_course(request, slug):
         return redirect('instructors:instructor_dashboard')
 
     return render(request, 'instructors/delete_course.html', {'course': course})
+
+
+
+
+def get_todo_list(user):
+    # Get assessments not taken yet
+    assessments_not_taken = Assessment.objects.filter(
+        Q(course__in=user.completed_courses.all()) | 
+        Q(module__in=user.completed_modules.all()) |
+        Q(lesson__in=user.completed_lessons.all()),
+        ~Q(assessment_scores__user=user)
+    ).distinct()
+
+    return assessments_not_taken
+
+
+def todo_list_view(request):
+    user = request.user
+    todo_list = get_todo_list(user)
+    return render(request, 'todo_list.html', {'todo_list': todo_list})
+
+
+
+
+def upload_question_answer(request):
+    if request.method == 'POST':
+        form = QuestionAnswerForm(request.POST)
+        if form.is_valid():
+            assessment = form.cleaned_data['assessment']
+            question_text = form.cleaned_data['text']
+            answer_text = form.cleaned_data['answer_text']
+            is_correct = form.cleaned_data['is_correct']
+
+            # Create the question
+            question = Question.objects.create(text=question_text, assessment=assessment)
+
+            # Create the answer
+            answer = Answer.objects.create(text=answer_text, question=question, is_correct=is_correct)
+
+            return redirect('upload_success')  # Redirect to a success page
+
+    else:
+        form = QuestionAnswerForm()
+
+    return render(request, 'upload_question_answer.html', {'form': form})
 
 

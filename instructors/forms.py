@@ -1,5 +1,5 @@
 from django import forms
-from .models import Course, Module, Lesson, Assessment, Resource
+from .models import Answer, Course, Module, Lesson, Assessment, Question, Resource
 
 class CourseForm(forms.ModelForm):
     class Meta:
@@ -56,3 +56,31 @@ class LessonForm(forms.ModelForm):
         # Customize the 'module' field to be a select input
         self.fields['module'].widget = forms.Select(attrs={'class': 'form-control'})
 
+
+
+class QuestionAnswerForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ['text']
+
+    # Add a field to select the assessment
+    assessment = forms.ModelChoiceField(
+        queryset=Assessment.objects.all(),
+        empty_label="Select an assessment"
+    )
+
+    # Add a field to enter the answer text
+    answer_text = forms.CharField(
+        label="Answer Text",
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+    )
+
+    # Add a field to specify if the answer is correct
+    is_correct = forms.BooleanField(
+        required=False,  # Allows for multiple answers, some of which may be correct
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+    )
+
+class Meta:
+    model = Answer
+    fields = ['text', 'is_correct']

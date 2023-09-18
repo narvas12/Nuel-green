@@ -18,6 +18,7 @@ urlpatterns = [
     path('html_css/', html_css, name='html_css'),
 
 
+
     path('course_list/', CourseListView.as_view(), name='course_list'),
     
     path('enroll/<slug:slug>/', enroll_course, name='enroll_course'),

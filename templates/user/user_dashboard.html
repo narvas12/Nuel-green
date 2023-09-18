@@ -175,4 +175,11 @@
       {% endif %}
     </div>
   </div>
+  <h2>To-Do List</h2>
+  <ul>
+      {% for assessment in todo_list %}
+          <li>{{ assessment.title }}</li>
+      {% endfor %}
+  </ul>
+
 {% endblock %}
