@@ -192,30 +192,6 @@ def get_modules_and_lessons(request):
     return JsonResponse(data)
 
 
-# def get_modules_and_lessons(request):
-#     course_id = request.GET.get('course_id')
-    
-#     try:
-#         # Debugging: Print course_id
-#         print('course_id:', course_id)
-        
-#         if course_id:
-#             modules = Module.objects.filter(course_id=course_id)
-#         else:
-#             modules = Module.objects.none()
-
-#         # Debugging: Print the number of modules
-#         print('Number of modules:', modules.count())
-        
-#         # ... continue with the rest of your code
-        
-#     except Exception as e:
-#         # Debugging: Print any exceptions
-#         print('Error:', str(e))
-
-#     # ... continue with the rest of your code
-
-
 
 
 @login_required
