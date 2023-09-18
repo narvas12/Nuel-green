@@ -1,13 +1,41 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
-  <h2>Create a New Lesson for {{ module.module_title }}</h2>
+  <h2>Create Assessment</h2>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Create Lesson</button>
-  </form>
 
-  <!-- Anchor link to create an assessment -->
-  <a href="{% url 'instructors:create_assessment' lesson.id %}">Create Assessment</a>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#id_course').change(function() {
+          var selectedCourse = $(this).val();
+          $.ajax({
+            url: '/get_modules_and_lessons/',
+            data: {
+              'course_id': selectedCourse
+            },
+            dataType: 'json',
+            success: function(data) {
+              var moduleSelect = $('#id_module');
+              moduleSelect.empty();
+              $.each(data.modules, function(key, value) {
+                moduleSelect.append($('<option>').text(value[1]).attr('value', value[0]));
+              });
+
+              var lessonSelect = $('#id_lesson');
+              lessonSelect.empty();
+              $.each(data.lessons, function(key, value) {
+                lessonSelect.append($('<option>').text(value[1]).attr('value', value[0]));
+              });
+            }
+          });
+        });
+      });
+    </script>
+
+    <button type="submit">Create Assessment</button>
+  </form>
 {% endblock %}
+

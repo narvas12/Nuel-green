@@ -22,7 +22,7 @@ def instructor_dashboard(request):
     instructor_profile = get_object_or_404(InstructorProfile, user=request.user)
     no_courses_exist = not courses.exists()
 
-    return render(request, 'instructors/dashboard.html', {'courses': courses, 'instructor_profile': instructor_profile, 'no_courses_exist': no_courses_exist})
+    return render(request, 'instructors/instructor_dashboard.html', {'courses': courses, 'instructor_profile': instructor_profile, 'no_courses_exist': no_courses_exist})
 
 
 
@@ -152,21 +152,69 @@ def load_lesson_data(request):
         return JsonResponse({'message': 'No data found'}, status=404)
 
 
-
 @login_required
-def create_assessment(request, lesson_id):
-    lesson = get_object_or_404(Lesson, id=lesson_id)
+def create_assessment(request):
     if request.method == 'POST':
         form = AssessmentForm(request.POST)
         if form.is_valid():
-            assessment = form.save(commit=False)
-            assessment.lesson = lesson
-            assessment.course = lesson.module.course
-            assessment.save()
-            return redirect('instructors:course_detail', slug=lesson.module.course.slug)
+            assessment = form.save()
+            return redirect('instructors:create_assessment')  # Redirect to the assessment detail page
     else:
         form = AssessmentForm()
-    return render(request, 'instructors/assessment_form.html', {'form': form, 'lesson': lesson})
+
+    return render(request, 'instructors/create_assessment.html', {'form': form})
+
+
+
+
+def get_modules_and_lessons(request):
+    course_id = request.GET.get('course_id')
+    module_id = request.GET.get('module_id')
+
+    if course_id:
+        modules = Module.objects.filter(course_id=course_id)
+    else:
+        modules = Module.objects.none()
+
+    if module_id:
+        lessons = Lesson.objects.filter(module_id=module_id)
+    else:
+        lessons = Lesson.objects.none()
+
+    module_choices = [{'id': module.id, 'module_title': module.module_title} for module in modules]
+    lesson_choices = [{'id': lesson.id, 'title': lesson.title} for lesson in lessons]
+
+    data = {
+        'modules': module_choices,
+        'lessons': lesson_choices,
+    }
+
+    return JsonResponse(data)
+
+
+# def get_modules_and_lessons(request):
+#     course_id = request.GET.get('course_id')
+    
+#     try:
+#         # Debugging: Print course_id
+#         print('course_id:', course_id)
+        
+#         if course_id:
+#             modules = Module.objects.filter(course_id=course_id)
+#         else:
+#             modules = Module.objects.none()
+
+#         # Debugging: Print the number of modules
+#         print('Number of modules:', modules.count())
+        
+#         # ... continue with the rest of your code
+        
+#     except Exception as e:
+#         # Debugging: Print any exceptions
+#         print('Error:', str(e))
+
+#     # ... continue with the rest of your code
+
 
 
 

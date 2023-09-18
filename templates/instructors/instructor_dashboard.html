@@ -3,6 +3,11 @@
 {% block content %}
   <h2>{{ instructor_profile.user.username }} Instructor Dashboard</h2>
   <a href="{% url 'instructors:create_course' %}" class="btn btn-primary">Create Course</a>
+  <a href="{% url 'instructors:create_module' %}" class="btn btn-primary">Add Course Modules</a>
+  <a href="{% url 'instructors:create_lesson' %}" class="btn btn-primary">Add Lesson</a>
+  <a href="{% url 'instructors:create_assessment' %}" class="btn btn-primary">Create lesson Assessment</a>
+
+
 
   {% if no_courses_exist %}
     <p>No courses created yet.</p>

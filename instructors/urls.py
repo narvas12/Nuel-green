@@ -11,11 +11,12 @@ urlpatterns = [
     path('course/<slug:slug>/', course_detail, name='course_detail'),
     path('create_module/', create_modules, name='create_module'),
     path('create_lesson/', create_lesson, name='create_lesson'),
-    path('create_assessment/', create_assessment, name='create_assessment'),
+    path('lesson/<int:lesson_id>/upload_resource/', upload_resource, name='upload_resource'),
 
     path('lesson/<int:lesson_id>/create_assessment/', create_assessment, name='create_assessment'),
-    path('lesson/<int:lesson_id>/upload_resource/', upload_resource, name='upload_resource'),
-  
+    path('create_assessment/', create_assessment, name='create_assessment'),
+
+    path('get_modules_and_lessons/', get_modules_and_lessons, name='get_modules_and_lessons'),
 
     path('edit_course/<slug:slug>/', edit_course, name='edit_course'),
     path('delete_course/<slug:slug>/', delete_course, name='delete_course'),
