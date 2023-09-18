@@ -34,7 +34,7 @@ class LessonForm(forms.ModelForm):
 
     class Meta:
         model = Lesson
-        fields = ('course', 'module', 'content',)
+        fields = ('id', 'title', 'course', 'module', 'content',)
         widgets = {
             'content': forms.Textarea(attrs={'class': 'ckeditor'}),
         }
@@ -44,20 +44,6 @@ class LessonForm(forms.ModelForm):
         # Customize the 'module' field to be a select input
         self.fields['module'].widget = forms.Select(attrs={'class': 'form-control'})
 
-
-
-
-# class AssessmentForm(forms.ModelForm):
-#     class Meta:
-#         model = Assessment
-#         fields = ['title', 'description', 'course', 'module', 'lesson', 'passing_score']
-
-#     course = forms.ModelChoiceField(queryset=Course.objects.all(), empty_label="Select a course")
-#     module = forms.ModelChoiceField(queryset=Module.objects.none(), empty_label="Select a module")
-#     lesson = forms.ModelChoiceField(queryset=Lesson.objects.none(), empty_label="Select a lesson")
-
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
 
 
 

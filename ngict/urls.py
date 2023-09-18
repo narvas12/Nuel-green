@@ -1,6 +1,7 @@
 from django.urls import path
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from .views import *
+from instructors.views import instructor_dashboard
 
 app_name = 'academy'
 
@@ -14,6 +15,7 @@ urlpatterns = [
     path('dashboard/', user_dashboard, name='user_dashboard'),
     path('create_profile/', update_profile, name='update_profile'),
     
+    path('instructor_dashboard/', instructor_dashboard, name='instructor_dashboard'),
 
     path('html_css/', html_css, name='html_css'),
 

@@ -61,6 +61,8 @@ class Module(models.Model):
 
 
 class Lesson(models.Model):
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=500)
     course = models.ForeignKey(Course, on_delete=models.PROTECT)
     module = models.ForeignKey(Module, default=None, null=True, on_delete=models.PROTECT)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)

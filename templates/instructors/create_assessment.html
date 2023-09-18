@@ -2,40 +2,69 @@
 
 {% block content %}
   <h2>Create Assessment</h2>
-  <form method="post">
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-      $(document).ready(function() {
-        $('#id_course').change(function() {
-          var selectedCourse = $(this).val();
+    <button type="submit" class="btn btn-primary">Create Assessment</button>
+  </form>
+  
+  <script>
+    $(document).ready(function() {
+      $('#id_course').on('change', function() {
+        var course_id = $(this).val();
+        if (course_id) {
           $.ajax({
-            url: '/get_modules_and_lessons/',
-            data: {
-              'course_id': selectedCourse
-            },
-            dataType: 'json',
+            type: 'GET',
+            url: '{% url "instructors:get_modules_and_lessons" %}',
+            data: {'course_id': course_id},
             success: function(data) {
-              var moduleSelect = $('#id_module');
-              moduleSelect.empty();
-              $.each(data.modules, function(key, value) {
-                moduleSelect.append($('<option>').text(value[1]).attr('value', value[0]));
+              console.log('Data received:', data); // Debug line
+              var moduleDropdown = $('#id_module');
+              moduleDropdown.empty();
+              moduleDropdown.append('<option value="">Select a module</option>');
+              $.each(data.modules, function(index, module) {
+                moduleDropdown.append('<option value="' + module.id + '">' + module.module_title + '</option>');
               });
-
-              var lessonSelect = $('#id_lesson');
-              lessonSelect.empty();
-              $.each(data.lessons, function(key, value) {
-                lessonSelect.append($('<option>').text(value[1]).attr('value', value[0]));
-              });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              console.error('Error:', textStatus, errorThrown); // Debug line
+              // Handle errors here if needed
             }
           });
-        });
+        } else {
+          // If no course is selected, empty the module dropdown
+          $('#id_module').empty();
+        }
       });
+    
+      // Add similar code for loading lessons based on the selected module
+      $('#id_module').on('change', function() {
+        var module_id = $(this).val();
+        if (module_id) {
+          $.ajax({
+            type: 'GET',
+            url: '{% url "instructors:get_modules_and_lessons" %}',
+            data: {'module_id': module_id},
+            success: function(data) {
+              console.log('Data received:', data); // Debug line
+              var lessonDropdown = $('#id_lesson');
+              lessonDropdown.empty();
+              lessonDropdown.append('<option value="">Select a lesson</option>');
+              $.each(data.lessons, function(index, lesson) {
+                lessonDropdown.append('<option value="' + lesson.id + '">' + lesson.title + '</option>');
+              });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              console.error('Error:', textStatus, errorThrown); // Debug line
+              // Handle errors here if needed
+            }
+          });
+        } else {
+          // If no module is selected, empty the lesson dropdown
+          $('#id_lesson').empty();
+        }
+      });
+    });
     </script>
-
-    <button type="submit">Create Assessment</button>
-  </form>
+    
 {% endblock %}
-

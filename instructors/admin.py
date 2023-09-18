@@ -16,7 +16,7 @@ class ModuleAdmin(admin.ModelAdmin):
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('module','user', 'content', 'created_at')
+    list_display = ('title','module','user', 'content', 'created_at')
 
 @admin.register(Assessment)
 class AssessmentAdmin(admin.ModelAdmin):

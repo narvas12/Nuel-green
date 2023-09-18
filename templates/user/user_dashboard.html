@@ -95,6 +95,11 @@
 {% block content %}
   <div class="container">
     <h1>Welcome, {{ user.username }}!</h1>
+    {% if user.is_staff %}
+    <a href="{% url 'instructors:instructor_dashboard' %}" class="btn-primary">view instructor Dashboard</a>
+    {% else %}
+      <p></p>
+    {% endif %}
     {% if user.is_authenticated %}
       <h2>Enrolled Courses</h2>
       {% if enrolled_courses %}
