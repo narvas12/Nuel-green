@@ -93,7 +93,6 @@ def create_modules(request):
 
 
 
-
 @login_required
 def create_lesson(request):
     # Fetch courses and modules and pass them as context
@@ -122,6 +121,7 @@ def create_lesson(request):
     return render(request, 'instructors/create_lesson.html', {'form': form, 'courses': courses, 'module_data_json': json.dumps(module_data)})
 
 
+
 def save_lesson_data(request):
     if request.method == 'POST':
         course = request.POST.get('course')
@@ -135,6 +135,8 @@ def save_lesson_data(request):
         return JsonResponse({'message': 'Form data saved successfully'})
 
     return JsonResponse({'message': 'Invalid request'}, status=400)
+
+
 
 def load_lesson_data(request):
     # Fetch the saved data from the database or another storage
@@ -152,6 +154,7 @@ def load_lesson_data(request):
         return JsonResponse({'message': 'No data found'}, status=404)
 
 
+
 @login_required
 def create_assessment(request):
     if request.method == 'POST':
@@ -163,7 +166,6 @@ def create_assessment(request):
         form = AssessmentForm()
 
     return render(request, 'instructors/create_assessment.html', {'form': form})
-
 
 
 
@@ -190,7 +192,6 @@ def get_modules_and_lessons(request):
     }
 
     return JsonResponse(data)
-
 
 
 
@@ -249,7 +250,6 @@ def delete_course(request, slug):
 
 
 
-
 def get_todo_list(user):
     # Get assessments not taken yet
     assessments_not_taken = Assessment.objects.filter(
@@ -262,11 +262,11 @@ def get_todo_list(user):
     return assessments_not_taken
 
 
+
 def todo_list_view(request):
     user = request.user
     todo_list = get_todo_list(user)
     return render(request, 'todo_list.html', {'todo_list': todo_list})
-
 
 
 
