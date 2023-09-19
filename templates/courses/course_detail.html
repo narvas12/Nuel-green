@@ -79,6 +79,7 @@
 {% block content %}
   <div class="container">
     <h1>{{ course.course_title }}</h1>
+    <iframe width="1000" height="650"  src="{{ course.video_url }}" frameborder="0" allowfullscreen></iframe>
     <p>{{ course.description|safe  }}</p>
 
     {% if is_enrolled %}
@@ -86,7 +87,7 @@
       <ul>
         {% for module in modules %}
           <li>
-            <h3>{{ module.module_title }}</h3>
+            <h6>{{ module.module_title }}</h6>
             <ul>
               {% for lesson in module.lesson_set.all %}
                 <li>
