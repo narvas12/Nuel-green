@@ -121,12 +121,13 @@
   <header>
     <h1><a href="">Nuel-Green ICT</a></h1>
   </header>
-
+  
   <nav>
     <a href="{% url 'instructors:create_course' %}">Create Course</a>
-  </nav>
-
-  <nav>
+  
+  <a href="{% url 'academy:user_dashboard' %}"><i class='bx bx-grid-alt'></i>
+    <span class="link-name">Dashboard</span></a>
+ 
     <a href="{% url 'academy:course_list' %}"> Course List</a>
   </nav>
 

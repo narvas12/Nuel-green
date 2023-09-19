@@ -25,4 +25,6 @@ urlpatterns = [
     path('load_lesson_data/', load_lesson_data, name='load_lesson_data'),
 
     path('upload_question_answer/', upload_question_answer, name='upload_question_answer'),
+
+    path('save_question_answer_ajax/', save_question_answer_ajax, name='save_question_answer_ajax'),
 ]

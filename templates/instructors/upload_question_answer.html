@@ -1,11 +1,73 @@
-
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<h2>Upload Question and Answer</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Upload</button>
-</form>
-{% endblock content %}
+    <h1>Upload Question and Answers</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        
+        <!-- Assessment Selection -->
+        <div class="form-group">
+            <label for="{{ form.assessment.id_for_label }}">Select an Assessment:</label>
+            {{ form.assessment }}
+        </div>
+        
+        <!-- Question Text -->
+        <div class="form-group">
+            <label for="{{ form.text.id_for_label }}">Question Text:</label>
+            {{ form.text }}
+        </div>
+        
+        <!-- Answer Options -->
+        <div class="form-group">
+            <label>Answer Options:</label>
+            {{ form.answer_text }}
+            <br>
+            {{ form.answer_option_1 }} {{ form.is_correct_1 }} Correct?
+            <br>
+            {{ form.answer_option_2 }} {{ form.is_correct_2 }} Correct?
+            <br>
+            {{ form.answer_option_3 }} {{ form.is_correct_3 }} Correct?
+            <br>
+            {{ form.answer_option_4 }} {{ form.is_correct_4 }} Correct?
+        </div>
+        
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+
+   <!-- Add this script tag to your HTML template -->
+    <script>
+        $(document).ready(function() {
+            // Handle form submission via AJAX
+            $("form").on("submit", function(event) {
+                event.preventDefault();  // Prevent the default form submission
+
+                // Serialize the form data
+                var formData = $(this).serialize();
+
+                // Send an AJAX POST request to the server
+                $.ajax({
+                    url: "{% url 'instructors:save_question_answer_ajax' %}",
+                    type: "POST",
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            // Clear the form or perform any other necessary actions
+                            alert("Question and answer saved successfully!");
+                            $("form")[0].reset();  // Reset the form
+                        } else {
+                            alert("Failed to save the question and answer.");
+                        }
+                    },
+                    error: function() {
+                        alert("An error occurred while saving the data.");
+                    }
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

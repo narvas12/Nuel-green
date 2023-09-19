@@ -250,6 +250,31 @@ def delete_course(request, slug):
 
 
 
+
+def upload_question_answer(request):
+    if request.method == 'POST':
+        form = QuestionAnswerForm(request.POST)
+        if form.is_valid():
+            assessment = form.cleaned_data['assessment']
+            question_text = form.cleaned_data['text']
+            answer_text = form.cleaned_data['answer_text']
+            is_correct = form.cleaned_data['is_correct']
+
+            # Create the question
+            question = Question.objects.create(text=question_text, assessment=assessment)
+
+            # Create the answer
+            answer = Answer.objects.create(text=answer_text, question=question, is_correct=is_correct)
+
+            return redirect('upload_success')  # Redirect to a success page
+
+    else:
+        form = QuestionAnswerForm()
+
+    return render(request, 'upload_question_answer.html', {'form': form})
+
+
+
 def get_todo_list(user):
     # Get assessments not taken yet
     assessments_not_taken = Assessment.objects.filter(
@@ -276,20 +301,52 @@ def upload_question_answer(request):
         if form.is_valid():
             assessment = form.cleaned_data['assessment']
             question_text = form.cleaned_data['text']
-            answer_text = form.cleaned_data['answer_text']
-            is_correct = form.cleaned_data['is_correct']
 
             # Create the question
             question = Question.objects.create(text=question_text, assessment=assessment)
 
-            # Create the answer
-            answer = Answer.objects.create(text=answer_text, question=question, is_correct=is_correct)
+            # Create the answers based on the selected correct option
+            answers = []
+            for i in range(1, 5):
+                answer_text = form.cleaned_data[f'answer_option_{i}']
+                is_correct = form.cleaned_data[f'is_correct_{i}']
+
+                answer = Answer.objects.create(
+                    text=answer_text,
+                    question=question,
+                    is_correct=is_correct
+                )
+
+                answers.append(answer)
 
             return redirect('upload_success')  # Redirect to a success page
 
     else:
         form = QuestionAnswerForm()
 
-    return render(request, 'upload_question_answer.html', {'form': form})
+    return render(request, 'instructors/upload_question_answer.html', {'form': form})
 
+
+
+
+def save_question_answer_ajax(request):
+    if request.method == 'POST':
+        assessment_id = request.POST.get('assessment')
+        question_text = request.POST.get('text')
+
+        # Create the question
+        question = Question.objects.create(text=question_text, assessment_id=assessment_id)
+
+        # Create answers based on user input
+        answers = []
+        for i in range(1, 5):
+            answer_text = request.POST.get(f'answer_option_{i}')
+            is_correct = request.POST.get(f'is_correct_{i}') == 'true'  # Convert 'true' to boolean
+            answer = Answer.objects.create(text=answer_text, question=question, is_correct=is_correct)
+            answers.append(answer)
+
+        # Return a JSON response to indicate success
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False, 'message': 'Invalid request method'})
 

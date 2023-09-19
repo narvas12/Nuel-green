@@ -84,8 +84,6 @@ class AssessmentForm(forms.ModelForm):
 
 
 
-
-
 class QuestionAnswerForm(forms.ModelForm):
     class Meta:
         model = Question
@@ -97,18 +95,38 @@ class QuestionAnswerForm(forms.ModelForm):
         empty_label="Select an assessment"
     )
 
-    # Add a field to enter the answer text
-    answer_text = forms.CharField(
-        label="Answer Text",
+    # Add fields for answer options
+    answer_option_1 = forms.CharField(
+        label="Answer Option 1",
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+    )
+    answer_option_2 = forms.CharField(
+        label="Answer Option 2",
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+    )
+    answer_option_3 = forms.CharField(
+        label="Answer Option 3",
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+    )
+    answer_option_4 = forms.CharField(
+        label="Answer Option 4",
         widget=forms.TextInput(attrs={'class': 'form-control'}),
     )
 
-    # Add a field to specify if the answer is correct
-    is_correct = forms.BooleanField(
-        required=False,  # Allows for multiple answers, some of which may be correct
+    # Add fields to specify if the answer is correct
+    is_correct_1 = forms.BooleanField(
+        required=False,
         widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
     )
-
-class Meta:
-    model = Answer
-    fields = ['text', 'is_correct']
+    is_correct_2 = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+    )
+    is_correct_3 = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+    )
+    is_correct_4 = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+    )
