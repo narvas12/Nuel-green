@@ -6,14 +6,27 @@ from django.contrib import messages
 from .models import Answer, Course, InstructorProfile, Module, Lesson, Assessment, Question, Resource
 from .forms import CourseForm, LessonForm, AssessmentForm, QuestionAnswerForm, ResourceForm
 from django.db.models import Q
-
-
 from django.contrib.auth.decorators import login_required, user_passes_test
+import hashlib
+#------------------------------------------------------------
 
+
+
+#========================== generate_hash ==============================
+def generate_hash(identifier, object_id):
+    hashed_url = generate_hash(object_id)
+    return hashlib.sha256(str(identifier).encode()).hexdigest()[:10]  # Adjust the length as needed
+#------------------------------------------------------------
+
+
+#============================= is_staff ===========================
 # Custom user test function to check if a user is staff
 def is_staff(user):
     return user.is_staff
+#------------------------------------------------------------
 
+
+#========================== instructor_dashboard ==============================
 @login_required
 @user_passes_test(is_staff, login_url='academy:home')  # Redirect non-staff users to the 'home' page
 def instructor_dashboard(request):
@@ -23,12 +36,10 @@ def instructor_dashboard(request):
     no_courses_exist = not courses.exists()
 
     return render(request, 'instructors/instructor_dashboard.html', {'courses': courses, 'instructor_profile': instructor_profile, 'no_courses_exist': no_courses_exist})
+#------------------------------------------------------------
 
 
-
-# @login_required
-# @user_passes_test(lambda u: u.is_staff, login_url='home')  # Only staff users can access this view
-
+#============================ create_course ============================
 @login_required
 def create_course(request):
     # Check if the user has an associated InstructorProfile and is a creator
@@ -53,17 +64,19 @@ def create_course(request):
         form = CourseForm()
 
     return render(request, 'instructors/create_course.html', {'form': form})
+#------------------------------------------------------------
 
 
-
+#========================== course_detail ==============================
 @login_required
 def course_detail(request, slug):
     course = get_object_or_404(Course, slug=slug)
     modules = Module.objects.filter(course=course)
     return render(request, 'instructors/course_detail.html', {'course': course, 'modules': modules})
+#------------------------------------------------------------
 
 
-
+#=========================== create_modules =============================
 @login_required
 def create_modules(request):
     if request.method == 'POST':
@@ -90,9 +103,10 @@ def create_modules(request):
 
     # If it's not a POST request, render the form
     return render(request, 'instructors/create_module.html', {'courses': courses})
+#------------------------------------------------------------
 
 
-
+#=========================== create_lesson =============================
 @login_required
 def create_lesson(request):
     # Fetch courses and modules and pass them as context
@@ -119,9 +133,10 @@ def create_lesson(request):
         return JsonResponse({'modules': module_data})
 
     return render(request, 'instructors/create_lesson.html', {'form': form, 'courses': courses, 'module_data_json': json.dumps(module_data)})
+#------------------------------------------------------------
 
 
-
+#============================ save_lesson_data ============================
 def save_lesson_data(request):
     if request.method == 'POST':
         course = request.POST.get('course')
@@ -135,9 +150,10 @@ def save_lesson_data(request):
         return JsonResponse({'message': 'Form data saved successfully'})
 
     return JsonResponse({'message': 'Invalid request'}, status=400)
+#------------------------------------------------------------
 
 
-
+#============================ load_lesson_data ============================
 def load_lesson_data(request):
     # Fetch the saved data from the database or another storage
     # You may need to identify the specific data to load (e.g., based on user or session)
@@ -152,9 +168,10 @@ def load_lesson_data(request):
         return JsonResponse(data)
     else:
         return JsonResponse({'message': 'No data found'}, status=404)
+#------------------------------------------------------------
 
 
-
+#============================ create_assessment ============================
 @login_required
 def create_assessment(request):
     if request.method == 'POST':
@@ -166,9 +183,10 @@ def create_assessment(request):
         form = AssessmentForm()
 
     return render(request, 'instructors/create_assessment.html', {'form': form})
+#------------------------------------------------------------
 
 
-
+#============================ get_modules_and_lessons ============================
 def get_modules_and_lessons(request):
     course_id = request.GET.get('course_id')
     module_id = request.GET.get('module_id')
@@ -192,9 +210,10 @@ def get_modules_and_lessons(request):
     }
 
     return JsonResponse(data)
+#------------------------------------------------------------
 
 
-
+#=========================== upload_resource =============================
 @login_required
 def upload_resource(request, lesson_id):
     lesson = get_object_or_404(Lesson, id=lesson_id)
@@ -208,9 +227,10 @@ def upload_resource(request, lesson_id):
     else:
         form = ResourceForm()
     return render(request, 'instructors/resource_form.html', {'form': form, 'lesson': lesson})
+#------------------------------------------------------------
 
 
-
+#============================ edit_course ============================
 @login_required
 def edit_course(request, slug):
     course = get_object_or_404(Course, slug=slug)
@@ -229,9 +249,10 @@ def edit_course(request, slug):
         form = CourseForm(instance=course)
 
     return render(request, 'instructors/edit_course.html', {'form': form, 'course': course})
+#------------------------------------------------------------
 
 
-
+#============================ delete_course ============================
 @login_required
 def delete_course(request, slug):
     course = get_object_or_404(Course, slug=slug)
@@ -247,10 +268,10 @@ def delete_course(request, slug):
         return redirect('instructors:instructor_dashboard')
 
     return render(request, 'instructors/delete_course.html', {'course': course})
+#------------------------------------------------------------
 
 
-
-
+#============================ upload_question_answer ============================
 def upload_question_answer(request):
     if request.method == 'POST':
         form = QuestionAnswerForm(request.POST)
@@ -272,9 +293,10 @@ def upload_question_answer(request):
         form = QuestionAnswerForm()
 
     return render(request, 'upload_question_answer.html', {'form': form})
+#------------------------------------------------------------
 
 
-
+#============================ get_todo_list ============================
 def get_todo_list(user):
     # Get assessments not taken yet
     assessments_not_taken = Assessment.objects.filter(
@@ -285,16 +307,20 @@ def get_todo_list(user):
     ).distinct()
 
     return assessments_not_taken
+#------------------------------------------------------------
 
 
-
+#=========================== todo_list_view =============================
+@login_required
 def todo_list_view(request):
     user = request.user
     todo_list = get_todo_list(user)
     return render(request, 'todo_list.html', {'todo_list': todo_list})
+#------------------------------------------------------------
 
 
-
+#========================== upload_question_answer==============================
+@login_required
 def upload_question_answer(request):
     if request.method == 'POST':
         form = QuestionAnswerForm(request.POST)
@@ -325,10 +351,11 @@ def upload_question_answer(request):
         form = QuestionAnswerForm()
 
     return render(request, 'instructors/upload_question_answer.html', {'form': form})
+#------------------------------------------------------------
 
 
-
-
+#========================== save_question_answer_ajax==============================
+@login_required
 def save_question_answer_ajax(request):
     if request.method == 'POST':
         assessment_id = request.POST.get('assessment')
@@ -349,4 +376,4 @@ def save_question_answer_ajax(request):
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False, 'message': 'Invalid request method'})
-
+#------------------------------------------------------------

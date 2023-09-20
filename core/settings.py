@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'ngict',
     'ckeditor',
     'instructors',
+    'survey',
     
 ]
 
