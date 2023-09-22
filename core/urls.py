@@ -20,5 +20,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('ngict.urls')),
     path('', include('instructors.urls')),
-    path('', include('survey.urls')),
 ]

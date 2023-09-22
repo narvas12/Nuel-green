@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'ngict',
     'ckeditor',
     'instructors',
-    'survey',
+    'analytical',
     
 ]
 
@@ -59,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'ngict.middleware.VisitorTrackingMiddleware'
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -182,3 +183,13 @@ CKEDITOR_CONFIGS = {
 }
 
 CKEDITOR_BASEPATH = "/staticfiles/ckeditor/ckeditor/"
+
+
+ANALYTICAL_INTERNAL_IPS = ['127.0.0.1']
+ANALYTICAL_AUTO_IDENTIFY = True
+
+ANALYTICAL_PROVIDERS = {
+    'google': {
+        'TRACKING_ID': 'YOUR_GOOGLE_ANALYTICS_TRACKING_ID',
+    },
+}
