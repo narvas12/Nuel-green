@@ -45,6 +45,38 @@
   background-color: #212529;
 }
 
+
+  /* Style form input fields */
+  .form-group input[type="text"],
+  .form-group input[type="number"],
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  /* Style the submit button */
+  .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-primary {
+    background-color: #11101d;
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background-color: #212529;
+  }
+
 /* Add more CSS styling as needed */
 
 
@@ -57,7 +89,43 @@
   <h2 class="form-title">Create Assessment</h2>
   <form method="post" enctype="multipart/form-data" class="assessment-form">
     {% csrf_token %}
-    {{ form.as_p }}
+  
+    <!-- Title Field -->
+    <div class="form-group">
+      <label for="{{ form.title.id_for_label }}">Title:</label>
+      {{ form.title }}
+    </div>
+  
+    <!-- Description Field -->
+    <div class="form-group">
+      <label for="{{ form.description.id_for_label }}">Description:</label>
+      {{ form.description }}
+    </div>
+  
+    <!-- Course Field -->
+    <div class="form-group">
+      <label for="{{ form.course.id_for_label }}">Course:</label>
+      {{ form.course }}
+    </div>
+  
+    <!-- Module Field -->
+    <div class="form-group">
+      <label for="{{ form.module.id_for_label }}">Module:</label>
+      {{ form.module }}
+    </div>
+  
+    <!-- Lesson Field -->
+    <div class="form-group">
+      <label for="{{ form.lesson.id_for_label }}">Lesson:</label>
+      {{ form.lesson }}
+    </div>
+  
+    <!-- Passing Score Field -->
+    <div class="form-group">
+      <label for="{{ form.passing_score.id_for_label }}">Passing Score:</label>
+      {{ form.passing_score }}
+    </div>
+  
     <button type="submit" class="btn btn-primary submit-button">Create Assessment</button>
   </form>
 </div>

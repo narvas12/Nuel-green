@@ -8,7 +8,6 @@ class CourseForm(forms.ModelForm):
 
 
 
-
 class ResourceForm(forms.ModelForm):
     class Meta:
         model = Resource

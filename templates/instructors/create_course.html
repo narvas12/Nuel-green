@@ -62,8 +62,23 @@
   background-color: #218838;
 }
 
-/* Add more CSS styling as needed */
+.create-course-form .form-group label {
+  /* Label styles for form inputs */
+  color: #333; /* Change label text color */
+}
 
+.create-course-form .form-group input[type="text"],
+.create-course-form .form-group input[type="number"],
+.create-course-form .form-group input[type="url"],
+.create-course-form .form-group textarea {
+  /* Input styles for text, URL, and textarea fields */
+  width: 100%; /* Make the input fields 100% width */
+  padding: 10px; /* Add padding to input fields */
+  border: 1px solid #ccc; /* Add a border to input fields */
+  border-radius: 5px; /* Add border-radius to input fields */
+}
+
+/* Add more CSS styling as needed */
 
 </style>
 {% endblock style %}
@@ -71,9 +86,30 @@
 {% block content %}
   <div class="create-course-container">
     <h2 class="form-title">Create a New Course</h2>
+
     <form method="post" class="create-course-form">
       {% csrf_token %}
-      {{ form.as_p }}
+      
+      <div class="form-group">
+          <label for="{{ form.course_title.id_for_label }}" class="form-label">Course Title:</label>
+          {{ form.course_title }}
+      </div>
+  
+      <div class="form-group">
+          <label for="{{ form.video_url.id_for_label }}" class="form-label">Video URL:</label>
+          {{ form.video_url }}
+      </div>
+  
+      <div class="form-group">
+          <label for="{{ form.description.id_for_label }}" class="form-label">Description:</label>
+          {{ form.description }}
+      </div>
+  
+      <div class="form-group">
+          <label for="{{ form.duration_in_days.id_for_label }}" class="form-label">Duration in Days:</label>
+          {{ form.duration_in_days }}
+      </div>
+  
       <button type="submit" class="btn btn-primary submit-button">Create Course</button>
     </form>
 
