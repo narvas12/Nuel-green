@@ -1,24 +1,92 @@
 {% extends 'base.html' %}
 {% load static %}
 
+
+{% block style %}
+
+<style>
+    /* CSS styles for the Upload Question and Answers form */
+.upload-question-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #11101d;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    color: #11101d;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: #11101d;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #212529;
+}
+
+.form-feedback {
+    font-size: 16px;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.error {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+/* Add more CSS styling as needed */
+
+</style>
+{% endblock style %}
 {% block content %}
+<div class="upload-question-form">
     <h1>Upload Question and Answers</h1>
-    <form method="post">
+    <form method="post" id="question-form">
         {% csrf_token %}
         {{ form.non_field_errors }}
-        
+
         <!-- Assessment Selection -->
         <div class="form-group">
             <label for="{{ form.assessment.id_for_label }}">Select an Assessment:</label>
             {{ form.assessment }}
         </div>
-        
+
         <!-- Question Text -->
         <div class="form-group">
             <label for="{{ form.text.id_for_label }}">Question Text:</label>
             {{ form.text }}
         </div>
-        
+
         <!-- Answer Options -->
         <div class="form-group">
             <label>Answer Options:</label>
@@ -32,10 +100,13 @@
             <br>
             {{ form.answer_option_4 }} {{ form.is_correct_4 }} Correct?
         </div>
-        
+
         <!-- Submit Button -->
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+
+    <div class="form-feedback"></div>
+</div>
 
 
    <!-- Add this script tag to your HTML template -->

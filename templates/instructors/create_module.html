@@ -1,31 +1,106 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block style %}
+<style>
+  /* Internal CSS styles for the create modules form */
+.create-modules-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.form-title {
+  font-size: 24px;
+  color: #11101d;
+  margin-bottom: 20px;
+}
+
+.create-modules-form {
+  background-color: #ffffff;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.module-titles-textarea,
+.course-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.create-modules-button {
+  background-color: #11101d;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.create-modules-button:hover {
+  background-color: #212529;
+}
+
+.add-lesson-link {
+  color: #28a745;
+  text-decoration: none;
+  font-size: 16px;
+  margin-top: 20px;
+  display: inline-block;
+  transition: color 0.3s;
+}
+
+.add-lesson-link:hover {
+  color: #218838;
+}
+
+/* Add more CSS styling as needed */
+
+</style>
+{% endblock style %}
+
 {% block content %}
-  <h2>Create Modules</h2>
-  <form method="post">
-    {% csrf_token %}
+  <div class="create-modules-container">
+    <h2 class="form-title">Create Modules</h2>
+    <form method="post" class="create-modules-form">
+      {% csrf_token %}
 
-    <!-- Module Titles Textarea -->
-    <div class="form-group">
-      <label for="id_module_titles_textarea">Module Titles (comma-separated):</label>
-      <textarea id="id_module_titles_textarea" name="module_titles_textarea" required></textarea>
-    </div>
+      <!-- Module Titles Textarea -->
+      <div class="form-group">
+        <label for="id_module_titles_textarea">Module Titles (comma-separated):</label>
+        <textarea id="id_module_titles_textarea" name="module_titles_textarea" required class="module-titles-textarea"></textarea>
+      </div>
 
-    <!-- Course (Select Input) -->
-    <div class="form-group">
-      <label for="id_course">Select a Course:</label>
-      <select id="id_course" name="course" required>
-        <option value="" disabled selected>Select a course</option>
-        {% for course in courses %}
-          <option value="{{ course.id }}">{{ course.course_title }}</option>
-        {% endfor %}
-      </select>
-    </div>
+      <!-- Course (Select Input) -->
+      <div class="form-group">
+        <label for="id_course">Select a Course:</label>
+        <select id="id_course" name="course" required class="course-select">
+          <option value="" disabled selected>Select a course</option>
+          {% for course in courses %}
+            <option value="{{ course.id }}">{{ course.course_title }}</option>
+          {% endfor %}
+        </select>
+      </div>
 
-    <button type="submit" class="btn btn-primary">Create Modules</button>
-  </form>
+      <button type="submit" class="btn btn-primary create-modules-button">Create Modules</button>
+    </form>
 
-  <a href="{% url 'instructors:create_lesson' %}">Add Lesson</a>
-
+    <a href="{% url 'instructors:create_lesson' %}" class="add-lesson-link">Add Lesson</a>
+  </div>
 {% endblock %}

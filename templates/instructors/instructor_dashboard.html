@@ -1,37 +1,141 @@
 {% extends 'base.html' %}
 
+
+{% load static %}
+
+
+{% block style %}
+<style>
+  /* Internal CSS styles for the instructor dashboard */
+.instructor-dashboard {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-title {
+  font-size: 24px;
+  color: #11101d;
+  margin-bottom: 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+.dashboard-buttons {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.dashboard-button {
+  margin-right: 10px;
+  background-color: #11101d;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.dashboard-button:hover {
+  background-color: #212529;
+}
+
+.no-courses-message {
+  font-size: 16px;
+  color: #333;
+}
+
+.your-courses-title {
+  font-size: 20px;
+  color: #11101d;
+  margin-top: 20px;
+}
+
+.course-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.course-item {
+  margin-bottom: 20px;
+}
+
+.course-title {
+  font-size: 18px;
+  color: #11101d;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.course-title:hover {
+  color: #212529;
+}
+
+.course-description {
+  font-size: 16px;
+  color: #333;
+}
+
+.profile-title {
+  font-size: 20px;
+  color: #11101d;
+  margin-top: 20px;
+}
+
+.profile-detail {
+  font-size: 16px;
+  color: #333;
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Add more CSS styling as needed */
+
+</style>
+{% endblock style %}
 {% block content %}
-  <h2>{{ instructor_profile.user.username }} Instructor Dashboard</h2>
-  <a href="{% url 'instructors:create_course' %}" class="btn btn-primary">Create Course</a>
-  <a href="{% url 'instructors:create_module' %}" class="btn btn-primary">Add Course Modules</a>
-  <a href="{% url 'instructors:create_lesson' %}" class="btn btn-primary">Add Lesson</a>
-  <a href="{% url 'instructors:create_assessment' %}" class="btn btn-primary">Create lesson Assessment</a>
-  <a href="{% url 'instructors:upload_question_answer' %}" class="btn btn-primary">Add Question</a>
-
-
-
+<div class="instructor-dashboard">
+  <h2 class="dashboard-title">{{ instructor_profile.user.username }} Instructor Dashboard</h2>
+  <div class="dashboard-buttons">
+    <a href="{% url 'instructors:create_course' %}" class="btn btn-primary dashboard-button">Create Course</a>
+    <a href="{% url 'instructors:create_module' %}" class="btn btn-primary dashboard-button">Add Course Modules</a>
+    <a href="{% url 'instructors:create_lesson' %}" class="btn btn-primary dashboard-button">Add Lesson</a>
+    <a href="{% url 'instructors:create_assessment' %}" class="btn btn-primary dashboard-button">Create Lesson Assessment</a>
+    <a href="{% url 'instructors:upload_question_answer' %}" class="btn btn-primary dashboard-button">Add Question</a>
+  </div>
 
   {% if no_courses_exist %}
-    <p>No courses created yet.</p>
+    <p class="no-courses-message">No courses created yet.</p>
   {% else %}
-    <h3>Your Courses</h3>
-    <ul>
+    <h3 class="your-courses-title">Your Courses</h3>
+    <ul class="course-list">
       {% for course in courses %}
-        <li>
-          <a href="{% url 'instructors:course_detail' slug=course.slug %}">{{ course.course_title }}</a>
-          <p>Description: {{ course.description }}</p>
+        <li class="course-item">
+          <a href="{% url 'instructors:course_detail' slug=course.slug %}" class="course-title">{{ course.course_title }}</a>
+          <p class="course-description">Description: {{ course.description }}</p>
           <!-- Add more course details here -->
         </li>
       {% endfor %}
     </ul>
   {% endif %}
 
-  <h3>Your Instructor Profile</h3>
-  <p>Username: {{ instructor_profile.user.username }}</p>
-  <p>Biography: {{ instructor_profile.biography }}</p>
-  <p>Contact Info: {{ instructor_profile.contact_info }}</p>
-
+  <h3 class="profile-title">Your Instructor Profile</h3>
+  <p class="profile-detail">Username: {{ instructor_profile.user.username }}</p>
+  <p class="profile-detail">Biography: {{ instructor_profile.biography }}</p>
+  <p class="profile-detail">Contact Info: {{ instructor_profile.contact_info }}</p>
   <!-- Add more instructor profile details here -->
-
 </div>
 {% endblock %}

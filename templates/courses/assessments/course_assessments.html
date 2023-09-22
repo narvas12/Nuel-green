@@ -1,11 +1,58 @@
 {% extends 'base.html' %}
+{% block style %}
+<style>
+      /* Define a class for elements with background color white */
+    .white-background {
+      background-color: #ffffff;
+      color: #11101d; /* Text color */
+    }
+
+    /* Apply the second color #161616 as a background color for headings */
+    h1, h2, h3 {
+      background-color: #161616;
+      color: #ffffff; /* Text color for headings */
+    }
+
+    /* Apply the third color #212529 as a background color for buttons */
+    .button {
+      background-color: #212529;
+      color: #ffffff; /* Text color for buttons */
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Apply the second color #161616 as a border color for images */
+    img {
+      border: 1px solid #161616;
+    }
+
+    /* Apply the first color #11101d as a text color for links */
+    a {
+      color: #11101d;
+      text-decoration: none; /* Remove underlines from links */
+    }
+
+    /* Apply the third color #212529 as a background color for a specific section */
+    .section {
+      background-color: #212529;
+      color: #ffffff; /* Text color for this section */
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    </style>
+{% endblock style %}
+
+{% extends 'base.html' %}
 
 {% block content %}
-  <h1>Assessments for {{ course.course_title }}</h1>
-  <ul>
+  <h1 class="white-background">Assessments for {{ course.course_title }}</h1>
+  <ul class="white-background">
     {% for assessment in assessments %}
       <li>
-        <a href="{% url 'academy:view_assessment' assessment.id %}">{{ assessment.title }}</a>
+        <a href="{% url 'academy:view_assessment' assessment.id %}" class="white-background">{{ assessment.title }}</a>
       </li>
     {% endfor %}
   </ul>

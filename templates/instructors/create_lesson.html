@@ -1,9 +1,80 @@
 {% extends 'base.html' %}
 {% load static %}
 
+
+{% block style %}
+<style>
+  /* Internal CSS styles for the create lesson form */
+.create-lesson-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.form-title {
+  font-size: 24px;
+  color: #11101d;
+  margin-bottom: 20px;
+}
+
+.create-lesson-form {
+  background-color: #ffffff;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #11101d;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #212529;
+}
+
+.create-assessment-link {
+  color: #28a745;
+  text-decoration: none;
+  font-size: 16px;
+  margin-top: 20px;
+  display: inline-block;
+  transition: color 0.3s;
+}
+
+.create-assessment-link:hover {
+  color: #218838;
+}
+
+/* Add more CSS styling as needed */
+
+
+</style>
+{% endblock style %}
+
 {% block content %}
-  <h2>Create a New Lesson</h2>
-  <form method="post" id="lesson-form">
+<div class="create-lesson-container">
+  <h2 class="form-title">Create a New Lesson</h2>
+  <form method="post" id="lesson-form" class="create-lesson-form">
     {% csrf_token %}
     
     <!-- Course (Select Input) -->
@@ -24,14 +95,15 @@
       {{ form.content }}
     </div>
     
-    <button type="submit" class="btn btn-primary">Create Lesson</button>
+    <button type="submit" class="btn btn-primary submit-button">Create Lesson</button>
   </form>
 
   <div id="lesson-data" style="display: none;">
     <!-- This will be used to load lesson data via AJAX -->
   </div>
 
-  <a href="{% url 'instructors:create_assessment' %}" >Create lesson Assessment</a>
+  <a href="{% url 'instructors:create_assessment' %}" class="create-assessment-link">Create Lesson Assessment</a>
+</div>
 
   <script>
     // JavaScript to update module options based on the selected course

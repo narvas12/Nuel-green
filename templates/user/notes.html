@@ -2,83 +2,75 @@
 
 {% block styles %}
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
+    /* CSS styles for the My Notes section */
+.notes-heading {
+  color: #11101d;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
+.notes-form {
+  margin-bottom: 20px;
+}
 
-    h2 {
-      color: #11101d; /* Primary Color */
-      font-size: 24px;
-      margin-top: 20px;
-      margin-bottom: 15px;
-    }
+.notes-form .btn-primary {
+  background-color: #11101d;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
 
-    form {
-      margin-bottom: 20px;
-    }
+.notes-form .btn-primary:hover {
+  background-color: #212529;
+}
 
-    button[type="submit"] {
-      background-color: #11101d; /* Primary Color */
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s ease;
-    }
+.notes-list {
+  list-style-type: none;
+  padding-left: 0;
+}
 
-    button[type="submit"]:hover {
-      background-color: #1d1b31; /* Secondary Color */
-    }
+.note-item {
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  padding: 15px;
+}
 
-    ul {
-      list-style-type: none;
-      padding-left: 0;
-    }
+.note-date {
+  color: #11101d;
+  font-weight: bold;
+}
 
-    li {
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      padding: 10px;
-      border-radius: 5px;
-      background-color: #fff;
-    }
+.note-content {
+  color: #333;
+}
 
-    strong {
-      display: block;
-      color: #1d1b31; /* Secondary Color */
-      font-size: 16px;
-      margin-bottom: 5px;
-    }
+/* Add more CSS styling as needed */
+
   </style>
 {% endblock %}
 
 {% block content %}
   <div class="container">
-    <h2>My Notes</h2>
-    <form method="post">
+    <h2 class="notes-heading">My Notes</h2>
+    <form method="post" class="notes-form">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit">Add Note</button>
+      <button type="submit" class="btn btn-primary">Add Note</button>
     </form>
-    <ul>
+    <ul class="notes-list">
       {% for note in notes %}
-        <li>
-          <strong>{{ note.created_at }}</strong>
-          {{ note.content|safe }}
+        <li class="note-item">
+          <strong class="note-date">{{ note.created_at }}</strong>
+          <p class="note-content">{{ note.content|safe }}</p>
         </li>
       {% endfor %}
     </ul>
   </div>
 {% endblock %}
+

@@ -1,14 +1,161 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block content %}
+
+{% block style %}
+<style>
+  /* Internal CSS styles for the template */
+
+
+.project_container{
+  padding;: 2rem;
+  margin:5rem;
+}
+  
+.section-title {
+  color: #11101d;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.subsection-title {
+  color: #161616;
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+.project-form {
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.label {
+  color: #161616;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.select, .input {
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 5px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.submit-button {
+  background-color: #11101d;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #212529;
+}
+
+.feedback {
+  margin-top: 15px;
+}
+
+.submitted-projects {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.project-item {
+  margin-bottom: 15px;
+}
+
+.project-title {
+  color: #11101d;
+  font-weight: bold;
+}
+
+.project-link {
+  color: #212529;
+  text-decoration: none;
+}
+
+.project-link:hover {
+  text-decoration: underline;
+}
+
+/* Internal CSS styles for the custom navigation menu */
+.custom-nav {
+  background-color: #11101d;
+  color: #ffffff;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.custom-link {
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 18px;
+  margin: 0 20px;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.custom-link i {
+  margin-right: 5px;
+}
+
+.custom-link-name {
+  display: none;
+  position: absolute;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  background-color: #212529;
+  padding: 5px 10px;
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.custom-link:hover {
+  color: #28a745;
+}
+
+.custom-link:hover .custom-link-name {
+  display: inline;
+  opacity: 1;
+}
+
+</style>
+{% endblock style %}
+
+{% block content  %}
+
+<nav class="custom-nav">
+  <a href="{% url 'instructors:create_course' %}" class="custom-link">Create Course</a>
+  <a href="{% url 'academy:user_dashboard' %}" class="custom-link">
+    <i class='bx bx-grid-alt'></i>
+    <span class="custom-link-name">Dashboard</span>
+  </a>
+  <a href="{% url 'academy:course_list' %}" class="custom-link">Course List</a>
+</nav>
+
+<div class="project_container">
+
+
   <div class="projects">
-    <h3>Projects</h3>
-    <h4>Submit Project:</h4>
-    <form id="project-form" method="post" action="{% url 'academy:projects' %}">
+    <h3 class="section-title">Projects</h3>
+    <h4 class="subsection-title">Submit Project:</h4>
+    <form id="project-form" method="post" action="{% url 'academy:projects' %}" class="project-form">
       {% csrf_token %}
-      <label for="project_id">Select Project:</label>
-      <select name="project_id" required>
+      <label for="project_id" class="label">Select Project:</label>
+      <select name="project_id" required class="select">
         <option value="" disabled selected>Select a project</option>
         {% for project in projects %}
           <option value="{{ project.id }}" {% if project.id in submitted_project_ids %}disabled{% endif %}>
@@ -17,21 +164,21 @@
         {% endfor %}
       </select>
       <br>
-      <label for="project_link">Live Project Link:</label>
-      <input type="url" name="project_link" required>
-      <button type="submit">Submit</button>
+      <label for="project_link" class="label">Live Project Link:</label>
+      <input type="url" name="project_link" required class="input">
+      <button type="submit" class="submit-button">Submit</button>
     </form>
-    <div id="project-feedback"></div>
+    <div id="project-feedback" class="feedback"></div>
   </div>
   
-  <h3>Submitted Projects:</h3>
-  <ul>
+  <h3 class="section-title">Submitted Projects:</h3>
+  <ul class="submitted-projects">
     {% for project_submission in project_submissions %}
-      <li>
-        <strong>{{ project_submission.submitted_project.project_title }}</strong>
-        - <a href="{{ project_submission.project_link }}" target="_blank">View Project</a>
+      <li class="project-item">
+        <strong class="project-title">{{ project_submission.submitted_project.project_title }}</strong>
+        - <a href="{{ project_submission.project_link }}" target="_blank" class="project-link">View Project</a>
       </li>
     {% endfor %}
   </ul>
-  
+</div>
 {% endblock %}

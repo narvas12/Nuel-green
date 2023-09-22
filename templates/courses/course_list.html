@@ -1,79 +1,175 @@
-<!DOCTYPE html>
 {% extends 'base.html' %}
 
+{% load static %}
+
+
+
 {% block style %}
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+  /* Internal CSS styles for the template */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
+.page-title {
+  font-size: 28px;
+  color: #11101d;
+  margin-bottom: 20px;
+}
 
-    h1 {
-      color: #11101d; /* Primary Color */
-      font-size: 28px;
-      margin-bottom: 10px;
-    }
+.course-list {
+  list-style-type: none;
+  padding-left: 0;
+}
 
-    h2 {
-      color: #1d1b31; /* Secondary Color */
-      font-size: 24px;
-      margin-top: 20px;
-      margin-bottom: 15px;
-    }
+.course-detail {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
 
-    ul {
-      list-style-type: none;
-      padding-left: 0;
-    }
+.course-item {
+  margin-bottom: 10px;
+}
 
-    li {
-      margin-bottom: 10px;
-    }
+.course-title {
+  font-size: 24px;
+  color: #11101d;
+}
 
-    a {
-      color: #1d1b31; /* Secondary Color */
-      text-decoration: none;
-    }
+.course-link {
+  text-decoration: none;
+  color: #11101d;
+  transition: color 0.3s;
+}
 
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
-{% endblock %}
+.course-link:hover {
+  color: #212529;
+}
+
+.course-description {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.enroll-form {
+  display: inline-block;
+}
+
+.btn {
+  padding: 8px 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-primary {
+  background-color: #11101d;
+  color: #fff;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.btn-primary:hover,
+.btn-success:hover {
+  background-color: #212529;
+}
+
+/* Internal CSS styles for the custom navigation menu */
+.custom-nav {
+  background-color: #11101d;
+  color: #ffffff;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.custom-link {
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 18px;
+  margin: 0 20px;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.custom-link i {
+  margin-right: 5px;
+}
+
+.custom-link-name {
+  display: none;
+  position: absolute;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  background-color: #212529;
+  padding: 5px 10px;
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.custom-link:hover {
+  color: #28a745;
+}
+
+.custom-link:hover .custom-link-name {
+  display: inline;
+  opacity: 1;
+}
+
+</style>
+
+{% endblock style %}
 
 
 {% block content %}
+
+<nav class="custom-nav">
+  <a href="{% url 'instructors:create_course' %}" class="custom-link">Create Course</a>
+  <a href="{% url 'academy:user_dashboard' %}" class="custom-link">
+    <i class='bx bx-grid-alt'></i>
+    <span class="custom-link-name">Dashboard</span>
+  </a>
+  <a href="{% url 'academy:course_list' %}" class="custom-link">Course List</a>
+</nav>
+
   <div class="container">
-    <h1>Available Courses</h1>
-    <ul>
+    <h1 class="page-title">Available Courses</h1>
+    <ul class="course-list">
       {% for course in courses %}
-      <div class="course_detail">
-        <li><a href="{% url 'academy:course_detail' course.slug %}"><h4>{{ course.course_title }}</h4></a></li>
-        <p>{{ course.description }}</p>
-        {% if user.is_authenticated %}
-          {% if course in user.student.enrolled_courses.all %}
-            <a href="{% url 'academy:course_detail' course.slug %}" class="btn btn-primary">Start Taking Course</a>
+        <div class="course-detail">
+          <li class="course-item">
+            <a href="{% url 'academy:course_detail' course.slug %}" class="course-link">
+              <h4 class="course-title">{{ course.course_title }}</h4>
+            </a>
+          </li>
+          <p class="course-description">{{ course.description }}</p>
+          {% if user.is_authenticated %}
+            {% if course in user.student.enrolled_courses.all %}
+              <a href="{% url 'academy:course_detail' course.slug %}" class="btn btn-primary start-course-btn">Start Taking Course</a>
+            {% else %}
+              <form method="post" action="{% url 'academy:enroll_course' course.slug %}" class="enroll-form">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success enroll-btn">Enroll in Course</button>
+              </form>
+            {% endif %}
           {% else %}
-            <form method="post" action="{% url 'academy:enroll_course' course.slug %}">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-success">Enroll in Course</button>
-            </form>
+            <a href="{% url 'academy:signin' %}" class="btn btn-primary sign-in-btn">Sign in to Enroll</a>
           {% endif %}
-        {% else %}
-          <a href="{% url 'academy:signin' %}" class="btn btn-primary">Sign in to Enroll</a>
-        {% endif %}
-      </div>
+        </div>
       {% endfor %}
     </ul>
   </div>
 {% endblock %}
-

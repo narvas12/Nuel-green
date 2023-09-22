@@ -58,7 +58,7 @@ def view_assessment(request, assessment_id):
     questions = Question.objects.filter(assessment=assessment)
     
     user = request.user
-    assessment_score = AssessmentScore.objects.filter(user=user, assessment=assessment).latest()
+    assessment_score = AssessmentScore.objects.filter(user=user, assessment=assessment).last()
     
     return render(request, 'courses/assessments/view_assessment.html', {'assessment': assessment, 'questions': questions, 'score': assessment_score})
 
