@@ -1,10 +1,19 @@
 from django import forms
 from .models import Answer, Course, Module, Lesson, Assessment, Question, Resource
+from django.forms.widgets import Textarea
+
+class AutoResizeTextarea(Textarea):
+    def __init__(self, attrs=None):
+        super().__init__(attrs={'class': 'auto-resize-textarea', **(attrs or {})})
+
+
 
 class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ['course_title', 'video_url', 'description', 'duration_in_days']
+        Course.description = forms.CharField(widget=AutoResizeTextarea(attrs={'rows': 1}))
+
+        fields = ['course_title', 'image',  'video_url', 'description', 'duration_in_days']
 
 
 

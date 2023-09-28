@@ -193,3 +193,7 @@ ANALYTICAL_PROVIDERS = {
         'TRACKING_ID': 'YOUR_GOOGLE_ANALYTICS_TRACKING_ID',
     },
 }
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

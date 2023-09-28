@@ -19,9 +19,28 @@ class InstructorProfile(models.Model):
         return self.user.username
 
 
+
+class CourseCategories(models.Model):
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=300)
+    slug = models.SlugField(unique=True, max_length=300, blank=True)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
     
 class Course(models.Model):
+    category = models.ForeignKey(CourseCategories, on_delete=models.PROTECT)
     course_title = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='images/course_images/')
     video_url = models.URLField(null=True)
     description = models.TextField()
     slug = models.SlugField(unique=True, blank=True)

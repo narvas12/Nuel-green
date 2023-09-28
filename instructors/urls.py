@@ -1,6 +1,10 @@
 from django.urls import path
 from instructors.views import *
 from ngict.views import home
+from django.conf import settings
+from django.conf.urls.static import static
+
+
 
 app_name = 'instructors'
 
@@ -28,3 +32,7 @@ urlpatterns = [
 
     path('save_question_answer_ajax/', save_question_answer_ajax, name='save_question_answer_ajax'),
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

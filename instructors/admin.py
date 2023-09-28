@@ -1,11 +1,11 @@
 from django.contrib import admin
 
-from instructors.models import Answer, Assessment, Course, InstructorProfile, Lesson, Module, Question, Resource
+from instructors.models import Answer, Assessment, Course, CourseCategories, InstructorProfile, Lesson, Module, Question, Resource
 
 # Register your models here.
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('course_title', 'description')
+    list_display = ('course_title', 'category', 'description')
     prepopulated_fields = {'slug': ('course_title',)}
 
 
@@ -52,3 +52,8 @@ class InstructorProfileAdmin(admin.ModelAdmin):
 
 # Register the InstructorProfile model with its admin class
 admin.site.register(InstructorProfile, InstructorProfileAdmin)
+
+@admin.register(CourseCategories)
+class CourseCategoriesAdmin(admin.ModelAdmin):
+    list_display = ('title', 'created_at', 'updated_at')
+    prepopulated_fields = {'slug': ('title',)}  # Automatically generate the slug from the title
