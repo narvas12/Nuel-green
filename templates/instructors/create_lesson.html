@@ -6,7 +6,7 @@
 <style>
   /* Internal CSS styles for the create lesson form */
   .create-lesson-container {
-    max-width: 600px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 20px;
     background-color: #f5f5f5;
@@ -87,6 +87,14 @@
 
 
 {% block content %}
+<nav class="custom-nav">
+  <a href="{% url 'instructors:create_course' %}" class="custom-link">Create Course</a>
+  <a href="{% url 'academy:user_dashboard' %}" class="custom-link">
+    <i class='bx bx-grid-alt'></i>
+    <span class="custom-link-name">Dashboard</span>
+  </a>
+  <a href="{% url 'academy:course_list' %}" class="custom-link">Course List</a>
+</nav>
 <div class="create-lesson-container">
   <h2 class="form-title">Create a New Lesson</h2>
   <form method="post" id="lesson-form" class="create-lesson-form">
@@ -119,6 +127,7 @@
 
   <a href="{% url 'instructors:create_assessment' %}" class="create-assessment-link">Create Lesson Assessment</a>
 </div>
+
 
   <script>
     // JavaScript to update module options based on the selected course

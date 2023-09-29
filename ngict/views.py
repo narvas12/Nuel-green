@@ -332,9 +332,11 @@ class UserDashboardView:
     def __init__(self, request):
         self.request = request
 
+
     @property
     def user(self):
         return self.request.user
+
 
     def get_enrolled_courses(self):
         try:
@@ -342,6 +344,8 @@ class UserDashboardView:
             return student.enrolled_courses.all()
         except Student.DoesNotExist:
             return None
+
+
 
     def get_progress_data(self, enrolled_courses):
         progress_data = []
@@ -358,6 +362,8 @@ class UserDashboardView:
                 'assessment_scores': assessment_scores,
             })
         return progress_data
+
+
 
     def render_dashboard(self, enrolled_courses, progress_data=None, message=None):
         context = {'enrolled_courses': enrolled_courses}

@@ -49,6 +49,7 @@
   /* Style form input fields */
   .form-group input[type="text"],
   .form-group input[type="number"],
+  textarea,
   .form-group select,
   .form-group textarea {
     width: 100%;
@@ -85,6 +86,14 @@
 
 
 {% block content %}
+<nav class="custom-nav">
+  <a href="{% url 'instructors:create_course' %}" class="custom-link">Create Course</a>
+  <a href="{% url 'academy:user_dashboard' %}" class="custom-link">
+    <i class='bx bx-grid-alt'></i>
+    <span class="custom-link-name">Dashboard</span>
+  </a>
+  <a href="{% url 'academy:course_list' %}" class="custom-link">Course List</a>
+</nav>
 <div class="assessment-form-container">
   <h2 class="form-title">Create Assessment</h2>
   <form method="post" enctype="multipart/form-data" class="assessment-form">
@@ -128,6 +137,8 @@
   
     <button type="submit" class="btn btn-primary submit-button">Create Assessment</button>
   </form>
+  <a href="{% url 'instructors:upload_question_answer' %}" class="create-assessment-link">Upload Questions & Answers</a>
+
 </div>
   
   <script>

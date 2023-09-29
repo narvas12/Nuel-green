@@ -89,6 +89,14 @@
 {% endblock style %}
 
 {% block content %}
+<nav class="custom-nav">
+  <a href="{% url 'instructors:create_course' %}" class="custom-link">Create Course</a>
+  <a href="{% url 'academy:user_dashboard' %}" class="custom-link">
+    <i class='bx bx-grid-alt'></i>
+    <span class="custom-link-name">Dashboard</span>
+  </a>
+  <a href="{% url 'academy:course_list' %}" class="custom-link">Course List</a>
+</nav>
   <div class="create-course-container">
     <h2 class="form-title">Create a New Course</h2>
 
