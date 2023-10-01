@@ -1,121 +1,78 @@
-{% extends 'base.html' %}
-{% load custom_template_filters %}
-
-{% block style %}
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #ffffff;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-
-    h1 {
-      color: #11101d;
-      margin-bottom: 20px;
-      font-size: 24px;
-    }
-
-    form {
-      background-color: #f5f5f5;
-      border: 1px solid #ccc;
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    ul {
-      list-style-type: none;
-      padding-left: 0;
-    }
-
-    li {
-      margin-bottom: 15px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 5px;
-      color: #161616;
-      font-weight: bold;
-    }
-
-    input[type="radio"] {
-      margin-right: 10px;
-    }
-
-    .incorrect-answer {
-      color: red;
-      font-weight: bold;
-    }
-
-    .messages {
-      margin-top: 15px;
-    }
-
-    .messages li {
-      color: red;
-      list-style-type: disc;
-      margin-left: 20px;
-    }
-
-    button[type="submit"] {
-      background-color: #11101d;
-      color: #ffffff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s ease;
-    }
-
-    button[type="submit"]:hover {
-      background-color: #212529;
-    }
-
-    .score {
-      display: block;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-  </style>
-{% endblock %}
+{% extends 'dashboard.html' %}
+{% load static %}
 
 {% block content %}
-  <h1>Take Assessment: {{ assessment.title }}</h1>
-  <form method="post" class="container">
+  <form method="post" class="assessment-form">
     {% csrf_token %}
-    <ul>
-      {% for question in questions %}
-        <li>
-          <p>{{ question.text }}</p>
-          <ul>
+    {% for question in questions %}
+        <fieldset class="question-fieldset">
+            <legend class="question-legend">{{ question.text }}</legend>
             {% for answer in question.answer_set.all %}
-              <li>
-                <label>
-                  <input type="radio" name="question_{{ question.id }}" value="{{ answer.id }}" {% if user_answer_id == answer.id and not answer.is_correct %}checked{% endif %}>
-                  {{ answer.text }}
-                </label>
-                {% if request.POST|get_question_answer_id:question.id == answer.id and not answer.is_correct %}
-                  <span class="incorrect-answer">Incorrect Answer</span>
-                {% endif %}
-              </li>
+                <label class="answer-label">
+                    <input type="radio" name="question_{{ question.id }}" value="{{ answer.id }}" class="answer-radio">
+                    {{ answer.text }}
+                </label><br>
             {% endfor %}
-          </ul>
-        </li>
-      {% endfor %}
-    </ul>
-    
-    <button type="submit">Submit</button>
+        </fieldset>
+    {% endfor %}
+    <input type="submit" value="Submit" class="submit-button">
   </form>
-  <span class="score">Score: {{ score }}</span>
-  {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-{% endblock %}
+
+  <style>
+    /* Add this CSS to your stylesheet or in a <style> tag in your HTML */
+
+    /* Style the form container */
+    .assessment-form {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Style the question fieldsets */
+    .question-fieldset {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    /* Style the question legends */
+    .question-legend {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    /* Style the answer labels and radio buttons */
+    .answer-label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .answer-radio {
+      margin-right: 5px;
+    }
+
+    /* Style the submit button */
+    .submit-button {
+      display: block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    .submit-button:hover {
+      background-color: #0056b3;
+    }
+
+  </style>
+{% endblock content %}

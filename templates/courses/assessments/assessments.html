@@ -1,0 +1,157 @@
+{% extends 'dashboard.html' %}
+
+{% load static %}
+
+
+
+{% block content %}
+  <div class="assessment-list-container">
+    <h1>Assessment List</h1>
+    <form method="get" class="filter-form">
+      <div class="filter-group">
+        <label for="course">Select Course:</label>
+        <select name="course" id="course" class="filter-select">
+          <option value="" {% if selected_course is None %}selected{% endif %}>All</option>
+          {% for course in courses %}
+            <option value="{{ course.id }}" {% if selected_course == course.id %}selected{% endif %}>{{ course.course_title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="module">Select Module:</label>
+        <select name="module" id="module" class="filter-select">
+          <option value="" {% if selected_module is None %}selected{% endif %}>All</option>
+          {% for module in modules %}
+            <option value="{{ module.id }}" {% if selected_module == module.id %}selected{% endif %}>{{ module.module_title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="lesson">Select Lesson:</label>
+        <select name="lesson" id="lesson" class="filter-select">
+          <option value="" {% if selected_lesson is None %}selected{% endif %}>All</option>
+          {% for lesson in lessons %}
+            <option value="{{ lesson.id }}" {% if selected_lesson == lesson.id %}selected{% endif %}>{{ lesson.title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <button type="submit" class="filter-button">Filter</button>
+    </form>
+
+    <table class="assessment-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Course</th>
+          <th>Module</th>
+          <th>Lesson</th>
+          <th>Score</th>  <!-- Add this column for scores -->
+        </tr>
+      </thead>
+      <tbody>
+        {% for assessment in assessments %}
+          <tr>
+            <td><a href="{% url 'instructors:take_assessment' assessment.id %}">{{ assessment.title }}</a></td> <!-- Link to take assessment page -->
+            <td>{{ assessment.description }}</td>
+            <td>{{ assessment.course.course_title }}</td>
+            <td>{{ assessment.module.module_title }}</td>
+            <td>{{ assessment.lesson.title }}</td>
+            <td>
+              {% for score in assessment_scores %}
+                  {% if score.assessment.id == assessment.id %}
+                      {{ score.score }}
+                  {% endif %}
+              {% empty %}
+                  Not taken
+              {% endfor %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    
+    
+  
+  <style>
+    /* Container Styles */
+    .assessment-list-container {
+      padding: 20px;
+    }
+
+    /* Header Styles */
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    /* Form Styles */
+    .filter-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .filter-group {
+      flex: 1;
+    }
+
+    .filter-select {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    .filter-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .filter-button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Table Styles */
+    .assessment-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .assessment-table th,
+    .assessment-table td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+
+    .assessment-table th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+      text-align: left;
+    }
+
+    /* Responsive Styles */
+    @media screen and (max-width: 768px) {
+      .filter-form {
+        flex-direction: column;
+      }
+
+      .filter-select {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      .filter-button {
+        width: 100%;
+      }
+    }
+  </style>
+{% endblock %}

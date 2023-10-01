@@ -31,6 +31,10 @@ urlpatterns = [
     path('upload_question_answer/', upload_question_answer, name='upload_question_answer'),
 
     path('save_question_answer_ajax/', save_question_answer_ajax, name='save_question_answer_ajax'),
+
+
+    path('assessment-list/', assessment_list, name='assessment_list'),
+    path('take_assessment/<int:assessment_id>/', take_assessment, name='take_assessment'),
 ]
 
 

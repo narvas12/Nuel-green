@@ -91,7 +91,7 @@ class AssessmentForm(forms.ModelForm):
                 pass  # Handle invalid module ID gracefully
 
 
-
+#upload questions and answer form
 class QuestionAnswerForm(forms.ModelForm):
     class Meta:
         model = Question
@@ -138,3 +138,20 @@ class QuestionAnswerForm(forms.ModelForm):
         required=False,
         widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
     )
+
+
+# tae assessents form 
+
+class AssessmentForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        assessment = kwargs.pop('assessment')
+        super(AssessmentForm, self).__init__(*args, **kwargs)
+
+        for question in Question.objects.filter(assessment=assessment):
+            choices = [(answer.id, answer.text) for answer in question.answer_set.all()]
+            self.fields[f'question_{question.id}'] = forms.ChoiceField(
+                label=question.text,
+                widget=forms.RadioSelect,
+                choices=choices,
+                required=True,
+            )

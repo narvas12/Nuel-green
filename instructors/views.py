@@ -3,12 +3,16 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Answer, Course, InstructorProfile, Module, Lesson, Assessment, Question, Resource
+
+from ngict.models import Student
+from .models import Answer, AssessmentScore, Course, InstructorProfile, Module, Lesson, Assessment, Question, Resource
 from .forms import CourseForm, LessonForm, AssessmentForm, QuestionAnswerForm, ResourceForm
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required, user_passes_test
 import hashlib
-#------------------------------------------------------------
+from decimal import Decimal
+
+ #------------------------------------------------------------
 
 
 
@@ -377,3 +381,106 @@ def save_question_answer_ajax(request):
     else:
         return JsonResponse({'success': False, 'message': 'Invalid request method'})
 #------------------------------------------------------------
+
+
+
+def assessment_list(request):
+    # Get the currently logged-in user
+    user = request.user
+
+    # Retrieve the courses that the user is enrolled in
+    try:
+        student = Student.objects.get(user=user)
+        enrolled_courses = student.enrolled_courses.all()
+    except Student.DoesNotExist:
+        enrolled_courses = []
+
+    # Fetch courses, modules, and lessons for filtering
+    courses = Course.objects.all()
+    modules = Module.objects.all()
+    lessons = Lesson.objects.all()
+
+    # Get filter parameters from the query string
+    course_id = request.GET.get('course')
+    module_id = request.GET.get('module')
+    lesson_id = request.GET.get('lesson')
+
+    # Filter assessments based on the selected criteria
+    assessments = Assessment.objects.filter(course__in=enrolled_courses)
+
+    if course_id:
+        assessments = assessments.filter(course_id=course_id)
+
+    if module_id:
+        assessments = assessments.filter(module_id=module_id)
+
+    if lesson_id:
+        assessments = assessments.filter(lesson_id=lesson_id)
+
+    # Fetch assessment scores for the user
+
+    assessment_scores = AssessmentScore.objects.filter(user=user, assessment__in=assessments)
+
+    return render(request, 'courses/assessments/assessments.html', {
+        'assessments': assessments,
+        'courses': courses,
+        'modules': modules,
+        'lessons': lessons,
+        'selected_course': int(course_id) if course_id else None,
+        'selected_module': int(module_id) if module_id else None,
+        'selected_lesson': int(lesson_id) if lesson_id else None,
+        'assessment_scores': assessment_scores,  # Pass the score dictionary to the template
+    })
+
+
+def take_assessment(request, assessment_id):
+    assessment = get_object_or_404(Assessment, pk=assessment_id)
+    questions = Question.objects.filter(assessment=assessment)
+    
+    if request.method == 'POST':
+        form = AssessmentForm(request.POST, assessment=assessment)
+        if form.is_valid():
+            # Calculate the score as a percentage
+            total_questions = questions.count()
+            correct_answers = 0
+
+            for question in questions:
+                selected_answer_id = form.cleaned_data[f'question_{question.id}']
+                selected_answer = get_object_or_404(Answer, pk=selected_answer_id)
+                if selected_answer.is_correct:
+                    correct_answers += 1
+
+            if total_questions > 0:
+                percentage_score = (Decimal(correct_answers) / Decimal(total_questions)) * 100
+            else:
+                percentage_score = Decimal(0)
+
+            # Save the assessment score
+            assessment_score, created = AssessmentScore.objects.get_or_create(
+                user=request.user,
+                assessment=assessment,
+                defaults={'score': percentage_score}
+            )
+
+            if not created:
+                assessment_score.score = percentage_score
+                assessment_score.save()
+
+            return redirect('instructors:assessment_list')
+    else:
+        form = AssessmentForm(assessment=assessment)
+
+    return render(request, 'courses/assessments/take_assessment.html', {
+        'assessment': assessment,
+        'questions': questions,
+        'form': form,
+    })
+
+
+# def assessment_result(request, assessment_id):
+#     assessment = get_object_or_404(Assessment, pk=assessment_id)
+#     assessment_score = AssessmentScore.objects.filter(user=request.user, assessment=assessment).first()
+#     return render(request, 'courses/assessment_result.html', {
+#         'assessment': assessment,
+#         'assessment_score': assessment_score,
+#     })

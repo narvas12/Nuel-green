@@ -67,12 +67,12 @@
 
           <div class="user-avatar">
             <a href="">
-            <img
-              src="https://static.vecteezy.com/system/resources/thumbnails/002/002/403/small/man-with-beard-avatar-character-isolated-icon-free-vector.jpg"
-              alt="User Avatar"
-              class="user-avatar"
-            />
-            <p>{{ user.username }}</p>
+              <img
+                src="https://static.vecteezy.com/system/resources/thumbnails/002/002/403/small/man-with-beard-avatar-character-isolated-icon-free-vector.jpg"
+                alt="User Avatar"
+                class="user-avatar"
+              />
+              <p>{{ user.username }}</p>
             </a>
           </div>
         </div>
@@ -82,13 +82,11 @@
     <section class="dashboard-content">
       <aside class="dashboard-sidebar">
         <div class="sidebar-header">
-          
           <h3>{{ user.username }}'s</h3>
-          <a href="academy:user_dashboard' %}">
-            <i class='bx bxs-dashboard'></i>
+          <a href="{% url 'academy:user_dashboard' %}">
+            <i class="bx bxs-dashboard"></i>
             <h4>Dashboard</h4>
           </a>
-          
         </div>
         <ul class="sidebar-menu">
           <li>
@@ -100,8 +98,15 @@
           </li>
 
           <li>
-            <i class='bx bxs-network-chart' ></i>
-            <a href="{% url 'academy:projects' %}" class="projects-link">Projects</a>
+            <i class="bx bxs-network-chart"></i>
+            <a href="{% url 'academy:projects' %}" class="projects-link"
+              >Projects</a
+            >
+          </li>
+
+          <li>
+            <a href="{% url 'instructors:assessment_list' %}">Assessments</a>
+
           </li>
 
           <li>
@@ -262,32 +267,30 @@
     </script>
     <script src="{% static 'js/index.js' %}"></script>
     <style>
-     .sidebar-header a{
-      display:flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-     }
+      .sidebar-header a {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+      }
 
-     .sidebar-header a i{
-      font-size: 30px;
-     }
+      .sidebar-header a i {
+        font-size: 30px;
+      }
 
-     .user-avatar a {
-      display: flex;
-      color: black;
-      font-weight: 100;
-    }
+      .user-avatar a {
+        display: flex;
+        color: black;
+        font-weight: 100;
+      }
 
-    .user-avatar img {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      border: none;
-      margin-bottom: 10px;
-    }
-
-    
+      .user-avatar img {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: none;
+        margin-bottom: 10px;
+      }
     </style>
   </body>
 </html>
