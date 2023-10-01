@@ -5,7 +5,8 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from instructors.models import Course, AssessmentScore, Project
-
+from uuid import uuid4
+import os
 
 
 class UserCode(models.Model):
@@ -87,3 +88,33 @@ class Note(models.Model):
 
     def __str__(self):
         return f"Note by {self.user.username}"
+
+
+
+
+def generate_upload_path(instance, filename):
+    """
+    Generate a unique upload path for each image.
+    """
+    # Get the file extension
+    ext = filename.split('.')[-1]
+    # Generate a unique filename
+    unique_filename = f"{uuid4().hex}.{ext}"
+    # Generate a folder structure based on the current date (optional)
+    folder = instance.uploaded_at.strftime("%Y/%m/%d")
+    # Combine the folder and filename to create the upload path
+    return os.path.join('uploads', folder, unique_filename)
+
+class Image(models.Model):
+    title = models.CharField(max_length=255)
+    image = models.ImageField(upload_to=generate_upload_path)
+    uploaded_at = models.DateTimeField(default=timezone.now)
+    updated_at =  models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.title:
+            self.title = os.path.splitext(self.image.name)[0]  # Use the filename as the title
+        super().save(*args, **kwargs)

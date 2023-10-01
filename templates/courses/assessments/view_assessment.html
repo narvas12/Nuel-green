@@ -1,51 +1,5 @@
 {% extends 'base.html' %}
 
-{% block style %}
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-
-    h1 {
-      color: #11101d; /* Primary Color */
-      margin-bottom: 20px;
-    }
-
-    h2 {
-      color: #1d1b31; /* Secondary Color */
-      margin-top: 20px;
-      margin-bottom: 15px;
-    }
-
-    ul {
-      list-style-type: none;
-      padding-left: 0;
-    }
-
-    li {
-      margin-bottom: 10px;
-    }
-
-    .messages {
-      margin-top: 15px;
-    }
-
-    .messages li {
-      color: red;
-      list-style-type: disc;
-    }
-
-    .score {
-      display: block;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-  </style>
-{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -71,5 +25,7 @@
       {% endfor %}
     </ul>
   {% endif %}
+
+  <a href="{% url 'academy:take_assessment' assessment.id %}" class="btn btn-primary">Take Assessment</a>
 </div>
 {% endblock %}

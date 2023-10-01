@@ -8,14 +8,11 @@ from core import settings
 from django.contrib.auth import authenticate, login, logout
 
 from instructors.models import Answer, Assessment, Lesson, Module, Question
-# from instructors.models import *
-from .models import Note, Project, ProjectSubmission, User_Profile, Course, Student, UserCode, AssessmentScore, UserProgress
+from .models import Image, Note, Project, ProjectSubmission, User_Profile, Course, Student, UserCode, AssessmentScore, UserProgress
 from django.views.generic import ListView, DetailView
-from django.urls import reverse
-from .forms import NoteForm, UserCreationForm
+from .forms import LoginForm, NoteForm, RegistrationForm, UserCreationForm
 from django.http import JsonResponse
 import json
-
 
 
 
@@ -44,99 +41,6 @@ def notes(request):
     notes = Note.objects.filter(user=request.user).order_by('-created_at')
     
     return render(request, 'user/notes.html', {'form': form, 'notes': notes})
-
-
-def view_course_assessments(request, course_slug):
-    course = get_object_or_404(Course, slug=course_slug)
-    assessments = Assessment.objects.filter(course=course)
-    return render(request, 'courses/assessments/course_assessments.html', {'assessments': assessments, 'course': course})
-
-
-@login_required
-def view_assessment(request, assessment_id):
-    assessment = get_object_or_404(Assessment, id=assessment_id)
-    questions = Question.objects.filter(assessment=assessment)
-    
-    user = request.user
-    assessment_score = AssessmentScore.objects.filter(user=user, assessment=assessment).last()
-    
-    return render(request, 'courses/assessments/view_assessment.html', {'assessment': assessment, 'questions': questions, 'score': assessment_score})
-
-
-
-class TakeAssessmentView:
-
-    def __init__(self, request, assessment_id):
-        self.request = request
-        self.assessment_id = assessment_id
-
-
-    def get_assessment(self):
-        return get_object_or_404(Assessment, id=self.assessment_id)
-
-
-    def get_user(self):
-        return self.request.user
-
-
-    def get_questions(self, assessment):
-        return Question.objects.filter(assessment=assessment)
-
-
-    def get_assessment_score(self, assessment):
-        return AssessmentScore.objects.filter(user=self.get_user(), assessment=assessment).last()
-
-
-    def calculate_score(self, questions, user_answers):
-        total_questions = questions.count()
-        correct_answers = 0
-        for question, user_answer_id in user_answers.items():
-            user_answer = get_object_or_404(Answer, id=user_answer_id)
-            if user_answer.is_correct:
-                correct_answers += 1
-        return (correct_answers / total_questions) * 100
-
-
-    def handle_post_request(self, assessment, questions):
-
-        user_answers = {}
-        for question in questions:
-            user_answer_id = self.request.POST.get(f'question_{question.id}', None)
-            if user_answer_id:
-                user_answers[question.id] = user_answer_id
-
-
-        score = self.calculate_score(questions, user_answers)
-        assessment_score = AssessmentScore.objects.create(user=self.get_user(), assessment=assessment, score=score)
-
-
-        if score < 100:
-            messages.error(self.request, 'Some of your answers are incorrect. Please review your answers.')
-            error_message = "Some of your answers are incorrect. Please review your answers."
-            return render(self.request, 'courses/assessments/take_assessment.html', {'assessment': assessment, 'questions': questions, 'error_message': error_message})
-
-
-        messages.success(self.request, 'You passed the test')
-        assessment_score.save()
-        return redirect('academy:view_assessment', assessment_id=assessment.id)
-
-
-    def render_page(self, assessment, questions, assessment_score=None):
-        return render(self.request, 'courses/assessments/take_assessment.html', {'assessment': assessment, 'questions': questions, 'score': assessment_score})
-
-
-
-@login_required
-def take_assessment(request, assessment_id):
-    take_assessment_view = TakeAssessmentView(request, assessment_id)
-    assessment = take_assessment_view.get_assessment()
-    questions = take_assessment_view.get_questions(assessment)
-    assessment_score = take_assessment_view.get_assessment_score(assessment)
-
-    if request.method == 'POST':
-        return take_assessment_view.handle_post_request(assessment, questions)
-    
-    return take_assessment_view.render_page(assessment, questions, assessment_score)
 
 
 
@@ -179,7 +83,6 @@ def get_user_codes(request):
         return JsonResponse({"message": "User codes not found."}, status=404)
 
 
-
 @login_required
 def home(request):
 
@@ -189,9 +92,35 @@ def home(request):
 
 
 
+# @login_required
+# def course_detail(request, slug):
+
+#     course = Course.objects.get(slug=slug)
+#     user = request.user
+
+#     try:
+#         student = Student.objects.get(user=user)
+#         is_enrolled = course in student.enrolled_courses.all()
+#     except Student.DoesNotExist:
+#         is_enrolled = False
+
+#     # Retrieve modules, lessons, and assessments related to the course
+#     modules = Module.objects.filter(course=course)
+#     lessons = Lesson.objects.filter(module__in=modules)
+#     assessments = Assessment.objects.filter(lesson__in=lessons)
+
+#     return render(request, 'courses/course_detail.html', {
+#         'course': course,
+#         'is_enrolled': is_enrolled,
+#         'user': user,
+#         'modules': modules,
+#         'lessons': lessons,
+#         'assessments': assessments,
+#     })
+
+
 @login_required
 def course_detail(request, slug):
-
     course = Course.objects.get(slug=slug)
     user = request.user
 
@@ -204,7 +133,16 @@ def course_detail(request, slug):
     # Retrieve modules, lessons, and assessments related to the course
     modules = Module.objects.filter(course=course)
     lessons = Lesson.objects.filter(module__in=modules)
-    assessments = Assessment.objects.filter(lesson__in=lessons)
+
+    # Retrieve assessments and questions for each assessment
+    assessments = {}
+    for lesson in lessons:
+        related_assessments = Assessment.objects.filter(lesson=lesson)
+        assessments[lesson] = []
+
+        for assessment in related_assessments:
+            questions = Question.objects.filter(assessment=assessment)
+            assessments[lesson].append({'assessment': assessment, 'questions': questions})
 
     return render(request, 'courses/course_detail.html', {
         'course': course,
@@ -214,6 +152,7 @@ def course_detail(request, slug):
         'lessons': lessons,
         'assessments': assessments,
     })
+
 
 
 class CourseListView(ListView):
@@ -293,6 +232,7 @@ class ProjectView:
 
     def get_submitted_project_ids(self):
         return ProjectSubmission.objects.filter(user=self.user).values_list('submitted_project_id', flat=True)
+
 
     def get_project_submissions(self):
         return ProjectSubmission.objects.filter(user=self.user)
@@ -395,75 +335,6 @@ def user_dashboard(request):
         return user_dashboard_view.render_unauthenticated_dashboard()
 
 
-class SignupView:
-    def __init__(self, request):
-        self.request = request
-
-    def render_signup_page(self, form):
-        return render(self.request, 'user/signup.html', {'form': form})
-
-    def handle_post_request(self, form):
-        if form.is_valid():
-            user = form.save()
-            if user.is_authenticated:
-                login(self.request, user)
-
-            # Send welcome email
-            subject = "Welcome to Nuel-Green ICT!!"
-            message = (
-                f"Hello {user.username}!!\n"
-                "Welcome to Nuel-Green ICT!!\n"
-                "Thank you for visiting our website.\n"
-                "We have also sent you a confirmation email, please confirm your email address in order to activate your account.\n\n"
-                "Thanking You\nAnubhav Madhav"
-            )
-            from_email = settings.EMAIL_HOST_USER
-            to_list = [user.email]
-            send_mail(subject, message, from_email, to_list, fail_silently=True)
-
-            if not user.is_active:
-                logout(self.request)
-                messages.info(
-                    self.request,
-                    "Your Account has been created successfully!! Please check your email to confirm your email address in order to activate your account.",
-                )
-            else:
-                messages.success(self.request, "Your Account has been created successfully!!")
-
-            return redirect("academy:home")
-
-        return self.render_signup_page(form)
-
-def signup(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        signup_view = SignupView(request)
-        return signup_view.handle_post_request(form)
-    else:
-        form = UserCreationForm()
-        signup_view = SignupView(request)
-        return signup_view.render_signup_page(form)
-
-
-def signin(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            messages.success(request, "You have successfully signed in!")
-            return redirect('academy:home')  # Redirect to your desired URL after login
-        else:
-            messages.error(request, "Invalid username or password. Please try again.")
-    
-    return render(request, 'user/signin.html')
-
-
-def signout(request):
-    logout(request)
-    messages.success(request, "Logged Out Successfully!!")
-    return redirect('academy:home')  # Redirect to the 'academy:home' URL name
 
 class UpdateProfileView:
     def __init__(self, request):
@@ -535,3 +406,74 @@ def update_profile(request):
         return update_profile_view.handle_post_request()
     
     return update_profile_view.render_update_profile_page()
+
+
+
+
+def image_list(request):
+    images = Image.objects.all()
+    return render(request, 'your_app/image_list.html', {'images': images})
+
+
+def view_image(request, image_id):
+    # Fetch the image object by its unique identifier (e.g., primary key)
+    image = get_object_or_404(Image, pk=image_id)
+
+    # Render a template to display the image
+    return render(request, 'image_detail.html', {'image': image})
+
+
+
+
+def register_and_login(request):
+    if request.method == 'POST':
+        registration_form = RegistrationForm(request.POST)
+        login_form = LoginForm(request.POST)
+
+        if registration_form.is_valid():
+            # Process registration form data
+            username = registration_form.cleaned_data['username']
+            email = registration_form.cleaned_data['email']
+            password1 = registration_form.cleaned_data['password1']
+            password2 = registration_form.cleaned_data['password2']
+
+            if password1 == password2:
+                # Check if the username or email already exists
+                if User.objects.filter(username=username).exists():
+                    messages.error(request, 'Username already exists.')
+                elif User.objects.filter(email=email).exists():
+                    messages.error(request, 'Email address already exists.')
+                else:
+                    # Create a new user
+                    user = User.objects.create_user(username=username, email=email, password=password1)
+                    messages.success(request, 'Registration successful. You can now log in.')
+            else:
+                messages.error(request, 'Passwords do not match.')
+
+        elif login_form.is_valid():
+            # Process login form data
+            username = login_form.cleaned_data['username']
+            password = login_form.cleaned_data['password']
+
+            # Authenticate the user
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'Login successful.')
+                return redirect('academy:home')  # Redirect to the user's profile page
+            else:
+                messages.error(request, 'Invalid username or password.')
+
+    else:
+        registration_form = RegistrationForm()
+        login_form = LoginForm()
+
+    return render(request, 'user/index.html', {'registration_form': registration_form, 'login_form': login_form})
+
+
+
+def signout(request):
+    logout(request)
+    messages.success(request, "Logged Out Successfully!!")
+    return redirect('academy:register_and_login')  # Redirect to the 'academy:home' URL name

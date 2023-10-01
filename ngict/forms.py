@@ -7,15 +7,46 @@ from .models import Note
 # ... rest of your code ...
 
 
-class UserCreationForm(UserCreationForm):
+
+
+
+class RegistrationForm(forms.Form):
     username = forms.CharField(max_length=20, required=True)
     email = forms.EmailField(required=True)
     password1 = forms.CharField(max_length=1000, required=True)
     password2 = forms.CharField(max_length=1000, required=True)
 
     class Meta:
-        model = User
-        fields = ('username', 'email', 'password1', 'password2',)
+        # You can add additional fields and options here
+        labels = {
+            'username': 'Your Username',
+            'email': 'Your Email',
+            'password1': 'Your Password',
+            'password2': 'Confirm Password',
+        }
+        help_texts = {
+            'username': 'Enter a unique username.',
+            'email': 'Enter a valid email address.',
+            'password1': 'Choose a strong password.',
+            'password2': 'Enter the same password as above.',
+        }
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(label="Username")
+    password = forms.CharField(widget=forms.PasswordInput, label="Password")
+
+    class Meta:
+        # You can add additional fields and options here
+        labels = {
+            'username': 'Your Username',
+            'password': 'Your Password',
+        }
+        help_texts = {
+            'username': 'Enter your username.',
+            'password': 'Enter your password.',
+        }
+
 
 
 class AssessmentForm(forms.ModelForm):

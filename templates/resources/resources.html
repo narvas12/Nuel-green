@@ -1,0 +1,13 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+  <h2>Image Gallery</h2>
+  <div class="image-gallery">
+    {% for image in images %}
+      <div class="image-item">
+        <img src="{{ image.image.url }}" alt="{{ image.title }}">
+        <p>{{ image.title }}</p>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

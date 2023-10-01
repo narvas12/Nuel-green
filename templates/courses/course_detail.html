@@ -1,122 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'dashboard.html' %}
 
 {% load static %}
-
-
-{% block style %}
-
-<style>
-/* Internal CSS styles for the template */
-
-*{
-  list-style: none;
-}
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f8f8f8;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.course-title {
-  font-size: 28px;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.course-description {
-  color: #666;
-}
-
-.module-title {
-  font-size: 20px;
-  color: #11101d;
-  margin-top: 20px;
-}
-
-.lesson-title {
-  font-size: 18px;
-  color: #11101d;
-}
-
-.assessment-title {
-  font-size: 16px;
-  color: #212529;
-}
-
-.notes-title {
-  font-size: 14px;
-  color: #11101d;
-  margin-top: 10px;
-
-}
-
-/* Internal CSS styles for the custom navigation menu */
-.custom-nav {
-  background-color: #11101d;
-  color: #ffffff;
-  padding: 10px 0;
-  text-align: center;
-}
-
-.custom-link {
-  text-decoration: none;
-  color: #ffffff;
-  font-size: 18px;
-  margin: 0 20px;
-  position: relative;
-  transition: color 0.3s;
-}
-
-.custom-link i {
-  margin-right: 5px;
-}
-
-.custom-link-name {
-  display: none;
-  position: absolute;
-  top: 25px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 14px;
-  background-color: #212529;
-  padding: 5px 10px;
-  border-radius: 5px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.custom-link:hover {
-  color: #28a745;
-}
-
-.custom-link:hover .custom-link-name {
-  display: inline;
-  opacity: 1;
-}
-
-  </style>
-
-{% endblock style %}
-
-
+{% load custom_filters %}
 
 
 {% block content %}
-<nav class="custom-nav">
-  <a href="{% url 'instructors:create_course' %}" class="custom-link">Create Course</a>
-  <a href="{% url 'academy:user_dashboard' %}" class="custom-link">
-    <i class='bx bx-grid-alt'></i>
-    <span class="custom-link-name">Dashboard</span>
-  </a>
-  <a href="{% url 'academy:course_list' %}" class="custom-link">Course List</a>
-</nav>
-<div class="container">
+
+<div class="list-container">
   <h1 class="course-title">{{ course.course_title }}</h1>
-  <iframe width="1150" height="650" src="{{ course.video_url }}" frameborder="0" allowfullscreen></iframe>
+  <iframe width="1250" height="650" src="{{ course.video_url }}" frameborder="0" allowfullscreen></iframe>
   <p class="course-description">{{ course.description|safe }}</p>
 
   {% if is_enrolled %}
@@ -124,23 +16,28 @@
     <div class="module-list">
       {% for module in modules %}
         <div class="module">
-          <h6 class="module-title">{{ module.module_title }}</h6>
-          <div class="lesson-list">
+          <h6 class="module-title" id="module-{{ module.id }}">{{ module.module_title }}</h6>
+          <div class="lesson-list hidden-lessons"> <!-- Added 'hidden-lessons' class -->
             {% for lesson in module.lesson_set.all %}
               <div class="lesson">
                 <h6 class="lesson-title">{{ lesson.lesson_title }}</h6>
                 <p class="lesson-content">{{ lesson.content|safe }}</p>
                 <h5 class="lesson-assessment-title">Assessments</h5>
                 <div class="assessment-list">
-                  {% for assessment in assessments %}
-                    {% if assessment.lesson == lesson %}
-                      <div class="assessment-title">{{ assessment.title|safe }}</div>
-                    {% endif %}
-                  {% endfor %}
-                </div>
-                <div class="notes">
-                  <h4 class="notes-title">You can make notes while studying</h4>
-                  <a href="{% url 'academy:notes' %}" class="notes-link">Click here to Make Notes</a>
+                  {% with assessments=course|organize_assessments_by_lesson %}
+                    {% for assessment_data in assessments %}
+                      {% if assessment_data.lesson == lesson %}
+                        <details>
+                          <summary><div class="assessment-title">{{ assessment_data.assessment.title|safe }}</div></summary>
+                          <ul>
+                            {% for question in assessment_data.questions %}
+                              <li>{{ question.question_text|safe }}</li>
+                            {% endfor %}
+                          </ul>
+                        </details>
+                      {% endif %}
+                    {% endfor %}
+                  {% endwith %}
                 </div>
               </div>
             {% endfor %}
@@ -149,24 +46,25 @@
       {% endfor %}
     </div>
   {% endif %}
+  
+  <!-- JavaScript to toggle the visibility of lesson lists -->
+  <script>
+    // Get all module title elements
+    const moduleTitles = document.querySelectorAll('.module-title');
 
-  <div class="assessment-ul">
-    {% for assessment in assessments %}
-      <div class="assessment">
-        <a href="{% url 'academy:view_assessment' assessment.id %}" class="assessment-link">View Assessment</a> |
-        <a href="{% url 'academy:take_assessment' assessment.id %}" class="assessment-link">Take Assessment</a>
-        <div class="assessment-details">
-          <div>
-            <div class="assessment-title">{{ assessment.title|safe }}</div>
-          </div>
-        </div>
-      </div>
-    {% endfor %}
-    <a href="{% url 'academy:projects' %}" class="projects-link">Projects</a>
-  </div>
+    // Add click event listeners to toggle the lesson list visibility
+    moduleTitles.forEach(moduleTitle => {
+      moduleTitle.addEventListener('click', () => {
+        const lessonList = moduleTitle.nextElementSibling;
+        lessonList.classList.toggle('hidden-lessons');
+      });
+    });
+  </script>
+
+
 
   {% if is_enrolled %}
-    <a href="{% url 'academy:course_detail' course.slug %}" class="btn btn-primary start-course-btn">Start Taking Course</a>
+    <a href="{% url 'academy:course_detail' course.slug %}" ></a>
   {% else %}
     <form method="post" action="{% url 'academy:enroll_course' course.slug %}" class="enroll-form">
       {% csrf_token %}
@@ -183,4 +81,157 @@
   {% endif %}
 </div>
 
+<style>
+    /* Reset default margin and padding for all elements */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    .list-container {
+      background-color: #ffffff;
+      border-radius: 5px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+      position: relative;
+      overflow: hidden;
+      width: 1300px;
+      padding: 10px;
+      margin: 10px;
+    }
+    
+    .course-title {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    
+    .course-description {
+      font-size: 14px;
+      line-height: 20px;
+      letter-spacing: 0.3px;
+      margin-bottom: 20px;
+    }
+    
+    .section-title {
+      font-size: 18px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    
+    .module-title {
+      font-size: 16px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    
+    .lesson-title {
+      font-size: 14px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .lesson-content {
+      font-size: 13px;
+      line-height: 18px;
+      margin-bottom: 20px;
+    }
+    
+    .lesson-assessment-title {
+      font-size: 16px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .assessment-title {
+      font-size: 14px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+    
+    .notes-title {
+      font-size: 16px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    
+    .notes-link {
+      font-size: 14px;
+      text-decoration: underline;
+      color: #007bff;
+    }
+    
+    .assessment-ul {
+      margin-top: 20px;
+    }
+    
+    .assessment {
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    
+    .assessment-link {
+      font-size: 14px;
+      text-decoration: underline;
+      color: #007bff;
+    }
+    
+    .projects-link {
+      font-size: 14px;
+      text-decoration: underline;
+      color: #007bff;
+    }
+    
+    .enroll-form {
+      margin-top: 20px;
+    }
+    
+    .enroll-btn {
+      background-color: #512da8;
+      color: #fff;
+      font-size: 12px;
+      padding: 10px 45px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    
+    .edit-course-btn {
+      background-color: #512da8;
+      color: #fff;
+      font-size: 12px;
+      padding: 10px 20px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    
+    .delete-course-btn {
+      background-color: #ff0000;
+      color: #fff;
+      font-size: 12px;
+      padding: 10px 20px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    
+    /* Add more styles as needed */
+    .hidden-lessons {
+      display: none;
+    }
+
+  
+</style>
 {% endblock %}

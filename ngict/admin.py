@@ -1,7 +1,12 @@
 # admin.py
 from django.contrib import admin
 
-from .models import Note, ProjectSubmission, Student, User_Profile, UserCode, AssessmentScore, Project
+from .models import Image, Note, ProjectSubmission, Student, User_Profile, UserCode, AssessmentScore, Project
+
+
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ('title', 'image', 'uploaded_at')
 
 
 @admin.register(User_Profile)
