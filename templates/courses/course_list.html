@@ -1,153 +1,35 @@
 {% extends 'dashboard.html' %}
-{% load static %}
-
-
-
-{% block style %}
-<style>
-  /* Internal CSS styles for the template */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.page-title {
-  font-size: 28px;
-  color: #11101d;
-  margin-bottom: 20px;
-}
-
-.course-list {
-  list-style-type: none;
-  padding-left: 0;
-}
-
-.course-detail {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  margin-bottom: 20px;
-  padding: 20px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.course-item {
-  margin-bottom: 10px;
-}
-
-.course-title {
-  font-size: 24px;
-  color: #11101d;
-}
-
-.course-link {
-  text-decoration: none;
-  color: #11101d;
-  transition: color 0.3s;
-}
-
-.course-link:hover {
-  color: #212529;
-}
-
-.course-description {
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.enroll-form {
-  display: inline-block;
-}
-
-.btn {
-  padding: 8px 16px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.btn-primary {
-  background-color: #11101d;
-  color: #fff;
-}
-
-.btn-success {
-  background-color: #28a745;
-  color: #fff;
-}
-
-.btn-primary:hover,
-.btn-success:hover {
-  background-color: #212529;
-}
-
-/* Internal CSS styles for the custom navigation menu */
-.custom-nav {
-  background-color: #11101d;
-  color: #ffffff;
-  padding: 10px 0;
-  text-align: center;
-}
-
-.custom-link {
-  text-decoration: none;
-  color: #ffffff;
-  font-size: 18px;
-  margin: 0 20px;
-  position: relative;
-  transition: color 0.3s;
-}
-
-.custom-link i {
-  margin-right: 5px;
-}
-
-.custom-link-name {
-  display: none;
-  position: absolute;
-  top: 25px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 14px;
-  background-color: #212529;
-  padding: 5px 10px;
-  border-radius: 5px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.custom-link:hover {
-  color: #28a745;
-}
-
-.custom-link:hover .custom-link-name {
-  display: inline;
-  opacity: 1;
-}
-
-</style>
-
-{% endblock style %}
-
 
 {% block content %}
+<div class="content-container">
+  <div class="categories">
+    <h1>All Courses</h1>
+    <h2>Categories</h2>
+    <ul>
+      <li><a href="{% url 'instructors:courses_by_category' %}">All</a></li>
+      {% for category in categories %}
+      <li><a href="{% url 'instructors:courses_by_category' %}?category={{ category.slug }}">{{ category.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
 
-  <div class="container">
-    <h1 class="page-title">Available Courses</h1>
-    <ul class="course-list">
-      {% for course in courses %}
-        <div class="course-detail">
-          <li class="course-item">
-            <a href="{% url 'academy:course_detail' course.slug %}" class="course-link">
-              <h4 class="course-title">{{ course.course_title }}</h4>
-            </a>
-          </li>
-          <p class="course-description">{{ course.description }}</p>
+  <div class="courses">
+    {% if category_filter %}
+    <h2>Courses in {{ category_filter.title }} Category</h2>
+    {% endif %}
+
+    <ul>
+      {% for category, courses in courses_by_category.items %}
+      {% if not category_filter or category_filter == category.slug %}
+      <h3>{{ category }}</h3>
+      <ul>
+        {% for course in courses %}
+        <li>
+          <a href="{% url 'academy:course_detail' course.slug %}" class="course-link">{{ course.course_title }}</a>
+          <p class="course-description">{{ course.description }}</p> <!-- Display course description -->
           {% if user.is_authenticated %}
             {% if course in user.student.enrolled_courses.all %}
+              <em>Enrolled</em>
               <a href="{% url 'academy:course_detail' course.slug %}" class="btn btn-primary start-course-btn">Start Taking Course</a>
             {% else %}
               <form method="post" action="{% url 'academy:enroll_course' course.slug %}" class="enroll-form">
@@ -158,8 +40,108 @@
           {% else %}
             <a href="" class="btn btn-primary sign-in-btn">Sign in to Enroll</a>
           {% endif %}
-        </div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
       {% endfor %}
     </ul>
   </div>
+</div>
+
+<style>
+  /* Apply these styles to your HTML */
+
+  /* Main container styles */
+  .content-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #f5f5f5;
+    width: 1400px;
+  }
+
+  .categories {
+    flex-basis: 25%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .categories h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .categories ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .categories li {
+    margin-bottom: 10px;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    padding: 4px;
+  }
+
+  .categories a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+
+  .categories a:hover {
+    color: #007bff;
+  }
+
+  .courses {
+    flex-basis: 70%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+  }
+
+  .courses h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .courses h3 {
+    font-size: 16px;
+    margin-top: 15px;
+  }
+
+  .courses ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .courses li {
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    border-radius: 5px;
+  }
+
+  .courses .course-link {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+  }
+
+  .courses .course-link:hover {
+    text-decoration: underline;
+  }
+
+  .course-description {
+    margin-top: 5px;
+    color: #666;
+  }
+</style>
 {% endblock %}

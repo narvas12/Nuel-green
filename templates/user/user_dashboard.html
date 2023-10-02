@@ -50,7 +50,7 @@
         <a href="{% url 'academy:register_and_login' %}">Log in</a>
       </p>
     {% endif %}
-
+{% comment %} 
     {% for course_progress in progress_data %}
       <div class="course-progress">
         <h5>{{ course_progress.course.course_title }}</h5>
@@ -61,7 +61,7 @@
           {% endfor %}
         </div>
       </div>
-    {% endfor %}
+    {% endfor %} {% endcomment %}
 
     <div class="messages">
       <h2>Messages</h2>
@@ -92,6 +92,8 @@
       </ul>
     </div>
 
+
+    
     <div class="course-progress">
       <h2>Course Progress</h2>
       {% if progress_data %}
@@ -109,6 +111,7 @@
         <p>No progress data available.</p>
       {% endif %}
     </div>
+
     <ul class="submitted-projects">
       {% for project_submission in project_submissions %}
         <li class="project-item">

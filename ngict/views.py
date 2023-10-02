@@ -8,9 +8,9 @@ from core import settings
 from django.contrib.auth import authenticate, login, logout
 
 from instructors.models import Answer, Assessment, Lesson, Module, Question
-from .models import Image, Note, Project, ProjectSubmission, User_Profile, Course, Student, UserCode, AssessmentScore, UserProgress
+from .models import Image, LessonCompletion, Note, Project, ProjectSubmission, User_Profile, Course, Student, UserCode, AssessmentScore, UserProgress
 from django.views.generic import ListView, DetailView
-from .forms import LoginForm, NoteForm, RegistrationForm, UserCreationForm
+from .forms import LessonCompletionForm, LoginForm, NoteForm, RegistrationForm, UserCreationForm
 from django.http import JsonResponse
 import json
 
@@ -155,10 +155,10 @@ def course_detail(request, slug):
 
 
 
-class CourseListView(ListView):
-    model = Course
-    template_name = 'courses/course_list.html'
-    context_object_name = 'courses'
+# class CourseListView(ListView):
+#     model = Course
+#     template_name = 'courses/course_list.html'
+#     context_object_name = 'courses'
 
 
 
@@ -184,7 +184,7 @@ class EnrollCourseView:
 
     def render_enroll_redirect(self, success):
         if success:
-            return redirect('academy:course_detail', slug=self.slug)
+            return redirect('instructors:courses_by_category')
         else:
             messages.info(self.request, 'You are already enrolled in this course.')
             return redirect('academy:course_detail', slug=self.slug)
@@ -473,7 +473,46 @@ def register_and_login(request):
 
 
 
+def get_course_progress(user, course):
+    course_progress = UserProgress.objects.filter(user=user, course=course)
+    total_modules = course.modules.count()
+    completed_modules = course_progress.filter(completed=True).count()
+    total_lessons = course.lessons.count()
+    completed_lessons = course_progress.filter(completed=True).count()
+    return {
+        'total_modules': total_modules,
+        'completed_modules': completed_modules,
+        'total_lessons': total_lessons,
+        'completed_lessons': completed_lessons,
+    }
+
+
+
+def mark_lesson_completed(request):
+    if request.method == 'POST':
+        form = LessonCompletionForm(request.POST)
+        if form.is_valid():
+            lesson_id = form.cleaned_data['lesson_id']
+            lesson = get_object_or_404(Lesson, pk=lesson_id)
+
+            # Check if the lesson completion already exists
+            existing_completion = LessonCompletion.objects.filter(user=request.user, lesson=lesson).first()
+            if not existing_completion:
+                # Create a new completion record
+                LessonCompletion.objects.create(user=request.user, lesson=lesson)
+
+            # Retrieve the course associated with the lesson
+            course = lesson.course
+
+            # Redirect to the course detail page with the course's slug
+            return redirect('academy:course_detail', slug=course.slug)
+
+
+    
+
 def signout(request):
     logout(request)
     messages.success(request, "Logged Out Successfully!!")
     return redirect('academy:register_and_login')  # Redirect to the 'academy:home' URL name
+
+

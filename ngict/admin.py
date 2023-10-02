@@ -1,7 +1,7 @@
 # admin.py
 from django.contrib import admin
 
-from .models import Image, Note, ProjectSubmission, Student, User_Profile, UserCode, AssessmentScore, Project
+from .models import Image, LessonCompletion, Note, ProjectSubmission, Student, User_Profile, UserCode, AssessmentScore, Project, UserProgress
 
 
 @admin.register(Image)
@@ -70,3 +70,20 @@ class StudentAdmin(admin.ModelAdmin):
     display_assessment_scores.short_description = 'Assessment Scores'
 
 
+@admin.register(UserProgress)
+class UserProgressAdmin(admin.ModelAdmin):
+    list_display = ('user', 'course', 'module', 'lesson', 'completed', 'timestamp')
+    list_filter = ('user', 'course', 'completed')
+    search_fields = ('user__username', 'course__course_title', 'module__module_title', 'lesson__title')
+    list_per_page = 20  # Number of items displayed per page
+
+
+@admin.register(LessonCompletion)
+class LessonCompletionAdmin(admin.ModelAdmin):
+    list_display = ('user', 'get_lesson_title', 'completed_at')  # Add 'get_lesson_title' to list_display
+    list_filter = ('user', 'completed_at')
+    search_fields = ('user__username',)
+
+    def get_lesson_title(self, obj):
+        return obj.lesson.title if obj.lesson else ''  # Fetch the lesson title or return an empty string if it's None
+    get_lesson_title.short_description = 'Completed Lesson Title'  # Set a custom column header

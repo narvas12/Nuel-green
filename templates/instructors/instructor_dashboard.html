@@ -1,120 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'dashboard.html' %}
 
 
 {% load static %}
 
 
-{% block style %}
-<style>
-  /* Internal CSS styles for the instructor dashboard */
-.instructor-dashboard {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
 
-.dashboard-title {
-  font-size: 24px;
-  color: #11101d;
-  margin-bottom: 20px;
-  animation: fadeIn 0.5s ease;
-}
-
-.dashboard-buttons {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.dashboard-button {
-  margin-right: 10px;
-  background-color: #11101d;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
-
-.dashboard-button:hover {
-  background-color: #212529;
-}
-
-.no-courses-message {
-  font-size: 16px;
-  color: #333;
-}
-
-.your-courses-title {
-  font-size: 20px;
-  color: #11101d;
-  margin-top: 20px;
-}
-
-.course-list {
-  list-style-type: none;
-  padding-left: 0;
-}
-
-.course-item {
-  margin-bottom: 20px;
-}
-
-.course-title {
-  font-size: 18px;
-  color: #11101d;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.course-title:hover {
-  color: #212529;
-}
-
-.course-description {
-  font-size: 16px;
-  color: #333;
-}
-
-.profile-title {
-  font-size: 20px;
-  color: #11101d;
-  margin-top: 20px;
-}
-
-.profile-detail {
-  font-size: 16px;
-  color: #333;
-}
-
-/* Animation keyframes */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Add more CSS styling as needed */
-
-</style>
-{% endblock style %}
 {% block content %}
-<nav class="custom-nav">
-  <a href="{% url 'instructors:create_course' %}" class="custom-link">Create Course</a>
-  <a href="{% url 'academy:user_dashboard' %}" class="custom-link">
-    <i class='bx bx-grid-alt'></i>
-    <span class="custom-link-name">Dashboard</span>
-  </a>
-  <a href="{% url 'academy:course_list' %}" class="custom-link">Course List</a>
-</nav>
+
 
 <div class="instructor-dashboard">
   <h2 class="dashboard-title">{{ instructor_profile.user.username }} Instructor Dashboard</h2>
@@ -147,4 +39,153 @@
   <p class="profile-detail">Contact Info: {{ instructor_profile.contact_info }}</p>
   <!-- Add more instructor profile details here -->
 </div>
+<style>
+  /* Add this CSS to your stylesheet or in a <style> tag in your HTML */
+
+  .instructor-dashboard {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .dashboard-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .dashboard-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .dashboard-button {
+    flex: 0 1 calc(32% - 10px);
+    padding: 10px 20px;
+    font-size: 16px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff; /* Blue color for buttons */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    text-align: center;
+  }
+
+  .dashboard-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+
+  .no-courses-message {
+    font-size: 18px;
+    margin-top: 20px;
+    color: #777;
+  }
+
+  .your-courses-title {
+    font-size: 20px;
+    margin-top: 20px;
+    color: #333;
+  }
+
+  .course-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .course-item {
+    margin-bottom: 20px;
+  }
+
+  .course-title {
+    font-size: 18px;
+    text-decoration: none;
+    color: #333;
+    display: block;
+  }
+
+  .course-description {
+    font-size: 14px;
+    color: #777;
+  }
+
+  .profile-title {
+    font-size: 20px;
+    margin-top: 20px;
+    color: #333;
+  }
+
+  .profile-detail {
+    font-size: 16px;
+    color: #444;
+    margin-bottom: 10px;
+  }
+
+  /* Update your CSS with these styles for course boxes */
+
+.course-list {
+  
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.course-item {
+  flex: 0 1 calc(33.33% - 20px);
+  margin: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+  position: relative;
+}
+
+.course-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.course-title {
+  font-size: 18px;
+  text-decoration: none;
+  color: #333;
+}
+
+.course-description {
+  font-size: 14px;
+  color: #777;
+  margin-top: 10px;
+}
+
+.course-button {
+  display: block;
+  padding: 8px 16px;
+  margin: 10px auto 0;
+  font-size: 16px;
+  text-decoration: none;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.course-button:hover {
+  background-color: #0056b3;
+}
+
+/* Adjust the course item width and margin for responsiveness as needed */
+
+  /* Add more styles as needed for additional profile details */
+
+</style>
 {% endblock %}

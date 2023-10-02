@@ -9,7 +9,6 @@ urlpatterns = [
    
     path('', home, name="home"),
     path('accounts/login/', register_and_login, name='register_and_login'),
-    # path('signup/', signup, name='signup'),
     path('signout/', signout, name='signout'),
     path('dashboard/', user_dashboard, name='user_dashboard'),
     path('create_profile/', update_profile, name='update_profile'),
@@ -18,9 +17,6 @@ urlpatterns = [
 
     path('html_css/', html_css, name='html_css'),
 
-
-
-    path('course_list/', CourseListView.as_view(), name='course_list'),
     
     path('enroll/<slug:slug>/', enroll_course, name='enroll_course'),
     path('unenroll/<slug:slug>/', unenroll_course, name='unenroll_course'),
@@ -38,6 +34,12 @@ urlpatterns = [
 
     path('image-list/', image_list, name='image_list'),
     path('image/<int:image_id>/', view_image, name='view_image'),
-]
+
+    path('get-course-progress/<int:course_id>/', get_course_progress, name='get_course_progress'),
+
+    # URL pattern for marking a lesson as completed
+    path('mark-lesson-completed/', mark_lesson_completed, name='mark_lesson_completed'),
+
+] 
 
 urlpatterns += staticfiles_urlpatterns()

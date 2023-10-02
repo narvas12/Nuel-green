@@ -22,23 +22,11 @@
               <div class="lesson">
                 <h6 class="lesson-title">{{ lesson.lesson_title }}</h6>
                 <p class="lesson-content">{{ lesson.content|safe }}</p>
-                <h5 class="lesson-assessment-title">Assessments</h5>
-                <div class="assessment-list">
-                  {% with assessments=course|organize_assessments_by_lesson %}
-                    {% for assessment_data in assessments %}
-                      {% if assessment_data.lesson == lesson %}
-                        <details>
-                          <summary><div class="assessment-title">{{ assessment_data.assessment.title|safe }}</div></summary>
-                          <ul>
-                            {% for question in assessment_data.questions %}
-                              <li>{{ question.question_text|safe }}</li>
-                            {% endfor %}
-                          </ul>
-                        </details>
-                      {% endif %}
-                    {% endfor %}
-                  {% endwith %}
-                </div>
+                <form class="lesson-completion-form" method="post" action="{% url 'academy:mark_lesson_completed' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="lesson_id" value="{{ lesson.id }}">
+                  <button type="submit">Mark as Completed</button>
+                </form>
               </div>
             {% endfor %}
           </div>
@@ -47,19 +35,6 @@
     </div>
   {% endif %}
   
-  <!-- JavaScript to toggle the visibility of lesson lists -->
-  <script>
-    // Get all module title elements
-    const moduleTitles = document.querySelectorAll('.module-title');
-
-    // Add click event listeners to toggle the lesson list visibility
-    moduleTitles.forEach(moduleTitle => {
-      moduleTitle.addEventListener('click', () => {
-        const lessonList = moduleTitle.nextElementSibling;
-        lessonList.classList.toggle('hidden-lessons');
-      });
-    });
-  </script>
 
 
 
@@ -234,4 +209,38 @@
 
   
 </style>
+
+<script>
+
+ // <!-- JavaScript to toggle the visibility of lesson lists -->
+
+    // Get all module title elements
+    const moduleTitles = document.querySelectorAll('.module-title');
+
+    // Add click event listeners to toggle the lesson list visibility
+    moduleTitles.forEach(moduleTitle => {
+      moduleTitle.addEventListener('click', () => {
+        const lessonList = moduleTitle.nextElementSibling;
+        lessonList.classList.toggle('hidden-lessons');
+      });
+    });
+
+
+    // Use JavaScript to submit the form when the user clicks a button or performs an action
+    document.getElementById('lesson-completion-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      fetch(this.action, {
+        method: 'POST',
+        body: new FormData(this),
+      }).then(response => {
+        if (response.ok) {
+          // Handle success, e.g., update the UI to show the lesson as completed
+          console.log('Lesson marked as completed');
+        } else {
+          // Handle error
+          console.error('Error marking lesson as completed');
+        }
+      });
+    });
+</script>
 {% endblock %}

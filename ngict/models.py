@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
-from instructors.models import Course, AssessmentScore, Project
+from instructors.models import Course, AssessmentScore, Lesson, Module, Project
 from uuid import uuid4
 import os
 
@@ -60,25 +60,6 @@ class Student(models.Model):
 
     assessment_scores = models.ManyToManyField(AssessmentScore, related_name='students', blank=True)
 
-
-class UserProgress(models.Model):
-    STATUS_NOT_STARTED = 'Not Started'
-    STATUS_IN_PROGRESS = 'In Progress'
-    STATUS_COMPLETED = 'Completed'
-
-    STATUS_CHOICES = (
-        (STATUS_NOT_STARTED, 'Not Started'),
-        (STATUS_IN_PROGRESS, 'In Progress'),
-        (STATUS_COMPLETED, 'Completed'),
-    )
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    week = models.PositiveIntegerField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_NOT_STARTED)
-
-    def __str__(self):
-        return f"{self.user.username} - {self.course.course_title} - Week {self.week} - Status: {self.get_status_display()}"
     
 
 class Note(models.Model):
@@ -118,3 +99,28 @@ class Image(models.Model):
         if not self.title:
             self.title = os.path.splitext(self.image.name)[0]  # Use the filename as the title
         super().save(*args, **kwargs)
+
+
+
+class UserProgress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    module = models.ForeignKey(Module, on_delete=models.CASCADE, null=True)
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True)
+    completed = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = ('user', 'course', 'module', 'lesson')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.course.course_title} - {self.module.module_title if self.module else ''} - {self.lesson.title if self.lesson else ''}"
+
+
+class LessonCompletion(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)  # Assuming you have a Lesson model
+    completed_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = ('user', 'lesson')

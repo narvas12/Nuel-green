@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from ngict.models import Student
-from .models import Answer, AssessmentScore, Course, InstructorProfile, Module, Lesson, Assessment, Question, Resource
+from .models import Answer, AssessmentScore, Course, CourseCategories, InstructorProfile, Module, Lesson, Assessment, Question, Resource
 from .forms import CourseForm, LessonForm, AssessmentForm, QuestionAnswerForm, ResourceForm
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -41,6 +41,32 @@ def instructor_dashboard(request):
 
     return render(request, 'instructors/instructor_dashboard.html', {'courses': courses, 'instructor_profile': instructor_profile, 'no_courses_exist': no_courses_exist})
 #------------------------------------------------------------
+
+
+
+#============================ list courses view ============================
+def courses_by_category(request):
+    # Fetch all categories
+    categories = CourseCategories.objects.all()
+    
+    # Fetch category filter from query parameters
+    category_filter = request.GET.get('category')
+
+    # Fetch all courses grouped by category
+    courses_by_category = {}
+    for category in categories:
+        courses_by_category[category] = Course.objects.filter(category=category)
+    
+    context = {
+        'categories': categories,
+        'courses_by_category': courses_by_category,
+        'category_filter': category_filter,  # Add the category filter to the context
+    }
+    
+    return render(request, 'courses/course_list.html', context)
+
+
+
 
 
 #============================ create_course ============================
@@ -395,8 +421,7 @@ def assessment_list(request):
     except Student.DoesNotExist:
         enrolled_courses = []
 
-    # Fetch courses, modules, and lessons for filtering
-    courses = Course.objects.all()
+    # Fetch modules and lessons for filtering
     modules = Module.objects.all()
     lessons = Lesson.objects.all()
 
@@ -405,7 +430,7 @@ def assessment_list(request):
     module_id = request.GET.get('module')
     lesson_id = request.GET.get('lesson')
 
-    # Filter assessments based on the selected criteria
+    # Filter assessments based on the selected criteria and user's enrolled courses
     assessments = Assessment.objects.filter(course__in=enrolled_courses)
 
     if course_id:
@@ -417,19 +442,17 @@ def assessment_list(request):
     if lesson_id:
         assessments = assessments.filter(lesson_id=lesson_id)
 
-    # Fetch assessment scores for the user
-
-    assessment_scores = AssessmentScore.objects.filter(user=user, assessment__in=assessments)
+    # Filter courses based on the user's enrolled courses
+    filtered_courses = Course.objects.filter(id__in=[course.id for course in enrolled_courses])
 
     return render(request, 'courses/assessments/assessments.html', {
         'assessments': assessments,
-        'courses': courses,
+        'courses': filtered_courses,  # Pass filtered courses to the template
         'modules': modules,
         'lessons': lessons,
         'selected_course': int(course_id) if course_id else None,
         'selected_module': int(module_id) if module_id else None,
         'selected_lesson': int(lesson_id) if lesson_id else None,
-        'assessment_scores': assessment_scores,  # Pass the score dictionary to the template
     })
 
 
@@ -476,11 +499,3 @@ def take_assessment(request, assessment_id):
         'form': form,
     })
 
-
-# def assessment_result(request, assessment_id):
-#     assessment = get_object_or_404(Assessment, pk=assessment_id)
-#     assessment_score = AssessmentScore.objects.filter(user=request.user, assessment=assessment).first()
-#     return render(request, 'courses/assessment_result.html', {
-#         'assessment': assessment,
-#         'assessment_score': assessment_score,
-#     })

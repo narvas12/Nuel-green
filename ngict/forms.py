@@ -9,6 +9,8 @@ from .models import Note
 
 
 
+class LessonCompletionForm(forms.Form):
+    lesson_id = forms.IntegerField(widget=forms.HiddenInput())
 
 class RegistrationForm(forms.Form):
     username = forms.CharField(max_length=20, required=True)
