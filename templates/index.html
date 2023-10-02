@@ -329,13 +329,13 @@ body{
             color: #fff;
         }
 
-        /* .sectionone{
+        .sectionone{
   position: relative;
   width: 100%;
   height: 100vh;
   background: #3586ff;
   overflow: hidden;
-  /* height: 100vh;
+  height: 100vh;
   
   
 }
@@ -424,112 +424,9 @@ body{
     border-radius: 100% 60% 60% 100% / 100% 100% 60% 60% ;
     transform: translate3d(0,-3px,0) rotateZ(0.01deg);
   }
-} */
+}
 
-.sectionone {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            background: #3586ff;
-            overflow: hidden;
-        }
 
-        .sectionone .air {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: url(https://1.bp.blogspot.com/-xQUc-TovqDk/XdxogmMqIRI/AAAAAAAACvI/AizpnE509UMGBcTiLJ58BC6iViPYGYQfQCLcBGAsYHQ/s1600/wave.png);
-            background-size: 1000px 100px;
-        }
-
-        .sectionone .air.air1 {
-            animation: wave 30s linear infinite;
-            z-index: 1000;
-            opacity: 1;
-            animation-delay: 0s;
-            bottom: 0;
-        }
-
-        .sectionone .air.air2 {
-            animation: wave2 15s linear infinite;
-            z-index: 999;
-            opacity: 0.5;
-            animation-delay: -5s;
-            bottom: 10px;
-        }
-
-        .sectionone .air.air3 {
-            animation: wave 30s linear infinite;
-            z-index: 998;
-            opacity: 0.2;
-            animation-delay: -2s;
-            bottom: 15px;
-        }
-
-        .sectionone .air.air4 {
-            animation: wave2 5s linear infinite;
-            z-index: 997;
-            opacity: 0.7;
-            animation-delay: -5s;
-            bottom: 20px;
-        }
-
-        @keyframes wave {
-            0% {
-                background-position-x: 0px;
-            }
-            100% {
-                background-position-x: 1000px;
-            }
-        }
-
-        @keyframes wave2 {
-            0% {
-                background-position-x: 0px;
-            }
-            100% {
-                background-position-x: -1000px;
-            }
-        }
-
-        .slider-thumb::before {
-            position: absolute;
-            content: "";
-            left: 30%;
-            top: 20%;
-            width: 450px;
-            height: 450px;
-            background: #17141d;
-            border-radius: 62% 47% 82% 35% / 45% 45% 80% 66%;
-            will-change: border-radius, transform, opacity;
-            animation: sliderShape 5s linear infinite;
-            display: block;
-            z-index: -1;
-            -webkit-animation: sliderShape 5s linear infinite;
-        }
-
-        @keyframes sliderShape {
-            0%, 100% {
-                border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
-                transform: translate3d(0, 0, 0) rotateZ(0.01deg);
-            }
-
-            34% {
-                border-radius: 70% 30% 46% 54% / 30% 29% 71% 70%;
-                transform: translate3d(0, 5px, 0) rotateZ(0.01deg);
-            }
-
-            50% {
-                transform: translate3d(0, 0, 0) rotateZ(0.01deg);
-            }
-
-            67% {
-                border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%;
-                transform: translate3d(0, -3px, 0) rotateZ(0.01deg);
-            }
-        }
 
         @media (max-width: 768px) {
             .sectionone {
@@ -537,15 +434,12 @@ body{
                 min-height: 100vh;
             }
 
-            .sectionone .air {
-                display: none;
-            }
 
             .slider-thumb::before {
                 width: 250px;
                 height: 250px;
             }
-        }
+        } 
 
 .cardone:hover .progress-bar {
             background-color: #3490dc;
@@ -759,32 +653,49 @@ body{
 }
 
 /* Input card */
+/* Input card styles */
 .input-card {
-  background-color: #007bff; /* Blue background color */
+  background-color: #3586ff;
   padding: 20px;
   border-radius: 10px;
   width: 100%;
-  max-width: 320px; /* Adjust the width as needed */
+  max-width: 320px;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+  overflow: hidden;
 }
 
+/* Hover effect for input card */
 .input-card:hover {
-  transform: translateY(-5px); /* Move up on hover */
+  transform: translateY(-5px);
+  box-shadow: 0px 12px 18px rgba(0, 0, 0, 0.15);
 }
 
-/* Input fields */
+/* Form group styles */
+.form-group {
+  margin-bottom: 15px;
+}
+
+/* Input and textarea styles */
 .blue-input {
   width: 100%;
   padding: 10px;
-  margin-bottom: 10px;
   border: none;
   border-radius: 5px;
   outline: none;
+  background-color: #fff;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
 }
 
-/* Button */
+/* Hover effect for input and textarea */
+.blue-input:hover {
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Button styles */
 .blue-button {
-  background-color: #007bff; /* Blue button color */
+  background-color: #007bff;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -794,9 +705,21 @@ body{
   transition: background-color 0.3s ease;
 }
 
+/* Hover effect for button */
 .blue-button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #0056b3;
 }
+
+/* Center the button text */
+.text-center {
+  text-align: center;
+}
+
+/* Style for text inside the button */
+.blue-button:focus {
+  box-shadow: 0 0 0 2px #007bff, 0 0 0 4px rgba(0, 123, 255, 0.3);
+}
+
 image-container {
   position: relative;
   width: 200px; /* Adjust the width as needed */
@@ -903,25 +826,25 @@ image-container {
 
     <main class="">
      
-        <!-- <section class="sectionone flex xl:flex-row  justify-between flex-col relative ">
+        <section class=" px-4 sectionone flex xl:flex-row  justify-between flex-col relative ">
        
           <div class='air air1'></div>
   <div class='air air2'></div>
   <div class='air air3'></div>
   <div class='air air4'></div>
       
-        <div class='px-16 pt-28  text-white'>
+        <div class=' pt-28  text-white'>
           <h1 class='xl:text-6xl text-4xl font-bold text-white'>Learn to code for <span class="text-blue-800">free </span></h1>
           <h1 class='xl:text-6xl text-4xl  font-bold text-white'>Build <span class="text-blue-800">Projects</span></h1>
           <p class="text-xl">We give the best detailed of all coding course that makes <br/> you learn the new updates at ease. Our classes are well detailed <br/> and so easy to understand. Join our Online classes and be...<br/> <span class="text-purple-400">Read More</span></p>
 
-          <div class="flex items-center w-72 xl:w-96 bg-white gap-4 mt-4 p-2 rounded-lg shadow-md">
-            <div class="flex-shrink-0">
+          <div class="flex items-center xl:w-96 bg-white gap-4 mt-4 p-2 rounded-lg shadow-md ">
+            <div class="xl:flex-shrink-0">
                 <i class="fa-solid fa-search text-black"></i>
             </div>
             <input type="text" class="flex-grow rounded-lg text-black pl-2 outline-none" placeholder="Search">
             <button class="outline-none px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded-lg transition duration-300 ease-in-out">
-                Get Started
+                Search
             </button>
         </div>
         </div>
@@ -933,51 +856,58 @@ image-container {
             </div>
         </div>
         </div>
-      </section> -->
-      <section class="sectionone flex xl:flex-row justify-between flex-col relative">
-        <div class='air air1'></div>
-        <div class='air air2'></div>
-        <div class='air air3'></div>
-        <div class='air air4'></div>
-        <div class='px-16 pt-28 text-white'>
-            <h1 class='text-6xl font-bold text-white'>Learn to code for <span class="text-blue-800">free </span></h1>
-            <h1 class='text-6xl font-bold text-white'>Build <span class="text-blue-800">Projects</span></h1>
-            <p class="text-xl">We give the best detailed of all coding course that makes <br/> you learn the new updates at ease. Our classes are well detailed <br/> and so easy to understand. Join our Online classes and be...<br/> <span class="text-purple-400">Read More</span></p>
-            <!-- <div class="flex items-center w-96 bg-white gap-4 mt-4 p-2 rounded-lg shadow-md">
-                <div class="flex-shrink-0">
-                    <i class="fa-solid fa-search text-black"></i>
-                </div>
-                <input type="text" class="flex-grow rounded-lg text-black pl-2 outline-none" placeholder="Search">
-                <button class="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded-lg transition duration-300 ease-in-out">
-                    Get Started
-                </button>
-            </div> -->
-            <div class="container">
-              <div class="row justify-content-center">
-                  <div class="col-md-6">
-                      <div class="input-group mb-3">
-                          <span class="input-group-text bg-white">
-                              <i class="fa-solid fa-search text-black"></i>
-                          </span>
-                          <input type="text" class="form-control rounded-lg text-black" placeholder="Search">
-                          <button class="btn btn-primary rounded-lg">
-                              Get Started
-                          </button>
-                      </div>
-                  </div>
-              </div>
-          </div>
-        </div>
-        <div class='pr-10 flex justify-end items-end'>
-            <div class="min-h-screen hidden md:flex flex items-center justify-center">
-                <div class="bg-blue-800 p-8 rounded-xl transform rotate-3 hover:rotate-0 transition-transform duration-300">
-                    <img src="https://tinypic.host/images/2023/09/24/19199606.jpeg" alt="3D Image" class="three">
-                </div>
+      </section>
+
+
+      <section class="mt-10 px-16">
+        <h1 class="text-4xl text-center font-bold mb-10">Here is what our alumni say about Nuel-green ICT</h1>
+        <!-- <div class="flex-col md:flex-row xl:flex row gap-24"> -->
+          <div class="flex flex-wrap justify-center items-center gap-6 ">
+          <div class="testimonial-card ">
+            <img class="testimonial-image rounded-lg" src="https://tinypic.host/images/2023/09/23/Rectangle-5.png" alt="girl" />
+            <div class="testimonial-cardtext flex-col">
+                <h2 class="text-xl font-bold">Chinwe Njoku</h2>
+                <p class="text-l py-4">Location: Lagos Nigeria</p>
+                <p class="">Software Engineer at Tek-expert</p>
+                <p>"Nuel-green was the gateway to my career as a software developer.
+                  The well-structured curriculum took my coding knowledge from 
+                  a total beginner level to a very confident level. It was everything I 
+                  needed to land my first dev job at an amazing company."</p>
             </div>
         </div>
-    </section>
+
+        <div class="testimonial-card">
+            <img class="testimonial-image rounded-lg" src="https://tinypic.host/images/2023/09/23/Rectangle-6.png" alt="girl" />
+            <div class="testimonial-cardtext">
+                <h2 class="text-xl font-bold">Ggbega Adeyemi</h2>
+                <p class="text-l py-4">Location: Ogun Nigeria</p>
+                <p class=" pb-6">Back-end Developer at Spotify</p>
+                <p>"I've always struggled with learning JavaScript. I've taken many courses, but
+                  Nuel-green's course was the one that stuck. Studying JavaScript as
+                  well as data structures and algorithms on Nuel-green gave me the 
+                  skills and confidence I needed to land my dream job as a back-end
+                  developer at Spotify."</p>
+            </div>
+        </div>
+
+        <div class="testimonial-card">
+            <img class="testimonial-image rounded-lg" src="https://tinypic.host/images/2023/09/23/Rectangle-7.png" alt="girl" />
+            <div class="testimonial-cardtext">
+                <h2 class="text-xl font-bold">Eric Moore</h2>
+                <p class="text-l py-4">Location: Lagos Nigeria</p>
+                <p class="text-sm pb-6">Full-stack developer at Smile-router</p>
+                <p>"It's scary to change careers. I only gained confidence that I could 
+                  code by working through the hundreds of hours of free lessons on 
+                  Nuel-green. Within a year, I had a six-figure job as a full-stack
+                  developer. Nuel-green ICT changed my life."</p>
+            </div>
+        </div>
+        </div>
+      </section>
+
+  
       
-      <section class="">
+      <section class="reason">
         <h1 class="text-4xl text-center font-bold mb-10 ">Why You Should Learn With Nuel-Green ICT</h1>
         <div class="grid grid-cols-1 md:grid-cols-3  xl:grid-cols-3 gap-6 px-16 ">
 
@@ -1022,53 +952,8 @@ image-container {
         </div>
       </section>
 
-      <section class="reason px-16">
-        <h1 class="text-4xl text-center font-bold mb-10">Here is what our alumni say about Nuel-green ICT</h1>
-        <!-- <div class="flex-col md:flex-row xl:flex row gap-24"> -->
-          <div class="flex flex-col md:flex-wrap justify-center items-center gap-6 ">
-          <div class="testimonial-card ">
-            <img class="testimonial-image rounded-lg" src="https://tinypic.host/images/2023/09/23/Rectangle-5.png" alt="girl" />
-            <div class="testimonial-cardtext flex-col">
-                <h2 class="text-xl font-bold">Chinwe Njoku</h2>
-                <p class="text-l py-4">Location: Lagos Nigeria</p>
-                <p class="">Software Engineer at Tek-expert</p>
-                <p>"Nuel-green was the gateway to my career as a software developer.
-                  The well-structured curriculum took my coding knowledge from 
-                  a total beginner level to a very confident level. It was everything I 
-                  needed to land my first dev job at an amazing company."</p>
-            </div>
-        </div>
-
-        <div class="testimonial-card">
-            <img class="testimonial-image rounded-lg" src="https://tinypic.host/images/2023/09/23/Rectangle-6.png" alt="girl" />
-            <div class="testimonial-cardtext">
-                <h2 class="text-xl font-bold">Ggbega Adeyemi</h2>
-                <p class="text-l py-4">Location: Ogun Nigeria</p>
-                <p class=" pb-6">Back-end Developer at Spotify</p>
-                <p>"I've always struggled with learning JavaScript. I've taken many courses, but
-                  Nuel-green's course was the one that stuck. Studying JavaScript as
-                  well as data structures and algorithms on Nuel-green gave me the 
-                  skills and confidence I needed to land my dream job as a back-end
-                  developer at Spotify."</p>
-            </div>
-        </div>
-
-        <div class="testimonial-card">
-            <img class="testimonial-image rounded-lg" src="https://tinypic.host/images/2023/09/23/Rectangle-7.png" alt="girl" />
-            <div class="testimonial-cardtext">
-                <h2 class="text-xl font-bold">Eric Moore</h2>
-                <p class="text-l py-4">Location: Lagos Nigeria</p>
-                <p class="text-sm pb-6">Full-stack developer at Smile-router</p>
-                <p>"It's scary to change careers. I only gained confidence that I could 
-                  code by working through the hundreds of hours of free lessons on 
-                  Nuel-green. Within a year, I had a six-figure job as a full-stack
-                  developer. Nuel-green ICT changed my life."</p>
-            </div>
-        </div>
-        </div>
-      </section>
-
-      <section class="reason flex flex-col justify-center px-16">
+      
+      <section class="reason flex flex-col justify-center px-16 ">
         <h2 class="text-4xl text-center font-bold mb-8">Learn Easily With Our Core Curriculum</h2>
      
 
@@ -1153,10 +1038,10 @@ image-container {
           <div class="flex flex-col">
             <!-- Skill Section 1 -->
             <div class="skill-item">
-              <div class="flex justify-between">
+              <div class="flex justify-between items-center justify-center gap-2">
                 <div class="flex gap-6 items-center justify-center">
                   <div class="lightblue widthtwo py-6 xl:widthtwo"></div>
-                  <p>Front End Development</p>
+                  <p class="font-bold">Front End Development</p>
                 </div>
                 <h2 class="text-2xl font-bold">75%</h2>
               </div>
@@ -1167,9 +1052,9 @@ image-container {
               <div class="flex justify-between mt-8">
                 <div class="flex gap-6 items-center justify-center">
                   <div class="lightblue widththree py-6 xl:widthtwo"></div>
-                  <p>Front End Development</p>
+                  <p class="font-bold">Database</p>
                 </div>
-                <h2 class="text-2xl font-bold">75%</h2>
+                <h2 class="text-2xl font-bold">65%</h2>
               </div>
             </div>
           
@@ -1178,9 +1063,9 @@ image-container {
               <div class="flex justify-between mt-8">
                 <div class="flex gap-6 items-center justify-center">
                   <div class="lightblue widthfour py-6 xl:widthtwo"></div>
-                  <p>Front End Development</p>
+                  <p class="font-bold">JavaScript</p>
                 </div>
-                <h2 class="text-2xl font-bold">75%</h2>
+                <h2 class="text-2xl font-bold">70%</h2>
               </div>
             </div>
           
@@ -1189,9 +1074,9 @@ image-container {
               <div class="flex justify-between mt-8">
                 <div class="flex gap-6 items-center justify-center">
                   <div class="lightblue widthfive py-6 xl:widththree"></div>
-                  <p>Front End Development</p>
+                  <p class="font-bold">Python</p>
                 </div>
-                <h2 class="text-2xl font-bold">75%</h2>
+                <h2 class="text-2xl font-bold">58%</h2>
               </div>
             </div>
           </div>
@@ -1211,32 +1096,27 @@ image-container {
             </div>
            
           </div>
+         
+          
           <div class="input-card">
-            <input placeholder="Name" class="blue-input" type="text">
-            <input placeholder="Email" class="blue-input" type="text">
-            <input placeholder="Course" class="blue-input" type="text">
-            <input placeholder="Write" class="blue-input" type="text">
-            <div class="flex justify-end">
-              <button class="blue-button">Send</button>
-            </div>
+            <form>
+              <div class="form-group">
+                <input type="text" id="name" class="blue-input" placeholder="Name" required>
+              </div>
+              <div class="form-group">
+                <input type="email" id="email" class="blue-input" placeholder="Email" required>
+              </div>
+              <div class="form-group">
+                <input type="text" id="course" class="blue-input" placeholder="Course" required>
+              </div>
+              <div class="form-group">
+                <textarea id="message" class="blue-input" placeholder="Write" required></textarea>
+              </div>
+              <div class="form-group text-center flex-end items-end">
+                <button type="submit" class="blue-button">Send</button>
+              </div>
+            </form>
           </div>
-          <!-- <div class="flex flex-col md:flex-row justify-center items-center md:items-start gap-6">
-            <img class="vector w-48 md:w-auto" src="https://tinypic.host/images/2023/09/25/Group-1.png" alt="">
-            <div class="text-center md:text-left">
-                <p class="text-blue-500">Contact Us</p>
-                <h2 class="text-2xl font-bold">Register Now</h2>
-                <p class="width">Sign up now to access the best learning materials that will launch you into the tech world...</p>
-            </div>
-        </div>
-        <div class="flex flex-col blue px-8 py-6 rounded-lg mt-6 md:w-96">
-            <input placeholder="Name" class="pl-3 pr py-4 rounded-lg outline-none blue-input" type="text">
-            <input placeholder="Email" class="pl-3 pr-24 py-4 rounded-lg outline-none blue-input" type="text">
-            <input placeholder="Course" class="pl-3 pr-24 py-4 rounded-lg outline-none blue-input" type="text">
-            <input placeholder="Write" class="pl-3 pr-24 pt-2 pb-16 rounded-lg outline-none blue-input" type="text">
-            <div class="flex justify-end">
-                <button class="blue-button text-white px-4 flex py-1 rounded-lg">Send</button>
-            </div>
-        </div> -->
         </div>
       </section>
 
