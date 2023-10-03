@@ -487,7 +487,7 @@ def get_course_progress(user, course):
     }
 
 
-
+@login_required
 def mark_lesson_completed(request):
     if request.method == 'POST':
         form = LessonCompletionForm(request.POST)
