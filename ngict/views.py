@@ -83,12 +83,9 @@ def get_user_codes(request):
         return JsonResponse({"message": "User codes not found."}, status=404)
 
 
-@login_required
 def home(request):
 
-    user = User.objects.get(username=request.user)
-
-    return render(request, 'index.html', {'user':user})
+    return render(request, 'index.html')
 
 
 
@@ -461,7 +458,7 @@ def register_and_login(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, 'Login successful.')
-                return redirect('academy:home')  # Redirect to the user's profile page
+                return redirect('academy:user_dashboard')  # Redirect to the user's profile page
             else:
                 messages.error(request, 'Invalid username or password.')
 
@@ -513,6 +510,6 @@ def mark_lesson_completed(request):
 def signout(request):
     logout(request)
     messages.success(request, "Logged Out Successfully!!")
-    return redirect('academy:register_and_login')  # Redirect to the 'academy:home' URL name
+    return redirect('academy:home')  # Redirect to the 'academy:home' URL name
 
 
