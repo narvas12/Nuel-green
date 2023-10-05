@@ -322,6 +322,7 @@ class UserDashboardView:
         return self.render_dashboard(enrolled_courses=None, message='Please log in to access your dashboard.')
 
 
+
 @login_required
 def user_dashboard(request):
     user_dashboard_view = UserDashboardView(request)

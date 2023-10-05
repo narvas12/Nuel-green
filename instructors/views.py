@@ -326,27 +326,6 @@ def upload_question_answer(request):
 #------------------------------------------------------------
 
 
-#============================ get_todo_list ============================
-def get_todo_list(user):
-    # Get assessments not taken yet
-    assessments_not_taken = Assessment.objects.filter(
-        Q(course__in=user.completed_courses.all()) | 
-        Q(module__in=user.completed_modules.all()) |
-        Q(lesson__in=user.completed_lessons.all()),
-        ~Q(assessment_scores__user=user)
-    ).distinct()
-
-    return assessments_not_taken
-#------------------------------------------------------------
-
-
-#=========================== todo_list_view =============================
-@login_required
-def todo_list_view(request):
-    user = request.user
-    todo_list = get_todo_list(user)
-    return render(request, 'todo_list.html', {'todo_list': todo_list})
-#------------------------------------------------------------
 
 
 #========================== upload_question_answer==============================
@@ -499,3 +478,27 @@ def take_assessment(request, assessment_id):
         'form': form,
     })
 
+
+
+
+#============================ get_todo_list ============================
+def get_todo_list(user):
+    # Get assessments not taken yet
+    assessments_not_taken = Assessment.objects.filter(
+        Q(course__in=user.completed_courses.all()) | 
+        Q(module__in=user.completed_modules.all()) |
+        Q(lesson__in=user.completed_lessons.all()),
+        ~Q(assessment_scores__user=user)
+    ).distinct()
+
+    return assessments_not_taken
+#------------------------------------------------------------
+
+
+#=========================== todo_list_view =============================
+@login_required
+def todo_list_view(request):
+    user = request.user
+    todo_list = get_todo_list(user)
+    return render(request, 'todo_list.html', {'todo_list': todo_list})
+#------------------------------------------------------------
