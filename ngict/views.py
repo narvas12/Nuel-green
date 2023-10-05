@@ -85,7 +85,7 @@ def get_user_codes(request):
 
 def home(request):
 
-    return render(request, 'index.html')
+    return render(request, 'home.html')
 
 
 
@@ -466,7 +466,7 @@ def register_and_login(request):
         registration_form = RegistrationForm()
         login_form = LoginForm()
 
-    return render(request, 'user/index.html', {'registration_form': registration_form, 'login_form': login_form})
+    return render(request, 'user/signup_signin.html', {'registration_form': registration_form, 'login_form': login_form})
 
 
 

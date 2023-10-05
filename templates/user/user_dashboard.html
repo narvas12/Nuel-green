@@ -51,7 +51,7 @@
       </p>
     {% endif %}
 
-    {% comment %} {% for course_progress in progress_data %}
+    {% for course_progress in progress_data %}
       <div class="course-progress">
         <h5>{{ course_progress.course.course_title }}</h5>
         <h5>Assessment Scores:</h5>
@@ -61,7 +61,7 @@
           {% endfor %}
         </div>
       </div>
-    {% endfor %}  {% endcomment %}
+    {% endfor %}  
 
     <div class="messages">
       <h2>Messages</h2>

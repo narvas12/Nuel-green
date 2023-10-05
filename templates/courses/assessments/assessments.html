@@ -60,11 +60,11 @@
         <td>{{ assessment.lesson.title }}</td>
         <td>
           {% for score in assessment_scores %}
-          {% if score.assessment.id == assessment.id %}
-          {{ score.score }}
-          {% endif %}
+            {% if score.assessment.id == assessment.id %}
+            {{ score.score }}
+            {% endif %}
           {% empty %}
-          Not taken
+            Not taken
           {% endfor %}
         </td>
       </tr>
