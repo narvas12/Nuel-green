@@ -86,9 +86,14 @@
     <div class="to-do-list">
       <h2>To-Do List</h2>
       <ul>
+       
         {% for assessment in todo_list %}
-          <div class="task">{{ assessment.title }}</div>
+        <li>
+          <a href="{% url 'instructors:take_assessment' assessment.id %}">{{ assessment.title }}</a>
+        </li>
+       
         {% endfor %}
+     
       </ul>
     </div>
 

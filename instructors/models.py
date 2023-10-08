@@ -107,7 +107,9 @@ class Assessment(models.Model):
     module = models.ForeignKey(Module, default=None, null=True, on_delete=models.PROTECT)
     lesson = models.ForeignKey(Lesson, default=None, null=True, on_delete=models.PROTECT)
     passing_score = models.PositiveIntegerField()
+    is_taken = models.BooleanField(default=False)
 
+    
     def __str__(self):
         return self.title
     

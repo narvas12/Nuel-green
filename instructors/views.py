@@ -424,9 +424,12 @@ def assessment_list(request):
     # Filter courses based on the user's enrolled courses
     filtered_courses = Course.objects.filter(id__in=[course.id for course in enrolled_courses])
 
+    assessment_scores = AssessmentScore.objects.filter(user=user)
+
     return render(request, 'courses/assessments/assessments.html', {
         'assessments': assessments,
         'courses': filtered_courses,  # Pass filtered courses to the template
+        'assessment_scores': assessment_scores,  # Pass assessment scores to the template
         'modules': modules,
         'lessons': lessons,
         'selected_course': int(course_id) if course_id else None,
@@ -468,6 +471,10 @@ def take_assessment(request, assessment_id):
                 assessment_score.score = percentage_score
                 assessment_score.save()
 
+            # Mark the assessment as taken
+            assessment.is_taken = True
+            assessment.save()
+
             return redirect('instructors:assessment_list')
     else:
         form = AssessmentForm(assessment=assessment)
@@ -479,6 +486,11 @@ def take_assessment(request, assessment_id):
     })
 
 
+
+
+    
+
+    # Now, `uncompleted_assessments` contains the assessments that the user hasn't taken.
 
 
 #============================ get_todo_list ============================
@@ -501,4 +513,4 @@ def todo_list_view(request):
     user = request.user
     todo_list = get_todo_list(user)
     return render(request, 'todo_list.html', {'todo_list': todo_list})
-#------------------------------------------------------------
+# #------------------------------------------------------------

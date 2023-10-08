@@ -36,7 +36,38 @@
   {% endif %}
   
 
+  {% comment %} <div class="code_editor">
+    <div class="code_editor_container">
+        <div class="code_editor_wrapper">
+            <div class="code_editor_segments" style="display: flex; flex-wrap: wrap;">
 
+                <div class="code" style="margin: 5px;">
+                    <h4>HTML</h4>
+                    <div class="editorContainer editor_input" id="htmlEditor" style="height: 400px; width: 650px;"></div>
+                </div>
+
+                <div class="code" style="margin: 5px;">
+                    <h4>CSS</h4>
+                    <div class="editorContainer editor_input" id="cssEditor" style="height: 400px; width: 650px;"></div>
+                </div>
+
+                <div class="code" style="margin: 5px;">
+                    <h4>JavaScript</h4>
+                    <div class="editorContainer editor_input" id="jsEditor" style="height: 400px; width: 900px;"></div>
+                </div>
+                
+            </div>
+            <button class="run_btn" id="runButton"><i class='bx bx-play'></i>Run</button>
+            <div class="code_editor_segments">
+                <div class="output">
+                    <h4>OutPut</h4>
+                    <pre class="editor_output" id="output" style="width: 1300px; height: 700px;"></pre>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+  </div> {% endcomment %}
 
   {% if is_enrolled %}
     <a href="{% url 'academy:course_detail' course.slug %}" ></a>
@@ -70,7 +101,7 @@
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
       position: relative;
       overflow: hidden;
-      width: 1300px;
+      width: 1380px;
       padding: 10px;
       margin: 10px;
     }

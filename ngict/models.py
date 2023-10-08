@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
-from instructors.models import Course, AssessmentScore, Lesson, Module, Project
+from instructors.models import Assessment, Course, AssessmentScore, Lesson, Module, Project
 from uuid import uuid4
 import os
 
@@ -109,12 +109,14 @@ class UserProgress(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True)
     completed = models.BooleanField(default=False)
     timestamp = models.DateTimeField(default=timezone.now)
+    assessments_completed = models.ManyToManyField(Assessment, blank=True)
 
     class Meta:
         unique_together = ('user', 'course', 'module', 'lesson')
 
     def __str__(self):
         return f"{self.user.username} - {self.course.course_title} - {self.module.module_title if self.module else ''} - {self.lesson.title if self.lesson else ''}"
+
 
 
 class LessonCompletion(models.Model):

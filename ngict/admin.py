@@ -70,14 +70,21 @@ class StudentAdmin(admin.ModelAdmin):
     display_assessment_scores.short_description = 'Assessment Scores'
 
 
-@admin.register(UserProgress)
+admin.register(UserProgress)
 class UserProgressAdmin(admin.ModelAdmin):
-    list_display = ('user', 'course', 'module', 'lesson', 'completed', 'timestamp')
+    list_display = ('user', 'course', 'module', 'lesson', 'completed', 'timestamp', 'completed_assessments')
     list_filter = ('user', 'course', 'completed')
     search_fields = ('user__username', 'course__course_title', 'module__module_title', 'lesson__title')
     list_per_page = 20  # Number of items displayed per page
 
+    def completed_assessments(self, obj):
+        # Display a comma-separated list of completed assessments
+        return ", ".join([assessment.title for assessment in obj.assessments_completed.all()])
+    
+    completed_assessments.short_description = 'Completed Assessments'
 
+
+    
 @admin.register(LessonCompletion)
 class LessonCompletionAdmin(admin.ModelAdmin):
     list_display = ('user', 'get_lesson_title', 'completed_at')  # Add 'get_lesson_title' to list_display

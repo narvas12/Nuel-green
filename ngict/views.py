@@ -13,6 +13,7 @@ from django.views.generic import ListView, DetailView
 from .forms import LessonCompletionForm, LoginForm, NoteForm, RegistrationForm, UserCreationForm
 from django.http import JsonResponse
 import json
+from django.db.models import Q
 
 
 
@@ -89,33 +90,6 @@ def home(request):
 
 
 
-# @login_required
-# def course_detail(request, slug):
-
-#     course = Course.objects.get(slug=slug)
-#     user = request.user
-
-#     try:
-#         student = Student.objects.get(user=user)
-#         is_enrolled = course in student.enrolled_courses.all()
-#     except Student.DoesNotExist:
-#         is_enrolled = False
-
-#     # Retrieve modules, lessons, and assessments related to the course
-#     modules = Module.objects.filter(course=course)
-#     lessons = Lesson.objects.filter(module__in=modules)
-#     assessments = Assessment.objects.filter(lesson__in=lessons)
-
-#     return render(request, 'courses/course_detail.html', {
-#         'course': course,
-#         'is_enrolled': is_enrolled,
-#         'user': user,
-#         'modules': modules,
-#         'lessons': lessons,
-#         'assessments': assessments,
-#     })
-
-
 @login_required
 def course_detail(request, slug):
     course = Course.objects.get(slug=slug)
@@ -150,12 +124,6 @@ def course_detail(request, slug):
         'assessments': assessments,
     })
 
-
-
-# class CourseListView(ListView):
-#     model = Course
-#     template_name = 'courses/course_list.html'
-#     context_object_name = 'courses'
 
 
 
@@ -283,7 +251,6 @@ class UserDashboardView:
             return None
 
 
-
     def get_progress_data(self, enrolled_courses):
         progress_data = []
         for course in enrolled_courses:
@@ -301,20 +268,41 @@ class UserDashboardView:
         return progress_data
 
 
+    def get_untaken_assessments(self):
+        enrolled_courses = self.get_enrolled_courses()
+        
+        # Use the filter function to get assessments where is_taken is False
+        untaken_assessments = Assessment.objects.filter(
+            is_taken=False,
+            course__in=enrolled_courses,
+        )
 
-    def render_dashboard(self, enrolled_courses, progress_data=None, message=None):
+        print(untaken_assessments)
+        
+        return untaken_assessments
+
+
+    def render_dashboard(self, enrolled_courses, todo_list, progress_data=None, message=None):
         context = {'enrolled_courses': enrolled_courses}
+
         if progress_data is not None:
             context['progress_data'] = progress_data
+
         if message is not None:
             context['message'] = message
+
+        if todo_list is not None:
+            context['todo_list'] = todo_list
+
         return render(self.request, 'user/user_dashboard.html', context)
+
 
     def render_authenticated_dashboard(self):
         enrolled_courses = self.get_enrolled_courses()
         if enrolled_courses is not None:
             progress_data = self.get_progress_data(enrolled_courses)
-            return self.render_dashboard(enrolled_courses, progress_data)
+            todo_list = self.get_untaken_assessments()
+            return self.render_dashboard(enrolled_courses, todo_list, progress_data)
         else:
             return self.render_dashboard(enrolled_courses, message='You are not enrolled in any courses yet.')
 
