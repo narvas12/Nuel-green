@@ -56,9 +56,24 @@ class LessonForm(forms.ModelForm):
         self.fields['module'].widget = forms.Select(attrs={'class': 'form-control'})
 
 
+# Your first form for taking assessments
+class TakeAssessmentForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        assessment = kwargs.pop('assessment')
+        super(TakeAssessmentForm, self).__init__(*args, **kwargs)
+
+        for question in Question.objects.filter(assessment=assessment):
+            choices = [(answer.id, answer.text) for answer in question.answer_set.all()]
+            self.fields[f'question_{question.id}'] = forms.ChoiceField(
+                label=question.text,
+                widget=forms.RadioSelect,
+                choices=choices,
+                required=True,
+            )
 
 
-class AssessmentForm(forms.ModelForm):
+# Your second form for creating assessments
+class CreateAssessmentForm(forms.ModelForm):
     class Meta:
         model = Assessment
         fields = ['title', 'description', 'course', 'module', 'lesson', 'passing_score']
@@ -92,7 +107,6 @@ class AssessmentForm(forms.ModelForm):
                 self.fields['lesson'].queryset = Lesson.objects.filter(module_id=module_id)
             except (ValueError, TypeError):
                 pass  # Handle invalid module ID gracefully
-
 
 #upload questions and answer form
 class QuestionAnswerForm(forms.ModelForm):
@@ -142,19 +156,3 @@ class QuestionAnswerForm(forms.ModelForm):
         widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
     )
 
-
-# tae assessents form 
-
-class AssessmentForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        assessment = kwargs.pop('assessment')
-        super(AssessmentForm, self).__init__(*args, **kwargs)
-
-        for question in Question.objects.filter(assessment=assessment):
-            choices = [(answer.id, answer.text) for answer in question.answer_set.all()]
-            self.fields[f'question_{question.id}'] = forms.ChoiceField(
-                label=question.text,
-                widget=forms.RadioSelect,
-                choices=choices,
-                required=True,
-            )

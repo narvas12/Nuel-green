@@ -1,99 +1,9 @@
-{% extends "base.html" %}
+{% extends "dashboard.html" %}
 {% load static %}
-
-{% block style %}
-
-<style>
-  /* Internal CSS styles for the assessment form */
-.assessment-form-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.form-title {
-  font-size: 24px;
-  color: #11101d;
-  margin-bottom: 20px;
-}
-
-.assessment-form {
-  background-color: #ffffff;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.submit-button {
-  background-color: #11101d;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
-
-.submit-button:hover {
-  background-color: #212529;
-}
-
-
-  /* Style form input fields */
-  .form-group input[type="text"],
-  .form-group input[type="number"],
-  textarea,
-  .form-group select,
-  .form-group textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-
-  /* Style the submit button */
-  .btn {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-
-  .btn-primary {
-    background-color: #11101d;
-    color: #fff;
-  }
-
-  .btn-primary:hover {
-    background-color: #212529;
-  }
-
-/* Add more CSS styling as needed */
-
-
-</style>
-{% endblock style %}
 
 
 {% block content %}
-<nav class="custom-nav">
-  <a href="{% url 'instructors:create_course' %}" class="custom-link">Create Course</a>
-  <a href="{% url 'academy:user_dashboard' %}" class="custom-link">
-    <i class='bx bx-grid-alt'></i>
-    <span class="custom-link-name">Dashboard</span>
-  </a>
-  <a href="{% url 'academy:course_list' %}" class="custom-link">Course List</a>
-</nav>
+
 <div class="assessment-form-container">
   <h2 class="form-title">Create Assessment</h2>
   <form method="post" enctype="multipart/form-data" class="assessment-form">
@@ -140,64 +50,144 @@
   <a href="{% url 'instructors:upload_question_answer' %}" class="create-assessment-link">Upload Questions & Answers</a>
 
 </div>
-  
-  <script>
-    $(document).ready(function() {
-      $('#id_course').on('change', function() {
-        var course_id = $(this).val();
-        if (course_id) {
-          $.ajax({
-            type: 'GET',
-            url: '{% url "instructors:get_modules_and_lessons" %}',
-            data: {'course_id': course_id},
-            success: function(data) {
-              console.log('Data received:', data); // Debug line
-              var moduleDropdown = $('#id_module');
-              moduleDropdown.empty();
-              moduleDropdown.append('<option value="">Select a module</option>');
-              $.each(data.modules, function(index, module) {
-                moduleDropdown.append('<option value="' + module.id + '">' + module.module_title + '</option>');
-              });
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-              console.error('Error:', textStatus, errorThrown); // Debug line
-              // Handle errors here if needed
-            }
-          });
-        } else {
-          // If no course is selected, empty the module dropdown
-          $('#id_module').empty();
-        }
-      });
-    
-      // Add similar code for loading lessons based on the selected module
-      $('#id_module').on('change', function() {
-        var module_id = $(this).val();
-        if (module_id) {
-          $.ajax({
-            type: 'GET',
-            url: '{% url "instructors:get_modules_and_lessons" %}',
-            data: {'module_id': module_id},
-            success: function(data) {
-              console.log('Data received:', data); // Debug line
-              var lessonDropdown = $('#id_lesson');
-              lessonDropdown.empty();
-              lessonDropdown.append('<option value="">Select a lesson</option>');
-              $.each(data.lessons, function(index, lesson) {
-                lessonDropdown.append('<option value="' + lesson.id + '">' + lesson.title + '</option>');
-              });
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-              console.error('Error:', textStatus, errorThrown); // Debug line
-              // Handle errors here if needed
-            }
-          });
-        } else {
-          // If no module is selected, empty the lesson dropdown
-          $('#id_lesson').empty();
-        }
-      });
+
+
+<style>
+  /* Internal CSS styles for the assessment form */
+  .assessment-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  .form-title {
+    font-size: 24px;
+    color: #11101d;
+    margin-bottom: 20px;
+  }
+
+  .assessment-form {
+    background-color: #ffffff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .submit-button {
+    background-color: #11101d;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+
+  .submit-button:hover {
+    background-color: #212529;
+  }
+
+
+  /* Style form input fields */
+  .form-group input[type="text"],
+  .form-group input[type="number"],
+  textarea,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  /* Style the submit button */
+  .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-primary {
+    background-color: #11101d;
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background-color: #212529;
+  }
+
+  /* Add more CSS styling as needed */
+</style>
+
+
+<script>
+  $(document).ready(function() {
+    $('#id_course').on('change', function() {
+      var course_id = $(this).val();
+      if (course_id) {
+        $.ajax({
+          type: 'GET',
+          url: '{% url "instructors:get_modules_and_lessons" %}',
+          data: {'course_id': course_id},
+          success: function(data) {
+            console.log('Data received:', data); // Debug line
+            var moduleDropdown = $('#id_module');
+            moduleDropdown.empty();
+            moduleDropdown.append('<option value="">Select a module</option>');
+            $.each(data.modules, function(index, module) {
+              moduleDropdown.append('<option value="' + module.id + '">' + module.module_title + '</option>');
+            });
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error:', textStatus, errorThrown); // Debug line
+            // Handle errors here if needed
+          }
+        });
+      } else {
+        // If no course is selected, empty the module dropdown
+        $('#id_module').empty();
+      }
     });
-    </script>
+  
+    // Add similar code for loading lessons based on the selected module
+    $('#id_module').on('change', function() {
+      var module_id = $(this).val();
+      if (module_id) {
+        $.ajax({
+          type: 'GET',
+          url: '{% url "instructors:get_modules_and_lessons" %}',
+          data: {'module_id': module_id},
+          success: function(data) {
+            console.log('Data received:', data); // Debug line
+            var lessonDropdown = $('#id_lesson');
+            lessonDropdown.empty();
+            lessonDropdown.append('<option value="">Select a lesson</option>');
+            $.each(data.lessons, function(index, lesson) {
+              lessonDropdown.append('<option value="' + lesson.id + '">' + lesson.title + '</option>');
+            });
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error:', textStatus, errorThrown); // Debug line
+            // Handle errors here if needed
+          }
+        });
+      } else {
+        // If no module is selected, empty the lesson dropdown
+        $('#id_lesson').empty();
+      }
+    });
+  });
+</script>
     
 {% endblock %}

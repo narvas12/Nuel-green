@@ -1,8 +1,44 @@
-{% extends 'base.html' %}
+{% extends 'dashboard.html' %}
 {% load static %}
 
 
-{% block style %}
+
+{% block content %}
+
+<div class="create-lesson-container">
+  <h2 class="form-title">Create a New Lesson</h2>
+  <form method="post" id="lesson-form" class="create-lesson-form">
+    {% csrf_token %}
+    
+    <!-- Course (Select Input) -->
+    <div class="form-group">
+      <label for="id_course">Course:</label>
+      {{ form.course }}
+    </div>
+
+    <!-- Module (Select Input) -->
+    <div class="form-group">
+      <label for="id_module">Module:</label>
+      {{ form.module }}
+    </div>
+
+    <!-- Content (Text Area) -->
+    <div class="form-group">
+      <label for="id_content">Content:</label>
+      {{ form.content }}
+    </div>
+    
+    <button type="submit" class="btn btn-primary submit-button">Create Lesson</button>
+  </form>
+
+  <div id="lesson-data" style="display: none;">
+    <!-- This will be used to load lesson data via AJAX -->
+  </div>
+
+  <a href="{% url 'instructors:create_assessment' %}" class="create-assessment-link">Create Lesson Assessment</a>
+</div>
+
+
 <style>
   /* Internal CSS styles for the create lesson form */
   .create-lesson-container {
@@ -82,51 +118,6 @@
     color: #218838;
   }
 </style>
-{% endblock style %}
-
-
-
-{% block content %}
-<nav class="custom-nav">
-  <a href="{% url 'instructors:create_course' %}" class="custom-link">Create Course</a>
-  <a href="{% url 'academy:user_dashboard' %}" class="custom-link">
-    <i class='bx bx-grid-alt'></i>
-    <span class="custom-link-name">Dashboard</span>
-  </a>
-  <a href="{% url 'academy:course_list' %}" class="custom-link">Course List</a>
-</nav>
-<div class="create-lesson-container">
-  <h2 class="form-title">Create a New Lesson</h2>
-  <form method="post" id="lesson-form" class="create-lesson-form">
-    {% csrf_token %}
-    
-    <!-- Course (Select Input) -->
-    <div class="form-group">
-      <label for="id_course">Course:</label>
-      {{ form.course }}
-    </div>
-
-    <!-- Module (Select Input) -->
-    <div class="form-group">
-      <label for="id_module">Module:</label>
-      {{ form.module }}
-    </div>
-
-    <!-- Content (Text Area) -->
-    <div class="form-group">
-      <label for="id_content">Content:</label>
-      {{ form.content }}
-    </div>
-    
-    <button type="submit" class="btn btn-primary submit-button">Create Lesson</button>
-  </form>
-
-  <div id="lesson-data" style="display: none;">
-    <!-- This will be used to load lesson data via AJAX -->
-  </div>
-
-  <a href="{% url 'instructors:create_assessment' %}" class="create-assessment-link">Create Lesson Assessment</a>
-</div>
 
 
   <script>
@@ -196,4 +187,6 @@
         });
     });
   </script>
+
+
 {% endblock %}

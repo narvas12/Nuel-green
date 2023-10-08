@@ -6,7 +6,7 @@ from django.contrib import messages
 
 from ngict.models import Student
 from .models import Answer, AssessmentScore, Course, CourseCategories, InstructorProfile, Module, Lesson, Assessment, Question, Resource
-from .forms import CourseForm, LessonForm, AssessmentForm, QuestionAnswerForm, ResourceForm
+from .forms import CourseForm, LessonForm, CreateAssessmentForm,TakeAssessmentForm, QuestionAnswerForm, ResourceForm
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required, user_passes_test
 import hashlib
@@ -217,12 +217,12 @@ def load_lesson_data(request):
 @login_required
 def create_assessment(request):
     if request.method == 'POST':
-        form = AssessmentForm(request.POST)
+        form = CreateAssessmentForm(request.POST)
         if form.is_valid():
             assessment = form.save()
             return redirect('instructors:create_assessment')  # Redirect to the assessment detail page
     else:
-        form = AssessmentForm()
+        form = CreateAssessmentForm()
 
     return render(request, 'instructors/create_assessment.html', {'form': form})
 #------------------------------------------------------------
@@ -455,7 +455,7 @@ def take_assessment(request, assessment_id):
     questions = Question.objects.filter(assessment=assessment)
     
     if request.method == 'POST':
-        form = AssessmentForm(request.POST, assessment=assessment)
+        form = TakeAssessmentForm(request.POST, assessment=assessment)
         if form.is_valid():
             # Calculate the score as a percentage
             total_questions = questions.count()
@@ -489,7 +489,7 @@ def take_assessment(request, assessment_id):
 
             return redirect('instructors:assessment_list')
     else:
-        form = AssessmentForm(assessment=assessment)
+        form = TakeAssessmentForm(assessment=assessment)
 
     return render(request, 'courses/assessments/take_assessment.html', {
         'assessment': assessment,

@@ -1,135 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'dashboard.html' %}
 {% load static %}
 
 
-{% block style %}
 
-<style>
-    /* CSS styles for the Upload Question and Answers form */
-    .upload-question-form {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #f5f5f5;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-  
-    h1 {
-      color: #11101d;
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-  
-    .form-group {
-      margin-bottom: 20px;
-    }
-  
-    label {
-      color: #11101d;
-      font-weight: bold;
-    }
-  
-    .btn-primary {
-      background-color: #11101d;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s ease;
-    }
 
-    .form-group input[type="text"],
-    .form-group input[type="number"],
-    textarea,
-    .form-group select,
-    .form-group textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-    
 
-    .btn-primary:hover {
-      background-color: #212529;
-    }
-  
-    .form-feedback {
-      font-size: 16px;
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 5px;
-      text-align: center;
-    }
-  
-    .success {
-      background-color: #28a745;
-      color: #fff;
-    }
-  
-    .error {
-      background-color: #dc3545;
-      color: #fff;
-    }
-  
-    /* Style for form elements */
-    .form-group input[type="text"],
-    .form-group input[type="number"],
-    .form-group select,
-    .form-group textarea,
-     {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 16px;
-    }
-  
-    /* Style for checkboxes */
-    .form-group input[type="checkbox"] {
-        border: 1px solid #ccc;
-      padding: 2px;
-      margin-right: 5px;
-      height: 18px;
-    }
-  
-    /* Optional: Style the checkbox label (text) */
-    .form-group .checkbox-label {
-      margin-left: 5px;
-    }
-
-    .checkbox-label {
-        display: flex; /* Use flex layout to align elements horizontally */
-        align-items: center; /* Vertically center items within the container */
-        margin-bottom: 10px; /* Adjust the margin for spacing between options */
-      }
-    
-      .checkbox-label input[type="checkbox"] {
-        margin:0 5px; /* Adjust the margin to control spacing between checkbox and text input */
-        width: 25px; /* Increase the width of the checkbox */
-        height: 25px; /* Increase the height of the checkbox */
-        padding: 0; /* Remove padding to ensure the checkbox size is consistent */
-        transform: scale(1.5); /* Scale the checkbox to increase its size */
-    }
-  </style>
-  
-</style>
-{% endblock style %}
 {% block content %}
-<nav class="custom-nav">
-    <a href="{% url 'instructors:create_course' %}" class="custom-link">Create Course</a>
-    <a href="{% url 'academy:user_dashboard' %}" class="custom-link">
-      <i class='bx bx-grid-alt'></i>
-      <span class="custom-link-name">Dashboard</span>
-    </a>
-    <a href="{% url 'academy:course_list' %}" class="custom-link">Course List</a>
-  </nav>
+
   
 <div class="upload-question-form">
     <h1>Upload Question and Answers</h1>
@@ -178,36 +55,139 @@
 </div>
 
 
-   <!-- Add this script tag to your HTML template -->
-    <script>
-        $(document).ready(function() {
-            // Handle form submission via AJAX
-            $("form").on("submit", function(event) {
-                event.preventDefault();  // Prevent the default form submission
+<style>
+  /* CSS styles for the Upload Question and Answers form */
+  .upload-question-form {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
 
-                // Serialize the form data
-                var formData = $(this).serialize();
+  h1 {
+    color: #11101d;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
 
-                // Send an AJAX POST request to the server
-                $.ajax({
-                    url: "{% url 'instructors:save_question_answer_ajax' %}",
-                    type: "POST",
-                    data: formData,
-                    success: function(response) {
-                        if (response.success) {
-                            // Clear the form or perform any other necessary actions
-                            alert("Question and answer saved successfully!");
-                            $("form")[0].reset();  // Reset the form
-                        } else {
-                            alert("Failed to save the question and answer.");
-                        }
-                    },
-                    error: function() {
-                        alert("An error occurred while saving the data.");
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  label {
+    color: #11101d;
+    font-weight: bold;
+  }
+
+
+
+  .form-group input[type="text"],
+  .form-group input[type="number"],
+   textarea,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  
+
+  .form-feedback {
+    font-size: 16px;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  .success {
+    background-color: #28a745;
+    color: #fff;
+  }
+
+  .error {
+    background-color: #dc3545;
+    color: #fff;
+  }
+
+  /* Style for form elements */
+  .form-group input[type="text"],
+  .form-group input[type="number"],
+  .form-group select,
+  .form-group textarea,
+   {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  /* Style for checkboxes */
+  .form-group input[type="checkbox"] {
+      border: 1px solid #ccc;
+    padding: 2px;
+    margin-right: 5px;
+    height: 18px;
+  }
+
+  /* Optional: Style the checkbox label (text) */
+  .form-group .checkbox-label {
+    margin-left: 5px;
+  }
+
+  .checkbox-label {
+      display: flex; /* Use flex layout to align elements horizontally */
+      align-items: center; /* Vertically center items within the container */
+      margin-bottom: 10px; /* Adjust the margin for spacing between options */
+    }
+  
+    .checkbox-label input[type="checkbox"] {
+      margin:0 5px; /* Adjust the margin to control spacing between checkbox and text input */
+      width: 25px; /* Increase the width of the checkbox */
+      height: 25px; /* Increase the height of the checkbox */
+      padding: 0; /* Remove padding to ensure the checkbox size is consistent */
+      transform: scale(1.5); /* Scale the checkbox to increase its size */
+  }
+</style>
+
+
+<!-- Add this script tag to your HTML template -->
+<script>
+    $(document).ready(function() {
+        // Handle form submission via AJAX
+        $("form").on("submit", function(event) {
+            event.preventDefault();  // Prevent the default form submission
+
+            // Serialize the form data
+            var formData = $(this).serialize();
+
+            // Send an AJAX POST request to the server
+            $.ajax({
+                url: "{% url 'instructors:save_question_answer_ajax' %}",
+                type: "POST",
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        // Clear the form or perform any other necessary actions
+                        alert("Question and answer saved successfully!");
+                        $("form")[0].reset();  // Reset the form
+                    } else {
+                        alert("Failed to save the question and answer.");
                     }
-                });
+                },
+                error: function() {
+                    alert("An error occurred while saving the data.");
+                }
             });
         });
-    </script>
+    });
+</script>
 
 {% endblock %}
