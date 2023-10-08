@@ -4,7 +4,8 @@ from instructors.models import Answer, Assessment, Course, CourseCategories, Ins
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('course_title', 'category', 'description')
+    list_display = ('course_title', 'category', 'description', 'is_published')
+    
     prepopulated_fields = {'slug': ('course_title',)}
     list_filter = ('category',)  # Add this line to enable filtering by category
 

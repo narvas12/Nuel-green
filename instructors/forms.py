@@ -7,13 +7,16 @@ class AutoResizeTextarea(Textarea):
         super().__init__(attrs={'class': 'auto-resize-textarea', **(attrs or {})})
 
 
-
 class CourseForm(forms.ModelForm):
+    is_published = forms.BooleanField(
+        required=False,
+        initial=True,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
+    )
+
     class Meta:
         model = Course
-        Course.description = forms.CharField(widget=AutoResizeTextarea(attrs={'rows': 1}))
-
-        fields = ['course_title', 'image',  'video_url', 'description', 'duration_in_days']
+        fields = ['course_title', 'image', 'video_url', 'description', 'duration_in_days', 'is_published']
 
 
 

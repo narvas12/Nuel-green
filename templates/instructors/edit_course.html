@@ -1,7 +1,78 @@
-{% extends 'base.html' %}
+{% extends 'dashboard.html' %}
 
 
-{% block style %}
+
+
+{% block content %}
+
+<div class="container">
+  <h1 class="edit-course-title">Edit Course</h1>
+  
+  <form method="post" class="edit-course-form">
+    {% csrf_token %}
+    
+    <!-- Display form errors -->
+    {% if form.errors %}
+      <div class="alert alert-danger">
+        <strong>Error:</strong> Please correct the following errors.
+      </div>
+    {% endif %}
+    
+    <!-- Course Title -->
+    <div class="form-group">
+      <label for="{{ form.course_title.id_for_label }}" class="form-label">Course Title</label>
+      {{ form.course_title }}
+      {% if form.course_title.errors %}
+        <div class="text-danger">
+          {{ form.course_title.errors }}
+        </div>
+      {% endif %}
+    </div>
+    
+    <!-- Video URL -->
+    <div class="form-group">
+      <label for="{{ form.video_url.id_for_label }}" class="form-label">Video URL</label>
+      {{ form.video_url }}
+      {% if form.video_url.errors %}
+        <div class="text-danger">
+          {{ form.video_url.errors }}
+        </div>
+      {% endif %}
+    </div>
+    
+    <!-- Description -->
+    <div class="form-group">
+      <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+      {{ form.description }}
+      {% if form.description.errors %}
+        <div class="text-danger">
+          {{ form.description.errors }}
+        </div>
+      {% endif %}
+    </div>
+    
+    <!-- Duration in Days -->
+    <div class="form-group">
+      <label for="{{ form.duration_in_days.id_for_label }}" class="form-label">Duration in Days</label>
+      {{ form.duration_in_days }}
+      {% if form.duration_in_days.errors %}
+        <div class="text-danger">
+          {{ form.duration_in_days.errors }}
+        </div>
+      {% endif %}
+    </div>
+    
+    <!-- "Publish Course" Checkbox -->
+    <div class="form-group form-check">
+      {{ form.is_published }}
+      <label for="{{ form.is_published.id_for_label }}" class="form-check-label">Publish Course</label>
+    </div>
+    
+    <button type="submit" class="btn btn-primary save-button">Save Changes</button>
+    <a href="{% url 'instructors:course_detail' slug=course.slug %}" class="btn btn-secondary cancel-button">Cancel</a>
+  </form>
+</div>
+
 <style>
   /* Internal CSS styles for the edit course form */
 .edit-course-title {
@@ -121,76 +192,4 @@ select {
 
 
 </style>
-{% endblock style %}
-
-{% block content %}
-<nav class="custom-nav">
-  <a href="{% url 'instructors:create_course' %}" class="custom-link">Create Course</a>
-  <a href="{% url 'academy:user_dashboard' %}" class="custom-link">
-    <i class='bx bx-grid-alt'></i>
-    <span class="custom-link-name">Dashboard</span>
-  </a>
-  <a href="{% url 'academy:course_list' %}" class="custom-link">Course List</a>
-</nav>
-<div class="container">
-  <h1 class="edit-course-title">Edit Course</h1>
-  
-  <form method="post" class="edit-course-form">
-    {% csrf_token %}
-    
-    <!-- Display form errors -->
-    {% if form.errors %}
-      <div class="alert alert-danger">
-        <strong>Error:</strong> Please correct the following errors.
-      </div>
-    {% endif %}
-    
-    <!-- Course Title -->
-    <div class="form-group">
-      <label for="{{ form.course_title.id_for_label }}" class="form-label">Course Title</label>
-      {{ form.course_title }}
-      {% if form.course_title.errors %}
-        <div class="text-danger">
-          {{ form.course_title.errors }}
-        </div>
-      {% endif %}
-    </div>
-    
-    <!-- Video URL -->
-    <div class="form-group">
-      <label for="{{ form.video_url.id_for_label }}" class="form-label">Video URL</label>
-      {{ form.video_url }}
-      {% if form.video_url.errors %}
-        <div class="text-danger">
-          {{ form.video_url.errors }}
-        </div>
-      {% endif %}
-    </div>
-    
-    <!-- Description -->
-    <div class="form-group">
-      <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
-      {{ form.description }}
-      {% if form.description.errors %}
-        <div class="text-danger">
-          {{ form.description.errors }}
-        </div>
-      {% endif %}
-    </div>
-    
-    <!-- Duration in Days -->
-    <div class="form-group">
-      <label for="{{ form.duration_in_days.id_for_label }}" class="form-label">Duration in Days</label>
-      {{ form.duration_in_days }}
-      {% if form.duration_in_days.errors %}
-        <div class="text-danger">
-          {{ form.duration_in_days.errors }}
-        </div>
-      {% endif %}
-    </div>
-    
-    <button type="submit" class="btn btn-primary save-button">Save Changes</button>
-    <a href="{% url 'instructors:course_detail' slug=course.slug %}" class="btn btn-secondary cancel-button">Cancel</a>
-  </form>
-</div>
 {% endblock %}

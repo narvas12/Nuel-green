@@ -46,7 +46,7 @@ class Course(models.Model):
     slug = models.SlugField(unique=True, blank=True)
     duration_in_days = models.IntegerField(default=100)
     instructor = models.ForeignKey(User, on_delete=models.PROTECT)  # Add this line to associate a course with an instructor
-    
+    is_published = models.BooleanField(default=False)
     
     @property
     def duration_in_weeks(self):

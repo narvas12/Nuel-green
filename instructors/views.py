@@ -44,27 +44,39 @@ def instructor_dashboard(request):
 
 
 
-#============================ list courses view ============================
+
 def courses_by_category(request):
     # Fetch all categories
     categories = CourseCategories.objects.all()
-    
+
     # Fetch category filter from query parameters
     category_filter = request.GET.get('category')
 
-    # Fetch all courses grouped by category
+    # Initialize courses queryset
+    courses_queryset = Course.objects.all()
+
+    # Check if category_filter is numeric (ID)
+    if category_filter and category_filter.isnumeric():
+        selected_category = get_object_or_404(CourseCategories, pk=category_filter)
+        courses_queryset = courses_queryset.filter(category=selected_category)
+
+    # Filter only published courses
+    courses_queryset = courses_queryset.filter(is_published=True)
+
+    # Group courses by category
     courses_by_category = {}
     for category in categories:
-        courses_by_category[category] = Course.objects.filter(category=category)
-    
+        category_courses = courses_queryset.filter(category=category)
+        if category_courses:
+            courses_by_category[category] = category_courses
+
     context = {
         'categories': categories,
         'courses_by_category': courses_by_category,
-        'category_filter': category_filter,  # Add the category filter to the context
+        'category_filter': category_filter,
     }
-    
-    return render(request, 'courses/course_list.html', context)
 
+    return render(request, 'courses/course_list.html', context)
 
 
 
