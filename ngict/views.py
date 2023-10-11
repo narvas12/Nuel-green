@@ -256,16 +256,30 @@ class UserDashboardView:
     def get_progress_data(self, enrolled_courses):
         progress_data = []
         for course in enrolled_courses:
-            user_progress = UserProgress.objects.filter(user=self.user, course=course)
-            total_weeks = course.duration_in_weeks  # Assuming the course has a duration_in_weeks field
-
-            assessment_scores = AssessmentScore.objects.filter(user=self.user, assessment__course=course)
-
+            # Assuming the course has a duration_in_weeks field
+            total_weeks = course.duration_in_weeks
+            
+            # Get the number of assessments related to this course
+            total_assessments = Assessment.objects.filter(course=course).count()
+            
+            # Get the number of assessments taken by the user for this course
+            assessments_taken = AssessmentScore.objects.filter(
+                user=self.user,
+                assessment__course=course,
+            ).count()
+            
+            # Calculate the progress as a percentage
+            if total_assessments > 0:
+                progress_percentage = (assessments_taken / total_assessments) * 100
+            else:
+                progress_percentage = 0
+            
             progress_data.append({
                 'course': course,
                 'total_weeks': total_weeks,
-                'user_progress': user_progress,
-                'assessment_scores': assessment_scores,
+                'assessments_taken': assessments_taken,
+                'total_assessments': total_assessments,
+                'progress_percentage': progress_percentage,
             })
         return progress_data
 
@@ -279,12 +293,11 @@ class UserDashboardView:
             course__in=enrolled_courses,
         )
 
-        print(untaken_assessments)
         
         return untaken_assessments
 
 
-    def render_dashboard(self, enrolled_courses, todo_list, progress_data=None, message=None):
+    def render_dashboard(self, enrolled_courses, todo_list=None, progress_data=None, message=None):
         context = {'enrolled_courses': enrolled_courses}
 
         if progress_data is not None:

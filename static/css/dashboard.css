@@ -259,32 +259,7 @@
       }
       
       /* Course Progress Styles */
-      .course-progress {
-        background-color: #f9f9f9;
-        padding: 20px;
-        margin-bottom: 20px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-      }
       
-      .course-progress h2 {
-        font-size: 20px;
-      }
-      
-      .course-progress .progress-bar {
-        background-color: #007bff;
-        height: 10px;
-        border-radius: 5px;
-      }
-      
-      .course-progress .progress-text {
-        font-size: 14px;
-        color: #555;
-      }
-      
-      .course-progress .progress-item {
-        margin: 40px 5px;
-      }
       
       .dashboard-main {
         flex-grow: 1;

@@ -106,7 +106,8 @@
             <div class="progress-item">
               <h6>{{ data.course.course_title }}</h6>
               <div class="progress-bar">
-                <div class="progress-text">{{ data.progress_percentage }}</div>
+                <div class="progress-text">{{ data.progress_percentage }}%</div>
+                <div class="color-overlay" data-progress="{{ data.progress_percentage }}"></div>
               </div>
             </div>
           {% endfor %}
@@ -115,7 +116,6 @@
         <p>No progress data available.</p>
       {% endif %}
     </div>
-
 
     <ul class="submitted-projects">
       {% for project_submission in project_submissions %}
@@ -126,5 +126,68 @@
       {% endfor %}
     </ul>
   </section>
+  
+  <style>
+    .course-progress {
+      background-color: #f9f9f9;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+  
+    .course-progress h2 {
+      font-size: 20px;
+    }
+  
+    .course-progress .progress-bar {
+      height: 10px;
+      border-radius: 5px;
+      position: relative; /* Added for stacking */
+    }
+  
+    .course-progress .color-overlay {
+      background-color: #007bff;
+      height: 100%; /* Initially, cover the entire progress bar */
+      border-radius: 5px;
+      position: absolute; /* Position relative to the progress bar */
+      top: 0;
+      left: 0;
+      width: 0; /* Initially, no width */
+      transition: width 0.5s; /* Added for smooth transition */
+    }
+  
+    .course-progress .progress-text {
+      font-size: 14px;
+      color: #555;
+      position: absolute;
+      top: -20px;
+      left: 0;
+    }
+  
+    .course-progress .progress-item {
+      margin: 40px 5px;
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Get all elements with the class "progress-bar"
+      const progressBars = document.querySelectorAll(".progress-bar");
+  
+      // Loop through each progress bar and set the width of the color overlay
+      progressBars.forEach(function (progressBar) {
+        const progressText = progressBar.querySelector(".progress-text");
+        const colorOverlay = progressBar.querySelector(".color-overlay");
+  
+        // Get the progress percentage from the progress text
+        const progressPercentage = parseFloat(progressText.innerText);
+  
+        // Set the width of the color overlay based on the progress percentage
+        colorOverlay.style.width = progressPercentage + "%";
+      });
+    });
+  </script>
+  
+  
   
 {% endblock content %}
