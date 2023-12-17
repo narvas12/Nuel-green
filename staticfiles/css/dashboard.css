@@ -257,47 +257,10 @@
       .to-do-list .task-checkbox {
         margin-right: 10px;
       }
+      
       /* Course Progress Styles */
-      .course-progress {
-        background-color: #f9f9f9;
-        padding: 20px;
-        margin-bottom: 20px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-      }
-
-      .course-progress h2 {
-        font-size: 20px;
-      }
-
-      .course-progress .progress-bar {
-        height: 10px;
-        border-radius: 5px;
-        position: relative; /* Added for stacking */
-      }
-
-      .course-progress .color-overlay {
-        background-color: rgba(0, 123, 255, 0.5); /* Change to your desired color and opacity */
-        height: 100%; /* Height covers the entire progress bar */
-        border-radius: 5px;
-        position: absolute; /* Position relative to the progress bar */
-        top: 0; /* Align to the top */
-        left: 0; /* Align to the left */
-        width: 0; /* Initially, no width */
-      }
-
-      .course-progress .progress-text {
-        font-size: 14px;
-        color: #555;
-        position: absolute; /* Position relative to the progress bar */
-        top: -20px; /* Adjust as needed to position the text above the progress bar */
-        left: 0; /* Align to the left */
-      }
-
-      .course-progress .progress-item {
-        margin: 40px 5px;
-      }
-
+      
+      
       .dashboard-main {
         flex-grow: 1;
         padding: 20px;

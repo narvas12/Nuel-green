@@ -9,6 +9,19 @@ from uuid import uuid4
 import os
 
 
+class Visitor(models.Model):
+    ip_address = models.GenericIPAddressField()
+    browser = models.CharField(max_length=255)
+    os = models.CharField(max_length=255)
+    device = models.CharField(max_length=255)
+    time_spent = models.FloatField()  # in seconds
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.ip_address} - {self.browser} - {self.os} - {self.device}"
+
+
+
 class UserCode(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     html_code = models.TextField()
