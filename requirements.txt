@@ -6,3 +6,4 @@ django-analytical
 Pillow
 django-ckeditor
 requests
+user-agents
