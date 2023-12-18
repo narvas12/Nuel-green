@@ -16,6 +16,7 @@ from decimal import Decimal
 
 
 
+
 #========================== generate_hash ==============================
 def generate_hash(identifier, object_id):
     hashed_url = generate_hash(object_id)

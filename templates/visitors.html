@@ -1,0 +1,24 @@
+<!-- templates/connected_visitors.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connected Visitors</title>
+</head>
+<body>
+    <h1>Connected Visitors</h1>
+    <ul>
+        {% for visitor in connected_visitors %}
+            <li>
+                IP Address: {{ visitor.ip_address }}<br>
+                Browser: {{ visitor.browser }}<br>
+                OS: {{ visitor.os }}<br>
+                Device: {{ visitor.device }}<br>
+                Time Spent: {{ visitor.time_spent }} seconds<br>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

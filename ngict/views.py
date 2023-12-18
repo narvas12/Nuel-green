@@ -8,12 +8,21 @@ from core import settings
 from django.contrib.auth import authenticate, login, logout
 
 from instructors.models import Answer, Assessment, Lesson, Module, Question
-from .models import Image, LessonCompletion, Note, Project, ProjectSubmission, User_Profile, Course, Student, UserCode, AssessmentScore, UserProgress
+from .models import Image, LessonCompletion, Note, Project, ProjectSubmission, User_Profile, Course, Student, UserCode, AssessmentScore, UserProgress, Visitor
 from django.views.generic import ListView, DetailView
 from .forms import LessonCompletionForm, LoginForm, NoteForm, RegistrationForm, UserCreationForm
 from django.http import JsonResponse
 import json
 from django.db.models import Q
+
+
+
+
+def connected_visitors(request):
+    # Get connected visitors (you may need to adjust this query based on your model structure)
+    connected_visitors = Visitor.objects.filter(is_connected=True)
+    context = {'connected_visitors': connected_visitors}
+    return render(request, 'visitors.html', context)
 
 
 

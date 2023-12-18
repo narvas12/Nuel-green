@@ -16,9 +16,10 @@ class Visitor(models.Model):
     device = models.CharField(max_length=255)
     time_spent = models.FloatField()  # in seconds
     timestamp = models.DateTimeField(auto_now_add=True)
+    is_connected = models.BooleanField(default=False)  # Add is_connected field
 
     def __str__(self):
-        return f"{self.ip_address} - {self.browser} - {self.os} - {self.device}"
+        return f"{self.ip_address} - {self.browser} - {self.os} - {self.device} - {self.is_connected}"
 
 
 

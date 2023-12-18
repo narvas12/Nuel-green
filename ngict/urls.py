@@ -39,6 +39,7 @@ urlpatterns = [
 
     # URL pattern for marking a lesson as completed
     path('mark-lesson-completed/', mark_lesson_completed, name='mark_lesson_completed'),
+    path('connected_visitors/', connected_visitors, name='connected_visitors'),
 
 ] 
 

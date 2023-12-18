@@ -36,6 +36,7 @@ urlpatterns = [
     path('assessment-list/', assessment_list, name='assessment_list'),
     path('take_assessment/<int:assessment_id>/', take_assessment, name='take_assessment'),
     path('courses/', courses_by_category, name='courses_by_category'),
+    
 ]
 
 

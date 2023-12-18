@@ -33,9 +33,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <link
-      rel="shortcut icon"
-      href="https://img.icons8.com/?size=1x&id=dxoYK8bxqiJr&format=png"
-      type="image/x-icon"
+      rel="icon"
+      href="https://tinypic.host/images/2023/12/16/logo-photoaidcom-cropped.png"
     />
     <script src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
     <script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
@@ -140,10 +139,10 @@
               ><i class="bx bx-log-out-circle"></i
             ></a>
             {% else %}
-            <a class="btn btn-primary" href="{% url 'academy:signin' %}"
+            <a class="btn btn-primary" href="{% url 'academy:register_and_login' %}"
               >Signin</a
             >
-            <a class="btn btn-primary" href="{% url 'academy:signup' %}"
+            <a class="btn btn-primary" href="{% url 'academy:register_and_login' %}"
               >signup</a
             >
             {% endif %}
