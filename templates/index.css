@@ -1,0 +1,121 @@
+body{
+    overflow-x: hidden;
+}
+
+.blue{
+    background-color: #0A58CA;
+}
+
+.reason{
+    margin-top: 150px;
+}
+
+.width{
+    width: 400px;
+}
+
+.black {
+    background-color: #212529;
+}
+
+.widthone{
+    width: 700px;
+}
+
+.widthtwo{
+    width: 600px;
+}
+.widththree{
+    width: 400px;
+}
+.widthfour{
+    width: 850px;
+}
+.widthfive{
+    width: 540px;
+}
+.widthsix{
+    width: 150px;
+}
+
+.lightblue{
+    background-color:  #C0DAFF;
+}
+
+@media(max-width:650px) {
+    .widthone{
+        width: 100px;
+    }
+    .widthtwo{
+        width: 150px;
+    }
+
+    .widththree{
+        width: 100px;
+    }
+
+    .widthfour{
+        width: 100px;
+    }
+
+    .widthfive{
+        width: 100px;
+    }
+    .widthsix{
+        width: 30px;
+    }
+ }
+
+ @media(min-width:700px) {
+    .widthone{
+        width: 400px;
+    }
+    .widthtwo{
+        width: 300px;
+    }
+
+    .widththree{
+        width: 200px;
+    }
+
+    .widthfour{
+        width: 500px;
+    }
+
+    .widthfive{
+        width: 370px;
+    }
+    .widthsix{
+        width: 130px;
+    }
+ }
+
+
+
+ .vector{
+    width: 180px;
+ }
+
+ .register{
+    background-color: #ECF4FF;
+ }
+
+ .pr{
+    padding-right: 180px;
+ }
+
+ .subscribe{
+    width: 100px;
+ }
+
+ .logo{
+    width: 30px;
+    height: 30px;
+ }
+
+ https://tinypic.host/images/2023/09/23/logo.png
+https://tinypic.host/images/2023/09/23/Mask-group.png
+https://tinypic.host/images/2023/09/23/Rectangle-4.png
+https://tinypic.host/images/2023/09/23/Rectangle-5.png
+https://tinypic.host/images/2023/09/23/Rectangle-6.png
+https://tinypic.host/images/2023/09/23/Rectangle-7.png
