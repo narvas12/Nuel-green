@@ -700,11 +700,23 @@ a.cta1 {
   }
 }
 
+
+
 @media only screen and (max-width: 767px) {
   .categories_right {
     display: flex;
     flex-direction: column;
   }
+
+
+  .categories_container .cta_guide {
+    
+    height: 190px;
+    width: 190px;
+  
+   
+  }
+
 
   .categories .categories_container .categories_right .category a {
     margin: 0;
