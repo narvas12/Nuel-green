@@ -90,11 +90,11 @@ def create_course(request):
         instructor_profile = InstructorProfile.objects.get(user=request.user)
     except InstructorProfile.DoesNotExist:
         messages.error(request, "You do not have permission to create courses.")
-        return redirect('instructors:instructor_dashboard')  # Redirect to instructor dashboard
+        return redirect('instructors:instructor_dashboard')
 
     if not instructor_profile.is_creator:
         messages.error(request, "You do not have permission to create courses.")
-        return redirect('instructors:instructor_dashboard')  # Redirect to instructor dashboard
+        return redirect('instructors:instructor_dashboard')
 
     if request.method == 'POST':
         form = CourseForm(request.POST)

@@ -9,27 +9,22 @@
     <!-- Owl Carousel CSS -->
 
     <!-- Box ICON CDN -->
-    <link
-      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-      rel="stylesheet"
-    />
-    
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-    <link
-      rel="icon"
-      href="https://tinypic.host/images/2023/12/16/logo-photoaidcom-cropped.png"
-    />
-  </head>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="icon" href="https://tinypic.host/images/2023/12/16/logo-photoaidcom-cropped.png" />
+  </head>
+<style>
+  .hilihted{
+    background-color: var(--color-primary);
+    padding: 1.3rem 0;
+    color: var(--color-white);
+  }
+</style>
   <body>
     <header id="floating-nav" class="floating-nav">
       <div class="logo">
-        <a class="logo-link" href="/"
-          ><img
-            class="logo"
-            src="https://tinypic.host/images/2023/12/16/logo-photoaidcom-cropped.png"
-            alt="Nuel-Green logo"
-        /></a>
+        <a class="logo-link" href="/"><img class="logo" src="https://tinypic.host/images/2023/12/16/logo-photoaidcom-cropped.png" alt="Nuel-Green logo" /></a>
       </div>
 
       <a class="btn cta1 rounded-overlay" href="">Apply Now</a>
@@ -38,21 +33,33 @@
 
       <nav class="nav_links">
         <ul>
-          <li><a href="{% url 'academy:home' %}">Home</a></li>
-          <li><a href="">Career</a></li>
-          <li><a href="{% url 'instructors:courses_by_category' %}">Courses</a></li>
-          <li><a href="">Contact</a></li>
+          <li class="hilihted">
+            <a href="https://solutions.nuelgreenict.com.ng/" target="_blank">Book a Service</a>
+          </li>
+          <li>
+            <a href="{% url 'academy:home' %}">Home</a>
+          </li>
+          <li>
+            <a href="">Career</a>
+          </li>
+          <li>
+            <a href="{% url 'instructors:courses_by_category' %}">Courses</a>
+          </li>
+          <li>
+            <a href="">Contact</a>
+          </li>
+
+         
         </ul>
 
         <a class="btn cta2 rounded-overlay" href="{% url 'academy:register_and_login' %}">Apply Now</a>
 
         <ul class="nav_menu nav_icons">
-          
           {% if user.is_authenticated %}
             <li>
               <a href="{% url 'academy:signout' %}"><i class="bx bx-log-out-circle"></i>Logout</a>
             </li>
-            
+
             <li>
               <a href="{% url 'academy:user_dashboard' %}"><i class="bx bxs-user-detail"></i>Account</a>
             </li>
@@ -60,14 +67,15 @@
             <li>
               <a href="{% url 'academy:register_and_login' %}"><i class="bx bx-log-in-circle"></i>Login</a>
             </li>
+
           {% endif %}
         </ul>
       </nav>
     </header>
 
-    <!-- end nav section  -->
+    <!-- end nav section -->
 
-    <!-- header section  -->
+    <!-- header section -->
     <section class="hero">
       <div class="container hero_container">
         <div class="hero_content">
@@ -77,39 +85,30 @@
               <span>Nuel-Green ICT</span> Redefining Excellence
             </h1>
           </div>
-          <p>
-            Nuel-Green ICT Helps your journey in acquiring the skills essential
-            for shaping and advancing the career you aspire to build
-          </p>
+          <p>Nuel-Green ICT Helps your journey in acquiring the skills essential for shaping and advancing the career you aspire to build</p>
           <div class="hero_ctas">
             <div class="cta">
               <a href="{% url 'academy:register_and_login' %}" class="btn rounded-overlay">Join Us Today</a>
-              <a href="{% url 'instructors:courses_by_category' %}" class="btn rounded-overlay cta_secondary"
-                >View Our Courses <i class="bx bxs-hand-right"></i
-              ></a>
+              <a href="{% url 'instructors:courses_by_category' %}" class="btn rounded-overlay cta_secondary">View Our Courses <i class="bx bxs-hand-right"></i></a>
             </div>
           </div>
         </div>
 
         <div class="hero_img" id="heroImg">
-          <img
-            src="https://tinypic.host/images/2023/11/02/web-development.png"
-            alt=""
-          />
+          <img src="https://tinypic.host/images/2023/11/02/web-development.png" alt="" />
         </div>
       </div>
     </section>
 
     <div class="scrolling-line"></div>
 
-    <!-- end heade section  -->
+    <!-- end heade section -->
 
-    <!-- categories section  -->
+    <!-- categories section -->
     <section id="section" class="categories">
       <div class="container categories_container">
         <div class="categories_left">
           <h1>Learn Easily With Our Core Curriculum</h1>
-
 
           <div class="cta_guide">
             <a class="btn rounded-overlay" href="{% url 'instructors:courses_by_category' %}">Choose a Course Now!</a>
@@ -124,10 +123,7 @@
                 <h5>Blockchain</h5>
               </div>
 
-              <p>
-                Explore the Revolutionary Technology Underlying Digital
-                Currencies and Decentralized Applications
-              </p>
+              <p>Explore the Revolutionary Technology Underlying Digital Currencies and Decentralized Applications</p>
 
               <i class="bx bxs-chevron-right"></i>
             </a>
@@ -140,11 +136,7 @@
                 <h5>Web Development</h5>
               </div>
 
-              <p>
-                Learn to create dynamic and interactive websites and web
-                applications using a variety of programming languages and
-                frameworks
-              </p>
+              <p>Learn to create dynamic and interactive websites and web applications using a variety of programming languages and frameworks</p>
               <i class="bx bxs-chevron-right"></i>
             </a>
           </article>
@@ -156,10 +148,7 @@
                 <h5>Data Science & Analytics</h5>
               </div>
 
-              <p>
-                Harness the power of data to derive insights, make data-driven
-                decisions, and build predictive models
-              </p>
+              <p>Harness the power of data to derive insights, make data-driven decisions, and build predictive models</p>
               <i class="bx bxs-chevron-right"></i>
             </a>
           </article>
@@ -170,12 +159,7 @@
                 <span><i class="bx bx-search-alt"></i></span>
                 <h5>Digital Marketing & SEO</h5>
               </div>
-
-              <p>
-                Elevate your online presence with courses on digital marketing
-                strategies, search engine optimization, and social media
-                marketing
-              </p>
+              <p>Elevate your online presence with courses on digital marketing strategies, search engine optimization, and social media marketing</p>
               <i class="bx bxs-chevron-right"></i>
             </a>
           </article>
@@ -187,10 +171,7 @@
                 <h5>UI/UX</h5>
               </div>
 
-              <p>
-                Dive into the world of coding and software engineering to create
-                innovative solutions and applications for various platforms
-              </p>
+              <p>Dive into the world of coding and software engineering to create innovative solutions and applications for various platforms</p>
               <i class="bx bxs-chevron-right"></i>
             </a>
           </article>
@@ -202,41 +183,29 @@
                 <h5>Mobile App Development</h5>
               </div>
 
-              <p>
-                Develop mobile applications for iOS and Android platforms, from
-                concept to deployment, and understand the mobile app ecosystem.
-              </p>
+              <p>Develop mobile applications for iOS and Android platforms, from concept to deployment, and understand the mobile app ecosystem.</p>
               <i class="bx bxs-chevron-right"></i>
             </a>
           </article>
         </div>
       </div>
     </section>
-    <!-- end categories section  -->
+    <!-- end categories section -->
 
-    <!-- most enrolled courses  -->
+    <!-- most enrolled courses -->
     <section id="section" class="courses">
       <h2>Trending Courses</h2>
       <div class="container courses_container">
         <article class="course">
           <div class="course_image">
-            <img
-              src="https://tinypic.host/images/2023/11/03/course1-removebg-preview.png"
-              alt="course1-removebg-preview.png"
-            />
+            <img src="https://tinypic.host/images/2023/11/03/course1-removebg-preview.png" alt="course1-removebg-preview.png" />
           </div>
 
           <div class="course_content">
             <h4>Responsive Social Media UI Design</h4>
 
-            <p>
-              Explore the art of creating a responsive and visually captivating
-              user interface for social media platforms, attracting and engaging
-              users in the world of modern web design.
-            </p>
-            <a href="{% url 'instructors:courses_by_category' %}" class="btn rounded-overlay learn_more"
-              >&nbsp; &nbsp; &nbsp;Learn More<i class="bx bx-arrow-back"></i
-            ></a>
+            <p>Explore the art of creating a responsive and visually captivating user interface for social media platforms, attracting and engaging users in the world of modern web design.</p>
+            <a href="{% url 'instructors:courses_by_category' %}" class="btn rounded-overlay learn_more">&nbsp; &nbsp; &nbsp;Learn More<i class="bx bx-arrow-back"></i></a>
           </div>
         </article>
 
@@ -248,116 +217,73 @@
           <div class="course_content">
             <h4>Responsive Smart Home Application</h4>
 
-            <p>
-              Learn to create responsive smart home application development,
-              where you'll learn to create intuitive and interconnected
-              interfaces for controlling and monitoring various IoT devices and
-              appliances
-            </p>
-            <a href="{% url 'instructors:courses_by_category' %}" class="btn rounded-overlay learn_more"
-              >&nbsp; &nbsp; &nbsp;Learn More <i class="bx bx-arrow-back"></i
-            ></a>
+            <p>Learn to create responsive smart home application development, where you'll learn to create intuitive and interconnected interfaces for controlling and monitoring various IoT devices and appliances</p>
+            <a href="{% url 'instructors:courses_by_category' %}" class="btn rounded-overlay learn_more">&nbsp; &nbsp; &nbsp;Learn More <i class="bx bx-arrow-back"></i></a>
           </div>
         </article>
 
         <article class="course">
           <div class="course_image">
-            <img
-              src="https://tinypic.host/images/2023/11/03/course17-removebg-preview.png"
-              alt="course17-removebg-preview.png"
-            />
+            <img src="https://tinypic.host/images/2023/11/03/course17-removebg-preview.png" alt="course17-removebg-preview.png" />
           </div>
 
           <div class="course_content">
             <h4>Admin Dashboard Design wiith</h4>
 
-            <p>
-              Create a sleek and functional admin dashboard design using HTML,
-              CSS, and JavaScript, empowering you to efficiently manage and
-              monitor data, applications, and systems.
-            </p>
-            <a href="{% url 'instructors:courses_by_category' %}" class="rounded-overlay learn_more"
-              >&nbsp; &nbsp; &nbsp;Learn More<i class="bx bx-arrow-back"></i
-            ></a>
+            <p>Create a sleek and functional admin dashboard design using HTML, CSS, and JavaScript, empowering you to efficiently manage and monitor data, applications, and systems.</p>
+            <a href="{% url 'instructors:courses_by_category' %}" class="rounded-overlay learn_more">&nbsp; &nbsp; &nbsp;Learn More<i class="bx bx-arrow-back"></i></a>
           </div>
         </article>
       </div>
     </section>
-    <!-- most enrolled courses  -->
+    <!-- most enrolled courses -->
 
-    <!-- testimonials section  -->
+    <!-- testimonials section -->
     <section id="section" class="testimonials">
       <h2>Here is what our alumni say about Nuel-green ICT</h2>
       <div class="testimonial_wrapper">
         <figure class="snip1157">
           <blockquote>
-            <strong>Chinwe Njoku: </strong>
-            Software Engineer at Tek-expert "Nuel-green was the gateway to my
-            career as a software developer. The well-structured curriculum took
-            my coding knowledge from a total beginner level to a very confident
-            level. It was everything I needed to land my first dev job at an
-            amazing company.
-            <div class="arrow"></div>
+            <strong>Chinwe Njoku:</strong>
+            Software Engineer at Tek-expert "Nuel-green was the gateway to my career as a software developer. The well-structured curriculum took my coding knowledge from a total beginner level to a very confident level. It was everything I needed to land my first dev job at an amazing company.<div class="arrow"></div>
           </blockquote>
-          <img
-            src="https://tinypic.host/images/2023/12/16/tetimonial1.png"
-            alt="sq-sample3"
-          />
+          <img src="https://tinypic.host/images/2023/12/16/tetimonial1.png" alt="sq-sample3" />
           <div class="author">
-            <h5>Pelican Steve <span> LIttleSnippets.net</span></h5>
+            <h5>Pelican Steve <span>LIttleSnippets.net</span></h5>
           </div>
         </figure>
         <figure class="snip1157 hover">
           <blockquote>
-            <strong>Ggbega Adeyemi: </strong>
-            I've always struggled with learning JavaScript. I've taken many
-            courses, but Nuel-green's course was the one that stuck. Studying
-            JavaScript as well as data structures and algorithms on Nuel-green
-            gave me the skills and confidence I needed to land my dream job as a
-            back-end developer at Spotify.
-            <div class="arrow"></div>
+            <strong>Ggbega Adeyemi:</strong>
+            I've always struggled with learning JavaScript. I've taken many courses, but Nuel-green's course was the one that stuck. Studying JavaScript as well as data structures and algorithms on Nuel-green gave me the skills and confidence I needed to land my dream job as a back-end developer at Spotify.<div class="arrow"></div>
           </blockquote>
-          <img
-            src="https://tinypic.host/images/2023/12/16/testimonial2.png"
-            alt="sq-sample27"
-          />
+          <img src="https://tinypic.host/images/2023/12/16/testimonial2.png" alt="sq-sample27" />
           <div class="author">
-            <h5>Max Conversion<span> LIttleSnippets.net</span></h5>
+            <h5>Max Conversion<span>LIttleSnippets.net</span></h5>
           </div>
         </figure>
         <figure class="snip1157">
           <blockquote>
-            <strong>Eric Moore: </strong>
-            It's scary to change careers. I only gained confidence that I could
-            code by working through the hundreds of hours of free lessons on
-            Nuel-green. Within a year, I had a six-figure job as a full-stack
-            developer. Nuel-green ICT changed my life.
-            <div class="arrow"></div>
+            <strong>Eric Moore:</strong>
+            It's scary to change careers. I only gained confidence that I could code by working through the hundreds of hours of free lessons on Nuel-green. Within a year, I had a six-figure job as a full-stack developer. Nuel-green ICT changed my life.<div class="arrow"></div>
           </blockquote>
-          <img
-            src="https://tinypic.host/images/2023/12/16/testimonial3.png"
-            alt="sq-sample17"
-          />
+          <img src="https://tinypic.host/images/2023/12/16/testimonial3.png" alt="sq-sample17" />
           <div class="author">
-            <h5>Eleanor Faint<span> LIttleSnippets.net</span></h5>
+            <h5>Eleanor Faint<span>LIttleSnippets.net</span></h5>
           </div>
         </figure>
       </div>
     </section>
-    <!-- end testimonial setion  -->
+    <!-- end testimonial setion -->
 
-    <!-- /* sell_point section  */ -->
+    <!-- /* sell_point section */ -->
     <section id="section">
       <div class="counter_container">
         <article>
-          <img
-            src="https://tinypic.host/images/2023/12/17/graduated.png"
-            alt=""
-          />
+          <img src="https://tinypic.host/images/2023/12/17/graduated.png" alt="" />
           <h1 id="counter1">0</h1>
           <p>Learners</p>
         </article>
-
 
         <article>
           <img src="https://tinypic.host/images/2023/12/17/pin.png" alt="" />
@@ -366,10 +292,7 @@
         </article>
 
         <article>
-          <img
-            src="https://tinypic.host/images/2023/12/17/online-course.png"
-            alt=""
-          />
+          <img src="https://tinypic.host/images/2023/12/17/online-course.png" alt="" />
           <h1 id="counter3">0</h1>
           <p>Courses</p>
         </article>
@@ -384,12 +307,7 @@
               <h5>Tailored Learning Paths to Suit Your Needs:</h5>
               <br />
 
-              <p>
-                Nuel-Green ICT Academy offers personalized courses for all skill
-                levels. Whether you're a beginner or an expert, our versatile
-                curriculum ensures a customized learning journey, simplifying
-                your path to success.
-              </p>
+              <p>Nuel-Green ICT Academy offers personalized courses for all skill levels. Whether you're a beginner or an expert, our versatile curriculum ensures a customized learning journey, simplifying your path to success.</p>
             </article>
 
             <article class="sell_point sell_point2">
@@ -397,29 +315,14 @@
               <h5>Immersive and Interactive Learning Adventure:</h5>
               <br />
 
-              <p>
-                Learning at Nuel-Green ICT Academy is enjoyable and engaging.
-                Our platform provides captivating content, hands-on activities,
-                and collaborative learning opportunities. Education here is not
-                passive; it's an exciting expedition filled with interactive
-                quizzes, discussions, and real-world projects.
-              </p>
+              <p>Learning at Nuel-Green ICT Academy is enjoyable and engaging. Our platform provides captivating content, hands-on activities, and collaborative learning opportunities. Education here is not passive; it's an exciting expedition filled with interactive quizzes, discussions, and real-world projects.</p>
             </article>
 
             <article class="sell_point sell_point3">
               <div class="bullet"></div>
-              <h5>
-                Equipping You with Skills to get you Job-Ready and Ongoing
-                Support:
-              </h5>
+              <h5>Equipping You with Skills to get you Job-Ready and Ongoing Support:</h5>
               <br />
-              <p>
-                Our thoughtfully crafted courses equip you with skills sought
-                after by employers. We provide ongoing support through career
-                guidance, mentorship, and opportunities to apply your knowledge
-                in real-world settings. At Nuel-Green ICT Academy, you're not
-                just learning; you're building a pathway to a prosperous future.
-              </p>
+              <p>Our thoughtfully crafted courses equip you with skills sought after by employers. We provide ongoing support through career guidance, mentorship, and opportunities to apply your knowledge in real-world settings. At Nuel-Green ICT Academy, you're not just learning; you're building a pathway to a prosperous future.</p>
             </article>
           </div>
         </div>
@@ -429,177 +332,87 @@
 
           <div class="accordion-container">
             <div class="accordion-item">
-              <button class="accordion-header">
-                What is Nuel-Green ICT Academy, and how does it address career
-                confusion for tech newcomers? <span class="icon">+</span>
-              </button>
+              <button class="accordion-header">What is Nuel-Green ICT Academy, and how does it address career confusion for tech newcomers? <span class="icon">+</span></button>
               <div class="accordion-content">
-                <p>
-                  Nuel-Green ICT Academy is a specialized institution committed
-                  to empowering individuals with the skills and knowledge needed
-                  for a successful career in the ICT industry. We focus on
-                  providing comprehensive training programs, mentorship, and
-                  resources to guide newcomers through the complexities of the
-                  ever-evolving tech landscape, helping them overcome career
-                  confusion.
-                </p>
+                <p>Nuel-Green ICT Academy is a specialized institution committed to empowering individuals with the skills and knowledge needed for a successful career in the ICT industry. We focus on providing comprehensive training programs, mentorship, and resources to guide newcomers through the complexities of the ever-evolving tech landscape, helping them overcome career confusion.</p>
               </div>
             </div>
             <div class="accordion-item">
               <button class="accordion-header">
-                As a complete beginner in ICT, can I still enroll in Nuel-Green
-                ICT Academy programs?
+                As a complete beginner in ICT, can I still enroll in Nuel-Green ICT Academy programs?
                 <span class="icon">+</span>
               </button>
               <div class="accordion-content">
-                <p>
-                  Absolutely! Our programs are designed to cater to beginners
-                  with little to no prior ICT experience. We start with
-                  foundational courses, ensuring that newcomers can build a
-                  strong understanding of ICT concepts before progressing to
-                  more advanced topics.
-                </p>
+                <p>Absolutely! Our programs are designed to cater to beginners with little to no prior ICT experience. We start with foundational courses, ensuring that newcomers can build a strong understanding of ICT concepts before progressing to more advanced topics.</p>
               </div>
             </div>
 
             <div class="accordion-item">
               <button class="accordion-header">
-                How does Nuel-Green ICT Academy help me navigate the diverse
-                career paths within the ICT industry?
+                How does Nuel-Green ICT Academy help me navigate the diverse career paths within the ICT industry?
                 <span class="icon">+</span>
               </button>
               <div class="accordion-content">
-                <p>
-                  We understand that the ICT industry offers a multitude of
-                  career paths. Our academy provides career guidance sessions
-                  and mentorship programs to help you identify your strengths,
-                  interests, and the most suitable career paths within the vast
-                  ICT landscape. We aim to clarify your goals and set you on the
-                  right path for a successful career.
-                </p>
+                <p>We understand that the ICT industry offers a multitude of career paths. Our academy provides career guidance sessions and mentorship programs to help you identify your strengths, interests, and the most suitable career paths within the vast ICT landscape. We aim to clarify your goals and set you on the right path for a successful career.</p>
               </div>
             </div>
 
             <div class="accordion-item">
-              <button class="accordion-header">
-                What specific ICT skills and technologies are covered in
-                Nuel-Green ICT Academy's curriculum? <span class="icon">+</span>
-              </button>
+              <button class="accordion-header">What specific ICT skills and technologies are covered in Nuel-Green ICT Academy's curriculum? <span class="icon">+</span></button>
               <div class="accordion-content">
-                <p>
-                  Our curriculum is carefully crafted to cover a broad spectrum
-                  of ICT skills and technologies. You'll gain proficiency in
-                  areas such as networking, cybersecurity, programming
-                  languages, cloud computing, and more. We ensure that our
-                  courses align with industry demands and provide you with a
-                  well-rounded skill set.
-                </p>
+                <p>Our curriculum is carefully crafted to cover a broad spectrum of ICT skills and technologies. You'll gain proficiency in areas such as networking, cybersecurity, programming languages, cloud computing, and more. We ensure that our courses align with industry demands and provide you with a well-rounded skill set.</p>
               </div>
             </div>
 
             <div class="accordion-item">
-              <button class="accordion-header">
-                How do mentorship programs at Nuel-Green ICT Academy contribute
-                to my career journey? <span class="icon">+</span>
-              </button>
+              <button class="accordion-header">How do mentorship programs at Nuel-Green ICT Academy contribute to my career journey? <span class="icon">+</span></button>
               <div class="accordion-content">
-                <p>
-                  Our mentorship programs connect you with experienced
-                  professionals in the ICT industry. Mentors offer guidance,
-                  share their career experiences, and provide advice on
-                  navigating the challenges of the tech world. This personalized
-                  support aims to clarify your career goals and boost your
-                  confidence as you embark on your ICT journey
-                </p>
+                <p>Our mentorship programs connect you with experienced professionals in the ICT industry. Mentors offer guidance, share their career experiences, and provide advice on navigating the challenges of the tech world. This personalized support aims to clarify your career goals and boost your confidence as you embark on your ICT journey</p>
               </div>
             </div>
 
             <div class="accordion-item">
-              <button class="accordion-header">
-                What kind of practical experience can I expect during my time at
-                Nuel-Green ICT Academy? <span class="icon">+</span>
-              </button>
+              <button class="accordion-header">What kind of practical experience can I expect during my time at Nuel-Green ICT Academy? <span class="icon">+</span></button>
               <div class="accordion-content">
-                <p>
-                  Our courses emphasize hands-on learning through real-world
-                  projects. You'll have the opportunity to work on practical
-                  projects that mirror the challenges faced in the ICT industry,
-                  ensuring that you gain valuable hands-on experience and are
-                  well-prepared for your future career.
-                </p>
+                <p>Our courses emphasize hands-on learning through real-world projects. You'll have the opportunity to work on practical projects that mirror the challenges faced in the ICT industry, ensuring that you gain valuable hands-on experience and are well-prepared for your future career.</p>
               </div>
             </div>
 
             <div class="accordion-item">
-              <button class="accordion-header">
-                How can Nuel-Green ICT Academy assist me in transitioning from
-                my current career to a role in ICT? <span class="icon">+</span>
-              </button>
+              <button class="accordion-header">How can Nuel-Green ICT Academy assist me in transitioning from my current career to a role in ICT? <span class="icon">+</span></button>
               <div class="accordion-content">
-                <p>
-                  Many of our students come from diverse backgrounds. We offer
-                  specialized programs and resources to facilitate a smooth
-                  transition into the ICT industry. Our academy provides
-                  guidance on leveraging your existing skills and experiences
-                  for a successful career shift
-                </p>
+                <p>Many of our students come from diverse backgrounds. We offer specialized programs and resources to facilitate a smooth transition into the ICT industry. Our academy provides guidance on leveraging your existing skills and experiences for a successful career shift</p>
               </div>
             </div>
 
             <div class="accordion-item">
-              <button class="accordion-header">
-                What support does Nuel-Green ICT Academy offer for job placement
-                and career advancement? <span class="icon">+</span>
-              </button>
+              <button class="accordion-header">What support does Nuel-Green ICT Academy offer for job placement and career advancement? <span class="icon">+</span></button>
               <div class="accordion-content">
-                <p>
-                  Our career services team provides job placement assistance,
-                  resume reviews, interview preparation, and connects you with
-                  our extensive network of hiring partners in the ICT industry.
-                  We are dedicated to supporting you in securing a fulfilling
-                  job and advancing in your ICT career
-                </p>
+                <p>Our career services team provides job placement assistance, resume reviews, interview preparation, and connects you with our extensive network of hiring partners in the ICT industry. We are dedicated to supporting you in securing a fulfilling job and advancing in your ICT career</p>
               </div>
             </div>
 
             <div class="accordion-item">
-              <button class="accordion-header">
-                Can I study at my own pace at Nuel-Green ICT Academy, and how
-                flexible are the course schedules? <span class="icon">+</span>
-              </button>
+              <button class="accordion-header">Can I study at my own pace at Nuel-Green ICT Academy, and how flexible are the course schedules? <span class="icon">+</span></button>
               <div class="accordion-content">
-                <p>
-                  Flexibility is a priority at Nuel-Green ICT Academy. Our
-                  courses are designed to accommodate various learning styles
-                  and schedules. You can study at your own pace, and we offer
-                  both live and recorded sessions to cater to different time
-                  zones and individual schedules.
-                </p>
+                <p>Flexibility is a priority at Nuel-Green ICT Academy. Our courses are designed to accommodate various learning styles and schedules. You can study at your own pace, and we offer both live and recorded sessions to cater to different time zones and individual schedules.</p>
               </div>
             </div>
 
             <div class="accordion-item">
               <button class="accordion-header">
-                How can I get started with enrolling in Nuel-Green ICT Academy,
-                and are there any admission requirements?
+                How can I get started with enrolling in Nuel-Green ICT Academy, and are there any admission requirements?
                 <span class="icon">+</span>
               </button>
               <div class="accordion-content">
-                <p>
-                  Enrolling at Nuel-Green ICT Academy is a straightforward
-                  process. Visit our website, explore the available courses, and
-                  follow the enrollment instructions. There are no strict
-                  admission requirements, making our programs accessible to
-                  anyone passionate about pursuing a successful career in the
-                  ICT industry
-                </p>
+                <p>Enrolling at Nuel-Green ICT Academy is a straightforward process. Visit our website, explore the available courses, and follow the enrollment instructions. There are no strict admission requirements, making our programs accessible to anyone passionate about pursuing a successful career in the ICT industry</p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-    <!-- /* sell_point section  */ -->
+    <!-- /* sell_point section */ -->
 
     <!-- newsletter section -->
     <section id="section" class="newsletter">
@@ -611,19 +424,14 @@
     </section>
     <!-- newsletter section -->
 
-    <!-- footer section  -->
+    <!-- footer section -->
     <footer>
       <div class="wrapper">
         <div class="footer_details">
           <div class="footer_about">
             <div class="footer_logo">
               <div class="logo">
-                <a class="logo-link" href="/"
-                  ><img
-                    class="logo"
-                    src="https://tinypic.host/images/2023/12/16/logo-photoaidcom-cropped.png"
-                    alt="Nuel-Green logo"
-                /></a>
+                <a class="logo-link" href="/"><img class="logo" src="https://tinypic.host/images/2023/12/16/logo-photoaidcom-cropped.png" alt="Nuel-Green logo" /></a>
               </div>
               <h2>Nuel-Green ICT</h2>
             </div>
@@ -631,10 +439,7 @@
               <div class="social_icons">
                 <a id="icon1" href=""></a>
                 <a id="icon2" href=""></a>
-                <a
-                  id="icon3"
-                  href="https://web.facebook.com/profile.php?id=100083054784553"
-                ></a>
+                <a id="icon3" href="https://web.facebook.com/profile.php?id=100083054784553"></a>
                 <a id="icon5" href="https://t.me/+eIq_rwu5pe1mMTNk"></a>
               </div>
             </div>
@@ -643,21 +448,39 @@
           <div class="footer_links">
             <h4>Companies</h4>
             <ul>
-              <li><a href="">Hire Our Trainees</a></li>
-              <li><a href="">Collaborate With Us</a></li>
+              <li>
+                <a href="">Hire Our Trainees</a>
+              </li>
+              <li>
+                <a href="">Collaborate With Us</a>
+              </li>
             </ul>
           </div>
 
           <div class="footer_links">
             <h4>Featured Courses</h4>
             <ul>
-              <li><a href="">Basic HTML/CSS3</a></li>
-              <li><a href="">JavaScript For Beginners</a></li>
-              <li><a href="">Python Full Course</a></li>
-              <li><a href="">Java</a></li>
-              <li><a href="">Version Control</a></li>
-              <li><a href="">JavaScript (Node.js)</a></li>
-              <li><a href="">Solidity</a></li>
+              <li>
+                <a href="">Basic HTML/CSS3</a>
+              </li>
+              <li>
+                <a href="">JavaScript For Beginners</a>
+              </li>
+              <li>
+                <a href="">Python Full Course</a>
+              </li>
+              <li>
+                <a href="">Java</a>
+              </li>
+              <li>
+                <a href="">Version Control</a>
+              </li>
+              <li>
+                <a href="">JavaScript (Node.js)</a>
+              </li>
+              <li>
+                <a href="">Solidity</a>
+              </li>
             </ul>
           </div>
         </div>
@@ -673,8 +496,12 @@
           <div class="footer_links">
             <h4>About Us</h4>
             <ul>
-              <li><a href="">Our Story</a></li>
-              <li><a href="">Get In Touch</a></li>
+              <li>
+                <a href="">Our Story</a>
+              </li>
+              <li>
+                <a href="">Get In Touch</a>
+              </li>
             </ul>
           </div>
           <div class="contact">
@@ -689,29 +516,134 @@
         <div class="footer_details copyright">
           <div class="footer_links">
             <ul>
-              <li><a href="">Privacy Policy</a></li>
-              <li><a href="">Terms Of Use</a></li>
-              <li><a href="">Schorlarships</a></li>
-              <li><a href="">Our Blog</a></li>
+              <li>
+                <a href="">Privacy Policy</a>
+              </li>
+              <li>
+                <a href="">Terms Of Use</a>
+              </li>
+              <li>
+                <a href="">Schorlarships</a>
+              </li>
+              <li>
+                <a href="">Our Blog</a>
+              </li>
             </ul>
           </div>
-          <small
-            >Copyright &copy; 2023, All Right reserved
-            <span><a href="Nuel-Green ICT"></a></span
-          ></small>
+          <small>
+            Copyright &copy; 2023, All Right reserved
+            <span><a href="Nuel-Green ICT"></a></span>
+          </small>
 
           <div class="footer_links">
             <ul>
-              <li><a href="{% url 'academy:home' %}">Home</a></li>
-              <li><a href="">Career</a></li>
-              <li><a href="">Courses</a></li>
+              <li>
+                <a href="{% url 'academy:home' %}">Home</a>
+              </li>
+              <li>
+                <a href="">Career</a>
+              </li>
+              <li>
+                <a href="">Courses</a>
+              </li>
             </ul>
           </div>
         </div>
       </div>
     </footer>
-    <!-- End footer section  -->
-
+    <!-- End footer section -->
+    <script>
+      const textElement = document.getElementById('typed-text')
+      const text = textElement.textContent
+      textElement.textContent = '' // Clear the text initially
+      
+      let i = 0
+      function typeText() {
+        if (i < text.length) {
+          textElement.textContent += text.charAt(i)
+          i++
+          setTimeout(typeText, 100) // Adjust the speed by changing the timeout value (milliseconds)
+        }
+      }
+      
+      typeText() // Start the typing animation
+      
+      menuToggle = document.querySelector('.menuToggle')
+      header = document.querySelector('header')
+      
+      menuToggle.addEventListener('click', function () {
+        header.classList.toggle('active')
+      })
+      
+      document.addEventListener('DOMContentLoaded', function () {
+        // Get the hero_img element
+        const heroImg = document.getElementById('heroImg')
+      
+        setTimeout(() => {
+          heroImg.classList.add('slide-in')
+        }, 500) // 500 milliseconds delay
+      })
+      
+      document.querySelectorAll('.accordion-header').forEach((button) => {
+        button.addEventListener('click', () => {
+          const accordionContent = button.nextElementSibling
+      
+          button.classList.toggle('active')
+      
+          if (button.classList.contains('active')) {
+            accordionContent.style.maxHeight = accordionContent.scrollHeight + 'px'
+          } else {
+            accordionContent.style.maxHeight = 0
+          }
+      
+          // Close other open accordion items
+          document.querySelectorAll('.accordion-header').forEach((otherButton) => {
+            if (otherButton !== button) {
+              otherButton.classList.remove('active')
+              otherButton.nextElementSibling.style.maxHeight = 0
+            }
+          })
+        })
+      })
+      
+      window.addEventListener('scroll', () => {
+        var reveals = document.querySelectorAll('#section')
+        for (let i = 0; i < reveals.length; i++) {
+          var windowHeight = window.innerHeight
+          var revealTop = reveals[i].getBoundingClientRect().top
+          var revealPoint = 150
+      
+          if (revealTop < windowHeight - revealPoint) {
+            if (!reveals[i].classList.contains('reveal')) {
+              reveals[i].classList.add('reveal')
+            }
+          } else {
+            reveals[i].classList.remove('reveal')
+          }
+        }
+      })
+      
+      function updateCounter(counterId, maxCount) {
+        const counterElement = document.getElementById(counterId)
+        let count = parseInt(counterElement.innerText)
+      
+        // Check if the count is less than the specified maxCount
+        if (count < maxCount) {
+          count++
+          counterElement.innerText = count > 1 ? count + '+' : count
+        } else {
+          // Reset the counter after reaching the maxCount
+          setTimeout(() => {
+            counterElement.innerText = '1'
+          }, 1000)
+        }
+      }
+      
+      // Update each counter every 100 milliseconds with different max counts
+      setInterval(() => updateCounter('counter1', 1000), 1)
+      setInterval(() => updateCounter('counter2', 10), 100)
+      setInterval(() => updateCounter('counter3', 15), 100)
+    </script>
     <script src="{% static 'js/main.js' %}"></script>
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 
