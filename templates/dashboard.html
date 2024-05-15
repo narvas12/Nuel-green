@@ -36,6 +36,9 @@
       rel="icon"
       href="https://tinypic.host/images/2023/12/16/logo-photoaidcom-cropped.png"
     />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.23.0/min/vs/editor/editor.main.css">
+
     <script src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
     <script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
 
@@ -107,6 +110,17 @@
             <a href="{% url 'instructors:assessment_list' %}">Assessments</a>
 
           </li>
+
+          <li>
+            <a href="{% url 'academy:make_notes' %}">Notes</a>
+
+          </li>
+
+          <li>
+            <a href="{% url 'academy:ide' %}">Practice</a>
+
+          </li>
+          
 
           <li>
             <i class="bx bxs-envelope"></i>
@@ -257,10 +271,11 @@
         });
       });
     </script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs/loader.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs/loader.js"></script>
     <script src="{% static 'js/ide.js' %}"></script>
+
     <script>
       hljs.highlightAll();
     </script>

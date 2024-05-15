@@ -52,7 +52,8 @@ def notes(request):
     
     return render(request, 'user/notes.html', {'form': form, 'notes': notes})
 
-
+def ide(request):
+    return render(request, 'ide.html')
 
 @login_required
 def save_user_codes(request):

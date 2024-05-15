@@ -30,7 +30,8 @@ urlpatterns = [
 
     path('projects/', projects, name='projects'),
 
-    path('notes/', notes, name='notes'),
+    path('notes/', notes, name='make_notes'),
+    path('ide/', ide, name='ide'),
 
     path('image-list/', image_list, name='image_list'),
     path('image/<int:image_id>/', view_image, name='view_image'),
